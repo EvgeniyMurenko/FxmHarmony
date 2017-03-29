@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Fxm Harmony</string>
+
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_error_title">Sorry</string>
+
+    <string name="empty_ribots">There aren\'t any ribots</string>
+    <string name="error_loading_ribots">There was a problem loading the ribots</string>
 </resources>
