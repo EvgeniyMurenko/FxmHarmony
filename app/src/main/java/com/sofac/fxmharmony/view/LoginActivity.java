@@ -18,6 +18,7 @@ public class LoginActivity extends BaseActivity {
     public void onBackPressed() {
         if (back_pressed + 2000 > System.currentTimeMillis()) {
             super.onBackPressed();
+            finishAffinity();
         } else {
             Toast.makeText(getBaseContext(), getString(R.string.ToastLogOut), Toast.LENGTH_SHORT).show();
         }

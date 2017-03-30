@@ -22,4 +22,7 @@
     <string name="sofac">SoFAC</string>
     <string name="softwareFactory">SoFAC : Software Factory</string>
     <string name="ToastLogOut">Нажмите еще раз для выхода</string>
+    <string name="loginButton">Login</string>
+    <string name="email_address">Login</string>
+    <string name="password">Password</string>
 </resources>
