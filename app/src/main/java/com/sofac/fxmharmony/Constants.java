@@ -7,5 +7,7 @@ package com.sofac.fxmharmony;
 public class Constants {
     /*Имя хранения preference*/
     public final static String PREFERENCE_AUTHORIZATION = "PREFERENCE_AUTHORIZATION";
+    public final static String LOGIN_STAFF = "LOGIN_STAFF";
+
 
 }
