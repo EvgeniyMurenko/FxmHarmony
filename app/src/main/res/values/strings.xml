@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fxm Harmony</string>
+    <string name="app_name">FXM Harmony</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_login">Sign in</string>
@@ -25,4 +25,10 @@
     <string name="loginButton">Login</string>
     <string name="email_address">Login</string>
     <string name="password">Password</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_search">Search</string>
+    <string name="hello_staff">Hello Staff</string>
 </resources>

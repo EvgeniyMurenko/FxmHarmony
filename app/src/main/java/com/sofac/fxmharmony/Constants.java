@@ -5,6 +5,8 @@ public class Constants {
 
     /*Имя хранения preference*/
     public final static String PREFERENCE_AUTHORIZATION = "PREFERENCE_AUTHORIZATION";
+    public final static String LOGIN_STAFF = "LOGIN_STAFF";
+
 
     public final static String SERVER_REQUEST_ERROR = "SERVER_REQUEST_ERROR";
     public final static String AUTHORIZATION_REQUEST = "AUTHORIZATION_REQUEST";
