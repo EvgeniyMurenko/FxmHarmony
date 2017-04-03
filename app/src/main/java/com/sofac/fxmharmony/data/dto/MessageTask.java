@@ -1,7 +1,7 @@
 package com.sofac.fxmharmony.data.dto;
 
 
-import java.sql.Date;
+import java.util.Date;
 
 public class MessageTask {
 
@@ -12,6 +12,12 @@ public class MessageTask {
         this.messageText = messageText;
         this.date = date;
         this.isApprove = isApprove;
+    }
+
+    public MessageTask(String title, String messageText, Date date) {
+        this.title = title;
+        this.messageText = messageText;
+        this.date = date;
     }
 
     private String title;

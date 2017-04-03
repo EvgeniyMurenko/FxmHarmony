@@ -1,16 +1,18 @@
 <resources>
+    /* All app */
     <string name="app_name">FXM Harmony</string>
+    <string name="ToastLogOut">Click again to exit</string>
 
     /* Login Activity */
     <string name="logo">Logo</string>
     <string name="harmony">harmony</string>
     <string name="sofac">SoFAC</string>
     <string name="softwareFactory">SoFAC : Software Factory</string>
-    <string name="ToastLogOut">Нажмите еще раз для выхода</string>
     <string name="loginButton">Login</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="title_activity_login">Login Activity</string>
+    <string name="fieldEmpty">Field empty</string>
 
     /* Navigation drawer - TasksActivity */
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -21,4 +23,7 @@
     <string name="hello_staff">Hello Staff</string>
 
     <string name="title_activity_tasks">TasksActivity</string>
+    <string name="setting">Setting</string>
+    <string name="exit">Exit</string>
+    <string name="tasks">Tasks</string>
 </resources>

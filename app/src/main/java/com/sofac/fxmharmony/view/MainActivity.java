@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.sofac.fxmharmony.R;
 import timber.log.Timber;
 
+import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
 
@@ -25,7 +26,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void checkAuthorization() {
-        preferences = getPreferences(MODE_PRIVATE);
+        preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         if (preferences.getBoolean(IS_AUTHORIZATION, false)) {
 
             startTasksActivity();

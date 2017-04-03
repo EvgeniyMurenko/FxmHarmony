@@ -29,12 +29,11 @@ public class DataManager {
     }
 
 
-
     public ServerResponse<StaffInfo> sendAuthorizationRequest(ServerRequest serverRequest) {
 
 
-            String response = sendRequest(serverRequest);
-            Timber.i(response);
+        String response = sendRequest(serverRequest);
+        Timber.i(response);
 
         if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
 
@@ -54,20 +53,21 @@ public class DataManager {
     }
 
 
-
-
-
     private String sendRequest(ServerRequest serverRequest) {
 
         Call<ResponseBody> call = requestResponseService.postAuthorizationRequest(serverRequest);
 
-        String response = "";
+        String response = Constants.SERVER_REQUEST_ERROR;
 
         try (ResponseBody responseBody = call.execute().body()) {
-            response = responseBody.string();
+            if (responseBody != null) {
+                response = responseBody.string();
+            } else {
+                return response;
+            }
         } catch (IOException e) {
-            response = Constants.SERVER_REQUEST_ERROR;
             e.printStackTrace();
+            return response;
         }
 
         return response;

@@ -8,6 +8,9 @@ public class Constants {
     public final static String NAME_LOGIN_STAFF = "NAME_LOGIN_STAFF";
 
     public final static String GOOGLE_CLOUD_PREFERENCE = "GOOGLE_CLOUD_PREFERENCE";
+    public static final String APP_PREFERENCES = "APP_PREFERENCES";
+    public final static String STAFF_PROFILE = "STAFF_PROFILE";
+
     public final static String SERVER_REQUEST_ERROR = "SERVER_REQUEST_ERROR";
     public final static String AUTHORIZATION_REQUEST = "AUTHORIZATION_REQUEST";
     public final static String REQUEST_SUCCESS = "REQUEST_SUCCESS";

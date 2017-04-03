@@ -8,4 +8,9 @@
     tools:context="com.sofac.fxmharmony.view.TasksActivity"
     tools:showIn="@layout/app_bar_navigation_drawer">
 
+    <ListView
+        android:id="@+id/listViewTasks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </android.support.constraint.ConstraintLayout>

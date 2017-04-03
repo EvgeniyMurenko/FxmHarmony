@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,9 +19,8 @@ import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
 import timber.log.Timber;
-
+import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
-import static com.sofac.fxmharmony.Constants.NAME_LOGIN_STAFF;
 
 /**
  * Activity login & password authorization, validation input field, if validate data start TasksActivity.class
@@ -28,7 +28,7 @@ import static com.sofac.fxmharmony.Constants.NAME_LOGIN_STAFF;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     public static SharedPreferences preferences;
-
+    Intent intent;
     private static long backPressed;
     EditText editPassword, editLogin;
     Button buttonLogin;
@@ -39,6 +39,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         initUI();
         buttonLogin.setOnClickListener(this);
+        intent = new Intent (this, TasksActivity.class);
     }
 
     private void initUI(){
@@ -51,14 +52,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         String password = editPassword.getText().toString();
         String login = editLogin.getText().toString();
-        Intent intent = new Intent (this, TasksActivity.class);
+
         if("".equals(password)&&"".equals(login)){
-            Toast.makeText(LoginActivity.this, "Field empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
             CheckAuthorizationOnServer task = new CheckAuthorizationOnServer();
-            task.execute();
+            task.execute(editLogin.getText().toString(),editPassword.getText().toString());
 
-            preferences = getPreferences(MODE_PRIVATE);
+            preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(IS_AUTHORIZATION, true);
             editor.apply();
@@ -90,11 +91,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         @Override
         protected String doInBackground(String... urls) {
 
-            Authorization authorization = new Authorization("1", "2", "3");
+            SharedPreferences sharedPref =  PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+            Authorization authorization = new Authorization(urls[0],urls[1], sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE,""));
+
             ServerRequest serverRequest = new ServerRequest(Constants.AUTHORIZATION_REQUEST, authorization);
             DataManager dataManager = DataManager.getInstance();
             ServerResponse<StaffInfo> staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
-
+            //intent.putExtra("STAFF_PROFILE", );
 
             if (staffInfoServerResponse != null) {
                 return staffInfoServerResponse.getResponseStatus();

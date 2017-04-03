@@ -1,5 +1,6 @@
 package com.sofac.fxmharmony.view;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -8,16 +9,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.adapter.AdapterTasksListView;
+import com.sofac.fxmharmony.data.dto.MessageTask;
+
+import java.util.Date;
+import java.util.ArrayList;
+
+import static android.os.Build.VERSION_CODES.M;
+import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
+import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
 
 public class TasksActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    public static SharedPreferences preferences;
     private static long backPressed;
+    public ArrayList<MessageTask> listStaff;
+    public AdapterTasksListView adapterTasksListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,16 +36,6 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /** Button send massage in right bottom */
-        //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //        fab.setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View view) {
-        //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //                        .setAction("Action", null).show();
-        //            }
-        //        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -44,6 +45,32 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        viewListTasks();
+    }
+
+    public void viewListTasks() {
+        ListView listViewTasks = (ListView) findViewById(R.id.listViewTasks);
+        listStaff = generatedStaffInfo();
+        adapterTasksListView = new AdapterTasksListView(this, listStaff);
+        listViewTasks.setAdapter(adapterTasksListView);
+
+//        listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
+//                                    long id) {
+//                Toast.makeText(getApplicationContext(), ((TextView) itemClicked).getText(),
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
+
+    public ArrayList<MessageTask> generatedStaffInfo() {
+        for (int i = 0; i < 10; i++) {
+            Date date = new Date();
+            MessageTask messageTask = new MessageTask(i+"",i+"",date);
+            listStaff.add(messageTask);
+        }
+        return listStaff;
     }
 
     @Override
@@ -62,47 +89,27 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
-        return true;
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_tasks) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_setting) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_exit) {
+            Intent intent = new Intent(this, MainActivity.class);
 
-        } else if (id == R.id.nav_share) {
+            SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(IS_AUTHORIZATION, false);
+            editor.apply();
+            editor.commit();
 
-        } else if (id == R.id.nav_send) {
-
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
