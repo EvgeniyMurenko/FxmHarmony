@@ -8,14 +8,14 @@ public class Authorization {
     public Authorization(String ssoId, String password, String googleCloudKey) {
         this.ssoId = ssoId;
         this.password = password;
-        GoogleCloudKey = googleCloudKey;
+        this.googleCloudKey = googleCloudKey;
     }
 
     private String ssoId;
 
     private String password;
 
-    private String GoogleCloudKey;
+    private String googleCloudKey;
 
     public String getSsoId() {
         return ssoId;
@@ -34,10 +34,10 @@ public class Authorization {
     }
 
     public String getGoogleCloudKey() {
-        return GoogleCloudKey;
+        return googleCloudKey;
     }
 
     public void setGoogleCloudKey(String googleCloudKey) {
-        GoogleCloudKey = googleCloudKey;
+        googleCloudKey = googleCloudKey;
     }
 }

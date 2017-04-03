@@ -10,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.sofac.fxmharmony.R;
 
 
 public class TasksActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static SharedPreferences preferences;
-
+    private static long backPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,13 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (backPressed + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+                finishAffinity();
+            } else {
+                Toast.makeText(getBaseContext(), getString(R.string.ToastLogOut), Toast.LENGTH_SHORT).show();
+            }
+            backPressed = System.currentTimeMillis();
         }
     }
 

@@ -4,8 +4,8 @@ package com.sofac.fxmharmony;
 public class Constants {
 
     /*Имя хранения preference*/
-    public final static String PREFERENCE_AUTHORIZATION = "PREFERENCE_AUTHORIZATION";
-    public final static String LOGIN_STAFF = "LOGIN_STAFF";
+    public final static String IS_AUTHORIZATION = "IS_AUTHORIZATION";
+    public final static String NAME_LOGIN_STAFF = "NAME_LOGIN_STAFF";
 
 
     public final static String SERVER_REQUEST_ERROR = "SERVER_REQUEST_ERROR";
