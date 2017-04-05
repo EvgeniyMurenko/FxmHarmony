@@ -13,11 +13,15 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterTasksListView;
 import com.sofac.fxmharmony.data.dto.MessageTask;
+import com.sofac.fxmharmony.data.dto.StaffInfo;
 
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
@@ -32,6 +36,11 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
+
+        StaffInfo staffInfo = (StaffInfo) getIntent().getSerializableExtra(Constants.STAFF_PROFILE);
+        Timber.i(staffInfo.toString());
+        listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,7 +57,7 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
 
     public void viewListTasks() {
         ListView listViewTasks = (ListView) findViewById(R.id.listViewTasks);
-/*        listStaff = generatedStaffInfo();*/
+
         adapterTasksListView = new AdapterTasksListView(this, listStaff);
         listViewTasks.setAdapter(adapterTasksListView);
 
@@ -62,14 +71,6 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
 //        });
     }
 
- /*   public ArrayList<MessageTask> generatedStaffInfo() {
-        for (int i = 0; i < 10; i++) {
-            Date date = new Date();
-            MessageTask messageTask = new MessageTask(i+"",i+"",date);
-            listStaff.add(messageTask);
-        }
-        return listStaff;
-    }*/
 
     @Override
     public void onBackPressed() {

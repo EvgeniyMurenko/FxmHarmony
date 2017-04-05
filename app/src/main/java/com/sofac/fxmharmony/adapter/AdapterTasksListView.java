@@ -23,8 +23,8 @@ public class AdapterTasksListView extends BaseAdapter {
 
     public AdapterTasksListView (Context context, ArrayList<MessageTask> messageTaskArrayList){
         this.messageTaskArrayList = messageTaskArrayList;
-        ctx = context;
-        inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.ctx = context;
+        this.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override

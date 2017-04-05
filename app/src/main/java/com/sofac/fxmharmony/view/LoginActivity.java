@@ -110,10 +110,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 StaffInfo staffInfo = staffInfoServerResponse.getDataTransferObject();
 
-
-               /* intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Constants.STAFF_PROFILE , staffInfo);
-                startActivity(intent);*/
+                startActivity(intent);
                 Toast.makeText(LoginActivity.this, Constants.REQUEST_SUCCESS, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(LoginActivity.this, Constants.SERVER_REQUEST_ERROR, Toast.LENGTH_SHORT).show();
