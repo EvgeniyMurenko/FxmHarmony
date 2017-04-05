@@ -1,9 +1,10 @@
 package com.sofac.fxmharmony.data.dto;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MessageTask {
+public class MessageTask implements Serializable{
 
     public MessageTask(){}
 
@@ -14,11 +15,7 @@ public class MessageTask {
         this.isApprove = isApprove;
     }
 
-    public MessageTask(String title, String messageText, Date date) {
-        this.title = title;
-        this.messageText = messageText;
-        this.date = date;
-    }
+
 
     private String title;
 
@@ -58,5 +55,15 @@ public class MessageTask {
 
     public void setApprove(Boolean approve) {
         isApprove = approve;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageTask{" +
+                "title='" + title + '\'' +
+                ", messageText='" + messageText + '\'' +
+                ", date=" + date +
+                ", isApprove=" + isApprove +
+                '}';
     }
 }

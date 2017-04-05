@@ -19,8 +19,6 @@ import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
 import timber.log.Timber;
-import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
-import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
 /**
  * Activity login & password authorization, validation input field, if validate data start TasksActivity.class
@@ -59,14 +57,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             CheckAuthorizationOnServer task = new CheckAuthorizationOnServer();
             task.execute(editLogin.getText().toString(),editPassword.getText().toString());
 
-            preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+          /*  preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(IS_AUTHORIZATION, true);
             editor.apply();
-            editor.commit();
-
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            editor.commit();*/
         }
     }
 
@@ -83,6 +78,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private class CheckAuthorizationOnServer extends AsyncTask<String, Void, String> {
 
+        ServerResponse<StaffInfo> staffInfoServerResponse;
+
         @Override
         protected void onPreExecute() {
             //on pre execute
@@ -96,8 +93,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             ServerRequest serverRequest = new ServerRequest(Constants.AUTHORIZATION_REQUEST, authorization);
             DataManager dataManager = DataManager.getInstance();
-            ServerResponse<StaffInfo> staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
-            //intent.putExtra("STAFF_PROFILE", );
+            staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
+
 
             if (staffInfoServerResponse != null) {
                 return staffInfoServerResponse.getResponseStatus();
@@ -108,7 +105,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         @Override
         protected void onPostExecute(String result) {
             Timber.i(result);
-            Toast.makeText(LoginActivity.this, Constants.SERVER_REQUEST_ERROR, Toast.LENGTH_SHORT).show();
+
+            if(result.equals(Constants.REQUEST_SUCCESS)){
+
+                StaffInfo staffInfo = staffInfoServerResponse.getDataTransferObject();
+
+
+               /* intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Constants.STAFF_PROFILE , staffInfo);
+                startActivity(intent);*/
+                Toast.makeText(LoginActivity.this, Constants.REQUEST_SUCCESS, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LoginActivity.this, Constants.SERVER_REQUEST_ERROR, Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 

@@ -1,14 +1,15 @@
 package com.sofac.fxmharmony.data.dto;
 
 
-import java.sql.Date;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-public class StaffInfo {
+public class StaffInfo implements Serializable {
 
-    public StaffInfo(){}
 
-    public StaffInfo(String name, String phone, String email, Date birthday, Set<MessageTask> messageTasks) {
+    public StaffInfo(String name, String phone, String email, Date birthday, List<MessageTask> messageTasks) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -24,7 +25,7 @@ public class StaffInfo {
 
     private Date birthday;
 
-    private Set<MessageTask> messageTasks;
+    private List<MessageTask> messageTasks;
 
     public String getName() {
         return name;
@@ -58,11 +59,22 @@ public class StaffInfo {
         this.birthday = birthday;
     }
 
-    public Set<MessageTask> getMessageTasks() {
+    public List<MessageTask> getMessageTasks() {
         return messageTasks;
     }
 
-    public void setMessageTasks(Set<MessageTask> messageTasks) {
+    public void setMessageTasks(List<MessageTask> messageTasks) {
         this.messageTasks = messageTasks;
+    }
+
+    @Override
+    public String toString() {
+        return "StaffInfo{" +
+                "name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                ", messageTasks=" + messageTasks +
+                '}';
     }
 }

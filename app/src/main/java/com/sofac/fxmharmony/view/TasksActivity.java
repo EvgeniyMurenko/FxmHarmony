@@ -17,10 +17,8 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterTasksListView;
 import com.sofac.fxmharmony.data.dto.MessageTask;
 
-import java.util.Date;
 import java.util.ArrayList;
 
-import static android.os.Build.VERSION_CODES.M;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
@@ -50,7 +48,7 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
 
     public void viewListTasks() {
         ListView listViewTasks = (ListView) findViewById(R.id.listViewTasks);
-        listStaff = generatedStaffInfo();
+/*        listStaff = generatedStaffInfo();*/
         adapterTasksListView = new AdapterTasksListView(this, listStaff);
         listViewTasks.setAdapter(adapterTasksListView);
 
@@ -64,14 +62,14 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
 //        });
     }
 
-    public ArrayList<MessageTask> generatedStaffInfo() {
+ /*   public ArrayList<MessageTask> generatedStaffInfo() {
         for (int i = 0; i < 10; i++) {
             Date date = new Date();
             MessageTask messageTask = new MessageTask(i+"",i+"",date);
             listStaff.add(messageTask);
         }
         return listStaff;
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

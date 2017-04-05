@@ -3,12 +3,14 @@ package com.sofac.fxmharmony.data;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.Constants;
+import com.sofac.fxmharmony.data.dto.MessageTask;
 import com.sofac.fxmharmony.data.dto.StaffInfo;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Set;
 
 
 import okhttp3.ResponseBody;
@@ -40,10 +42,12 @@ public class DataManager {
             Type authorizationType = new TypeToken<ServerResponse<StaffInfo>>() {
             }.getType();
 
+
             ServerResponse<StaffInfo> staffInfoServerResponse = new Gson().fromJson(response, authorizationType);
 
             Timber.i(staffInfoServerResponse.getResponseStatus());
             Timber.i(staffInfoServerResponse.getDataTransferObject().getClass().toString());
+
 
             return staffInfoServerResponse;
 

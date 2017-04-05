@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.MessageTask;
+
 import java.util.ArrayList;
 
 /**
