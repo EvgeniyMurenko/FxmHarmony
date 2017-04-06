@@ -38,7 +38,7 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_navigation_drawer);
 
         StaffInfo staffInfo = (StaffInfo) getIntent().getSerializableExtra(Constants.STAFF_PROFILE);
-        Timber.i(staffInfo.toString());
+//        Timber.i(staffInfo.toString());
         listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

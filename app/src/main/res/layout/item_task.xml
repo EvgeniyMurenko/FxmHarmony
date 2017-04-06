@@ -2,24 +2,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="10dp">
 
     <LinearLayout
-        android:paddingBottom="2dp"
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="3dp">
 
         <TextView
             android:id="@+id/idTitleItemTask"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Title"
+            android:textColor="@color/colorItemTitle"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/idDateItemTask"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:gravity="end"
+            android:text="date"
+            android:textColor="@color/colorItemDate" />
     </LinearLayout>
 
     <LinearLayout
@@ -30,7 +38,9 @@
         <TextView
             android:id="@+id/idMessageItemTask"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Context"
+            android:textColor="@color/colorItemContext" />
 
     </LinearLayout>
 

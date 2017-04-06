@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.MessageTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -52,11 +53,11 @@ public class AdapterTasksListView extends BaseAdapter {
         }
 
         MessageTask messageTask = getMessageTask(position);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy");
 
-        // заполняем View в пункте списка данными из товаров: наименование, цена
-        // и картинка
+        // заполняем View в пункте списка данными
         ((TextView) view.findViewById(R.id.idTitleItemTask)).setText(messageTask.getTitle());
-        ((TextView) view.findViewById(R.id.idDateItemTask)).setText(messageTask.getDate().toString());
+        ((TextView) view.findViewById(R.id.idDateItemTask)).setText(dateFormat.format(messageTask.getDate()));
         ((TextView) view.findViewById(R.id.idMessageItemTask)).setText(messageTask.getMessageText());
 
         return view;
