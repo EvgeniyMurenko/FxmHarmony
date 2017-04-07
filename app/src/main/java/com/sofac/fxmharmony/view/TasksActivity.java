@@ -7,9 +7,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,9 +26,10 @@ import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
+import static com.sofac.fxmharmony.Constants.TASK_INFO;
 
 
-public class TasksActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class TasksActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static long backPressed;
     public ArrayList<MessageTask> listStaff;
     public AdapterTasksListView adapterTasksListView;
@@ -38,7 +40,7 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_navigation_drawer);
 
         StaffInfo staffInfo = (StaffInfo) getIntent().getSerializableExtra(Constants.STAFF_PROFILE);
-//        Timber.i(staffInfo.toString());
+        Timber.i(staffInfo.toString());
         listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -57,18 +59,17 @@ public class TasksActivity extends AppCompatActivity implements NavigationView.O
 
     public void viewListTasks() {
         ListView listViewTasks = (ListView) findViewById(R.id.listViewTasks);
-
+        final Intent intent = new Intent(this, DetailTaskActivity.class);
         adapterTasksListView = new AdapterTasksListView(this, listStaff);
         listViewTasks.setAdapter(adapterTasksListView);
 
-//        listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-//                                    long id) {
-//                Toast.makeText(getApplicationContext(), ((TextView) itemClicked).getText(),
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+                intent.putExtra(TASK_INFO,listStaff.get(position));
+                startActivity(intent);
+            }
+        });
     }
 
 

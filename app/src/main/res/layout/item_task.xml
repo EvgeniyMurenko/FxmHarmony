@@ -12,6 +12,8 @@
         android:paddingBottom="3dp">
 
         <TextView
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/idTitleItemTask"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -39,6 +41,8 @@
             android:id="@+id/idMessageItemTask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="Context"
             android:textColor="@color/colorItemContext" />
 

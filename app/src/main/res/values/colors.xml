@@ -7,7 +7,7 @@
     <color name="colorText">#075f6e</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorItemTitle">#0d8ca1</color>
-    <color name="colorItemDate">#838383</color>
+    <color name="colorItemDate">#9b9b9b</color>
     <color name="colorItemContext">#979797</color>
 
 </resources>
