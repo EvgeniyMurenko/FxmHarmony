@@ -17,8 +17,8 @@ public class Constants {
     public final static String REQUEST_FAIL = "REQUEST_FAIL";
     public final static String TASK_INFO = "TASK_INFO";
 
-    public final static String BASE_URL = "http://192.168.0.32:8080/";
-    /*public final static String BASE_URL = "http://www.sofac.kr/";*/
+    public final static String BASE_URL = "http://192.168.1.223:8080/";
+//    public final static String BASE_URL = "http://www.sofac.kr/";
 
 
 

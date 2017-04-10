@@ -12,6 +12,8 @@ import com.sofac.fxmharmony.data.dto.MessageTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Maxim on 03.04.2017.
@@ -23,6 +25,11 @@ public class AdapterTasksListView extends BaseAdapter {
     private LayoutInflater inflater;
 
     public AdapterTasksListView (Context context, ArrayList<MessageTask> messageTaskArrayList){
+/*        Collections.sort(messageTaskArrayList, new Comparator<MessageTask>() {
+            public int compare(MessageTask o1, MessageTask o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });*/
         this.messageTaskArrayList = messageTaskArrayList;
         this.ctx = context;
         this.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
