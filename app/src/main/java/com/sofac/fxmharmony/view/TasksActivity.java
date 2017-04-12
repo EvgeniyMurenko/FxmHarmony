@@ -2,6 +2,7 @@ package com.sofac.fxmharmony.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,31 +18,36 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterTasksListView;
+import com.sofac.fxmharmony.data.DataManager;
 import com.sofac.fxmharmony.data.dto.MessageTask;
 import com.sofac.fxmharmony.data.dto.StaffInfo;
+import com.sofac.fxmharmony.data.dto.base.ServerRequest;
+import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 import static com.sofac.fxmharmony.Constants.TASK_INFO;
+import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 
 public class TasksActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static long backPressed;
     public ArrayList<MessageTask> listStaff;
     public AdapterTasksListView adapterTasksListView;
+    private static StaffInfo staffInfo;
+    private Intent intent;
+    public static SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
-
-        StaffInfo staffInfo = (StaffInfo) getIntent().getSerializableExtra(Constants.STAFF_PROFILE);
-        Timber.i(staffInfo.toString());
-        listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,10 +57,17 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        intent = new Intent(this, MainActivity.class);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        viewListTasks();
+    }
+
+    @Override
+    protected void onResume() {
+        SharedPreferences preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        GetStaffInfoOnServer task = new GetStaffInfoOnServer();
+        task.execute(preferences.getLong(USER_ID_PREF, 0));
+        super.onResume();
     }
 
     public void viewListTasks() {
@@ -66,7 +79,7 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
         listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                intent.putExtra(TASK_INFO,listStaff.get(position));
+                intent.putExtra(TASK_INFO, listStaff.get(position));
                 startActivity(intent);
             }
         });
@@ -97,8 +110,6 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
 
         if (id == R.id.nav_tasks) {
 
-        } else if (id == R.id.nav_setting) {
-
         } else if (id == R.id.nav_exit) {
             Intent intent = new Intent(this, MainActivity.class);
 
@@ -115,5 +126,56 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private class GetStaffInfoOnServer extends AsyncTask<Long, Void, String> {
+
+        ServerResponse<StaffInfo> staffInfoServerResponse;
+
+        @Override
+        protected void onPreExecute() {
+            //on pre execute
+        }
+
+        @Override
+        protected String doInBackground(Long... urls) {
+            ServerRequest serverRequest = new ServerRequest(Constants.GET_STAFF_INFO_REQUEST, urls[0]);
+            DataManager dataManager = DataManager.getInstance();
+            staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
+
+            if (staffInfoServerResponse != null) {
+                return staffInfoServerResponse.getResponseStatus();
+            }
+            return Constants.SERVER_REQUEST_ERROR;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Timber.i(result);
+
+            if (result.equals(Constants.REQUEST_SUCCESS)) {
+                staffInfo = staffInfoServerResponse.getDataTransferObject();
+                listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
+                Collections.sort(listStaff, new Comparator<MessageTask>() {
+                    public int compare(MessageTask messageTask1, MessageTask messageTask2) {
+                        return messageTask2.getDate().compareTo(messageTask1.getDate());
+                    }
+                });
+                viewListTasks();
+            } else {
+                Toast.makeText(TasksActivity.this, R.string.errorSingIn, Toast.LENGTH_SHORT).show();
+
+                preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(IS_AUTHORIZATION, false);
+                editor.apply();
+                editor.commit();
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+
+        }
     }
 }

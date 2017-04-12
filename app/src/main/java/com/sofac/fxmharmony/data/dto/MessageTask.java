@@ -8,14 +8,15 @@ public class MessageTask implements Serializable{
 
     public MessageTask(){}
 
-    public MessageTask(String title, String messageText, Date date, Boolean isApprove) {
+    public MessageTask(Long id, String title, String messageText, Date date, Boolean isApprove) {
+        this.id = id;
         this.title = title;
         this.messageText = messageText;
         this.date = date;
         this.isApprove = isApprove;
     }
 
-
+    private Long id;
 
     private String title;
 
@@ -57,10 +58,19 @@ public class MessageTask implements Serializable{
         isApprove = approve;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "MessageTask{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", messageText='" + messageText + '\'' +
                 ", date=" + date +
                 ", isApprove=" + isApprove +

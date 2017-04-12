@@ -11,13 +11,16 @@ import java.util.Set;
 public class StaffInfo implements Serializable {
 
 
-    public StaffInfo(String name, String phone, String email, Date birthday, List<MessageTask> messageTasks) {
+    public StaffInfo(Long id, String name, String phone, String email, Date birthday, List<MessageTask> messageTasks) {
         this.name = name;
+        this.id = id;
         this.phone = phone;
         this.email = email;
         this.birthday = birthday;
         this.messageTasks = messageTasks;
     }
+
+    private Long id;
 
     private String name;
 
@@ -70,10 +73,15 @@ public class StaffInfo implements Serializable {
         this.messageTasks = messageTasks;
     }
 
+    public Long getId() {        return id;    }
+
+    public void setId(Long id) {        this.id = id;    }
+
     @Override
     public String toString() {
         return "StaffInfo{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +

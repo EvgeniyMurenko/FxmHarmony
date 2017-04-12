@@ -1,10 +1,13 @@
 package com.sofac.fxmharmony.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sofac.fxmharmony.R;
@@ -24,12 +27,7 @@ public class AdapterTasksListView extends BaseAdapter {
     private Context ctx;
     private LayoutInflater inflater;
 
-    public AdapterTasksListView (Context context, ArrayList<MessageTask> messageTaskArrayList){
-/*        Collections.sort(messageTaskArrayList, new Comparator<MessageTask>() {
-            public int compare(MessageTask o1, MessageTask o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });*/
+    public AdapterTasksListView(Context context, ArrayList<MessageTask> messageTaskArrayList) {
         this.messageTaskArrayList = messageTaskArrayList;
         this.ctx = context;
         this.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -60,12 +58,17 @@ public class AdapterTasksListView extends BaseAdapter {
         }
 
         MessageTask messageTask = getMessageTask(position);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy");
 
-        // заполняем View в пункте списка данными
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd.yyyy");
+        if (messageTask.getApprove()) {
+            (view.findViewById(R.id.itemLayout)).setBackgroundColor(Color.parseColor("#ffffff"));
+        } else {
+            (view.findViewById(R.id.itemLayout)).setBackgroundColor(Color.parseColor("#e6e6e6"));
+        }
+
         ((TextView) view.findViewById(R.id.idTitleItemTask)).setText(messageTask.getTitle());
         ((TextView) view.findViewById(R.id.idDateItemTask)).setText(dateFormat.format(messageTask.getDate()));
-        ((TextView) view.findViewById(R.id.idMessageItemTask)).setText(messageTask.getMessageText());
+        ((TextView) view.findViewById(R.id.idMessageItemTask)).setText(Html.fromHtml(messageTask.getMessageText()).toString());
 
         return view;
     }

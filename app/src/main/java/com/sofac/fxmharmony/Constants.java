@@ -13,12 +13,19 @@ public class Constants {
 
     public final static String SERVER_REQUEST_ERROR = "SERVER_REQUEST_ERROR";
     public final static String AUTHORIZATION_REQUEST = "AUTHORIZATION_REQUEST";
+    public final static String GET_STAFF_INFO_REQUEST = "GET_STAFF_INFO_REQUEST";
+    public final static String SET_READ_MESSAGE_TASK_REQUEST = "SET_READ_MESSAGE_TASK_REQUEST";
+
     public final static String REQUEST_SUCCESS = "REQUEST_SUCCESS";
     public final static String REQUEST_FAIL = "REQUEST_FAIL";
-    public final static String TASK_INFO = "TASK_INFO";
 
-    public final static String BASE_URL = "http://192.168.1.223:8080/";
-//    public final static String BASE_URL = "http://www.sofac.kr/";
+
+    public final static String TASK_INFO = "TASK_INFO";
+    public final static String USER_ID_PREF = "USER_ID_PREF";
+
+
+    //public final static String BASE_URL = "http://192.168.0.32:8080/";
+    public final static String BASE_URL = "http://www.sofac.kr/";
 
 
 

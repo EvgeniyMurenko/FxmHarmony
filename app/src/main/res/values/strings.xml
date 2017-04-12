@@ -13,6 +13,8 @@
     <string name="password">Password</string>
     <string name="title_activity_login">Login Activity</string>
     <string name="fieldEmpty">Field empty</string>
+    <string name="errorConnection">No connection to server / Incorrect login or password</string>
+    <string name="errorSingIn">Error Sign In</string>
 
     /* Navigation drawer - TasksActivity */
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -29,4 +31,5 @@
 
     /* Menu Detail Task Activity */
     <string name="menu_back">Back</string>
+    <string name="accept_task">Accept task</string>
 </resources>

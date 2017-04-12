@@ -20,6 +20,10 @@ import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
 import timber.log.Timber;
 
+import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
+import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
+import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
+
 /**
  * Activity login & password authorization, validation input field, if validate data start TasksActivity.class
  */
@@ -54,14 +58,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if("".equals(password)&&"".equals(login)){
             Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
+
             CheckAuthorizationOnServer task = new CheckAuthorizationOnServer();
             task.execute(editLogin.getText().toString(),editPassword.getText().toString());
-
-          /*  preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(IS_AUTHORIZATION, true);
-            editor.apply();
-            editor.commit();*/
         }
     }
 
@@ -77,7 +76,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private class CheckAuthorizationOnServer extends AsyncTask<String, Void, String> {
-
         ServerResponse<StaffInfo> staffInfoServerResponse;
 
         @Override
@@ -95,7 +93,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             DataManager dataManager = DataManager.getInstance();
             staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
 
-
             if (staffInfoServerResponse != null) {
                 return staffInfoServerResponse.getResponseStatus();
             }
@@ -107,15 +104,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Timber.i(result);
 
             if(result.equals(Constants.REQUEST_SUCCESS)){
-
                 StaffInfo staffInfo = staffInfoServerResponse.getDataTransferObject();
+                Timber.e(result);
+
+                preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(IS_AUTHORIZATION, true);
+                editor.apply();
+                editor.commit();
+
+                SharedPreferences preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+                SharedPreferences.Editor editorUser = preferences.edit();
+                editorUser.putLong(USER_ID_PREF, staffInfo.getId());
+                editorUser.apply();
+                editorUser.commit();
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(Constants.STAFF_PROFILE , staffInfo);
                 startActivity(intent);
-                Toast.makeText(LoginActivity.this, Constants.REQUEST_SUCCESS, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(LoginActivity.this, Constants.SERVER_REQUEST_ERROR, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
+                Timber.e(result);
             }
 
         }
