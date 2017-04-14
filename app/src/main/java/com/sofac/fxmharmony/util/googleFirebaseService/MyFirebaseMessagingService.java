@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.view.MainActivity;
+import com.sofac.fxmharmony.view.SplashActivity;
 
 import timber.log.Timber;
 
@@ -50,7 +50,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
         Intent notificationIntent = null;
-        notificationIntent = new Intent(this, MainActivity.class);
+        notificationIntent = new Intent(this, SplashActivity.class);
 
         mNotificationManager = (NotificationManager) this
                 .getSystemService(this.NOTIFICATION_SERVICE);

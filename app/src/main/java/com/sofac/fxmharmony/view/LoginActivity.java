@@ -25,7 +25,7 @@ import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 /**
- * Activity login & password authorization, validation input field, if validate data start TasksActivity.class
+ * Activity login & password authorization, validation input field, if validate data start MainActivity.class
  */
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         initUI();
         buttonLogin.setOnClickListener(this);
-        intent = new Intent (this, TasksActivity.class);
+        intent = new Intent (this, MainActivity.class);
     }
 
     private void initUI(){
@@ -58,9 +58,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if("".equals(password)&&"".equals(login)){
             Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
-
             CheckAuthorizationOnServer task = new CheckAuthorizationOnServer();
-            task.execute(editLogin.getText().toString(),editPassword.getText().toString());
+            task.execute(editLogin.getText().toString(),editPassword.getText().toString()); // TODO PassEnCode
         }
     }
 
@@ -101,11 +100,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         @Override
         protected void onPostExecute(String result) {
-            Timber.i(result);
+            Timber.e("Response Server: " + result);
 
             if(result.equals(Constants.REQUEST_SUCCESS)){
                 StaffInfo staffInfo = staffInfoServerResponse.getDataTransferObject();
-                Timber.e(result);
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -119,11 +117,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 editorUser.apply();
                 editorUser.commit();
 
+                Timber.e(staffInfo.getId()+"");
+
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             } else {
                 Toast.makeText(LoginActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
-                Timber.e(result);
             }
 
         }

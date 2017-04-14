@@ -42,12 +42,7 @@ public class DataManager {
             Type authorizationType = new TypeToken<ServerResponse<StaffInfo>>() {
             }.getType();
 
-
             ServerResponse<StaffInfo> staffInfoServerResponse = new Gson().fromJson(response, authorizationType);
-
-//            Timber.i(staffInfoServerResponse.getResponseStatus());
-//            Timber.i(staffInfoServerResponse.getDataTransferObject().getClass().toString());
-
 
             return staffInfoServerResponse;
 

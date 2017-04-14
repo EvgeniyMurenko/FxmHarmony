@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.sofac.fxmharmony.view.TasksActivity"
+    tools:context="com.sofac.fxmharmony.view.MainActivity"
     tools:showIn="@layout/app_bar_navigation_drawer">
 
     <ListView
-        android:id="@+id/listViewTasks"
+        android:id="@+id/listViewMain"
         android:layout_height="match_parent"
         android:layout_width="match_parent"/>
 
