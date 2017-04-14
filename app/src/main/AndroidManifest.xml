@@ -17,7 +17,8 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MainActivity"
+        <activity
+            android:name=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,12 +28,17 @@
         </activity>
         <activity
             android:name=".view.TasksActivity"
-            android:label="@string/app_name"
+            android:label="@string/tasks_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.DetailTaskActivity"/>
+        <activity android:name=".view.DetailTaskActivity" />
+        <activity
+            android:name=".view.CasesActivity"
+            android:label="@string/cases_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
 
         <!-- Push Google Cloud Messaging services -->
         <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">

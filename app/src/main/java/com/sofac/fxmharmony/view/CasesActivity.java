@@ -37,13 +37,13 @@ import static com.sofac.fxmharmony.Constants.TASK_INFO;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 
-public class TasksActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class CasesActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static long backPressed;
     public ArrayList<MessageTask> listStaff;
     public AdapterTasksListView adapterTasksListView;
     private static StaffInfo staffInfo;
     private Intent intentMainActivity;
-    private Intent intentCasesActivity;
+    private Intent intentTasksActivity;
     private Intent intentDetailTaskActivity;
     public static SharedPreferences preferences;
 
@@ -65,7 +65,7 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(this);
 
         intentMainActivity = new Intent(this, MainActivity.class);
-        intentCasesActivity = new Intent(this, CasesActivity.class);
+        intentTasksActivity = new Intent(this, TasksActivity.class);
         intentDetailTaskActivity = new Intent(this, DetailTaskActivity.class);
     }
 
@@ -115,10 +115,10 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_cases) {
-            intentCasesActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intentCasesActivity);
-        } else if (id == R.id.nav_tasks) {
 
+        } else if (id == R.id.nav_tasks) {
+            intentTasksActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intentTasksActivity);
         } else if (id == R.id.nav_exit) {
             SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
@@ -160,6 +160,7 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
         @Override
         protected void onPostExecute(String result) {
             Timber.i(result);
+
             if (result.equals(Constants.REQUEST_SUCCESS)) {
                 staffInfo = staffInfoServerResponse.getDataTransferObject();
                 listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
@@ -170,7 +171,7 @@ public class TasksActivity extends BaseActivity implements NavigationView.OnNavi
                 });
                 viewListTasks();
             } else {
-                Toast.makeText(TasksActivity.this, R.string.errorSingIn, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CasesActivity.this, R.string.errorSingIn, Toast.LENGTH_SHORT).show();
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();

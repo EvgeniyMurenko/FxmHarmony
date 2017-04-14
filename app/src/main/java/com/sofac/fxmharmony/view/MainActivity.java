@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void startTasksActivity() {
-        intent = new Intent(this, TasksActivity.class);
+        intent = new Intent(this, CasesActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

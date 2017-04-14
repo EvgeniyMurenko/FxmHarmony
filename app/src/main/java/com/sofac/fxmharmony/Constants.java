@@ -15,6 +15,7 @@ public class Constants {
     public final static String AUTHORIZATION_REQUEST = "AUTHORIZATION_REQUEST";
     public final static String GET_STAFF_INFO_REQUEST = "GET_STAFF_INFO_REQUEST";
     public final static String SET_READ_MESSAGE_TASK_REQUEST = "SET_READ_MESSAGE_TASK_REQUEST";
+    public final static String LOAD_ALL_CASES_REQUEST = "LOAD_ALL_CASES_REQUEST";
 
     public final static String REQUEST_SUCCESS = "REQUEST_SUCCESS";
     public final static String REQUEST_FAIL = "REQUEST_FAIL";

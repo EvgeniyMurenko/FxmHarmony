@@ -22,6 +22,10 @@
 
     /* Menu TasksActivity */
     <string name="action_search">Search</string>
+    <string name="tasks_name">Tasks</string>
+
+    /* Menu TasksActivity */
+    <string name="cases_name">Cases</string>
 
     /* Menu Navigation drawer */
     <string name="hello_staff">Hello Staff</string>

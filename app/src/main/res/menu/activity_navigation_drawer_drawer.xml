@@ -3,13 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_cases"
+            android:icon="@drawable/chart_pie"
+            android:title="@string/cases_name" />
+        <item
             android:id="@+id/nav_tasks"
             android:icon="@drawable/receipt"
-            android:title="@string/tasks" />
-<!--        <item
-            android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/setting" />-->
+            android:title="@string/tasks_name" />
         <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/exit_to_app"
