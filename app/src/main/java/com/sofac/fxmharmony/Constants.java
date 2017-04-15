@@ -27,8 +27,9 @@ public class Constants {
     public final static Long VIEW_CASES_LIST = 0L;
     public final static Long VIEW_TASKS_LIST = 1L;
 
-    public final static String BASE_URL = "http://192.168.0.32:8080/";
-//    public final static String BASE_URL = "http://www.sofac.kr/";
+    //public final static String BASE_URL = "http://192.168.0.32:8080/";
+    public final static String BASE_URL = "http://192.168.1.108:8080/";
+//   public final static String BASE_URL = "http://www.sofac.kr/";
 
 
 

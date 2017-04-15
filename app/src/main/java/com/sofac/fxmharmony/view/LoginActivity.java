@@ -117,7 +117,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 editorUser.apply();
                 editorUser.commit();
 
-                Timber.e(staffInfo.getId()+"");
+                Timber.e(preferences.getLong(USER_ID_PREF,0L)+"");
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

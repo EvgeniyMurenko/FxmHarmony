@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public AdapterTasksListView adapterTasksListView;
     public AdapterCasesListView adapterCasesListView;
     private static StaffInfo staffInfo;
-    private Intent intentMainActivity;
+    private Intent intentSplashActivity;
     private Intent intentDetailCaseActivity;
     private Intent intentDetailTaskActivity;
     public static SharedPreferences preferences;
@@ -56,7 +56,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
-        intentMainActivity = new Intent(this, SplashActivity.class);
+
+        intentSplashActivity = new Intent(this, SplashActivity.class);
         intentDetailCaseActivity = new Intent(this, DetailCaseActivity.class);
         intentDetailTaskActivity = new Intent(this, DetailTaskActivity.class);
 
@@ -75,15 +76,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onResume() {
+        preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
         uploadListFromServer();
         super.onResume();
     }
 
     public void uploadListFromServer() {
-        SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         GetListFromServer task = new GetListFromServer();
-        Long lg = preferences.getLong(USER_ID_PREF, 0);
-        Timber.e(lg.toString());
+        Timber.e((preferences.getLong(USER_ID_PREF, 0)) + "");
         task.execute(preferences.getLong(USER_ID_PREF, 0), preferences.getLong(WHAT_KIND_VIEW_LIST, VIEW_TASKS_LIST));
     }
 
@@ -139,21 +139,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         if (id == R.id.nav_cases) {
             setTitle(getResources().getString(R.string.cases_name));
             editor.putLong(WHAT_KIND_VIEW_LIST, VIEW_CASES_LIST);
+            editor.apply();
             uploadListFromServer();
         } else if (id == R.id.nav_tasks) {
             setTitle(getResources().getString(R.string.tasks_name));
             editor.putLong(WHAT_KIND_VIEW_LIST, VIEW_TASKS_LIST);
+            editor.apply();
             uploadListFromServer();
         } else if (id == R.id.nav_exit) {
             editor.putBoolean(IS_AUTHORIZATION, false);
-            intentMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intentMainActivity);
+            editor.apply();
+            intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intentSplashActivity);
         }
-        editor.apply();
         editor.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -166,6 +169,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private class GetListFromServer extends AsyncTask<Long, Void, String> {
 
         ServerResponse<StaffInfo> staffInfoServerResponse;
+        Long idViewList;
 
         @Override
         protected void onPreExecute() {
@@ -174,14 +178,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         @Override
         protected String doInBackground(Long... urls) {
-            ServerRequest serverRequest = new ServerRequest(Constants.GET_STAFF_INFO_REQUEST, urls[0]);
-            DataManager dataManager = DataManager.getInstance();
-            staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
-
-            if (urls[1].equals(Constants.VIEW_CASES_LIST)) {
-
-            } else if (urls[1].equals(Constants.VIEW_TASKS_LIST)) {
-
+            idViewList = urls[1];
+            Timber.e("urls[1]:" + urls[1] + "");
+            if (idViewList.equals(Constants.VIEW_CASES_LIST)) {
+                //ServerRequest serverRequest = new ServerRequest(Constants.LOAD_ALL_CASES_REQUEST, "");
+                ServerRequest serverRequest = new ServerRequest(Constants.GET_STAFF_INFO_REQUEST, urls[0]);
+                DataManager dataManager = DataManager.getInstance();
+                staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
+            } else if (idViewList.equals(Constants.VIEW_TASKS_LIST)) {
+                ServerRequest serverRequest = new ServerRequest(Constants.GET_STAFF_INFO_REQUEST, urls[0]);
+                DataManager dataManager = DataManager.getInstance();
+                staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
             }
 
             if (staffInfoServerResponse != null) {
@@ -195,31 +202,36 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Timber.i(result);
             if (result.equals(Constants.REQUEST_SUCCESS)) {
 
-//                if (urls[1].equals(Constants.VIEW_CASES_LIST)) {
-//                    ServerRequest serverRequest = new ServerRequest(GET_STAFF_INFO_REQUEST, "");
-//                    DataManager dataManager = DataManager.getInstance();
-//                    serverResponse = dataManager.sendAuthorizationRequest(serverRequest);
-//                } else if (urls[1].equals(Constants.VIEW_CASES_LIST)) {
-                staffInfo = staffInfoServerResponse.getDataTransferObject();
-                listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
-                Collections.sort(listStaff, new Comparator<MessageTask>() {
-                    public int compare(MessageTask messageTask1, MessageTask messageTask2) {
-                        return messageTask2.getDate().compareTo(messageTask1.getDate());
-                    }
-                });
-                viewListTasks();
-//                }
+                if (idViewList.equals(VIEW_CASES_LIST)) {
+                    staffInfo = staffInfoServerResponse.getDataTransferObject();
+                    listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
+                    Collections.sort(listStaff, new Comparator<MessageTask>() {
+                        public int compare(MessageTask messageTask1, MessageTask messageTask2) {
+                            return messageTask2.getDate().compareTo(messageTask1.getDate());
+                        }
+                    });
+                    viewListTasks();
+                } else if (idViewList.equals(VIEW_TASKS_LIST)) {
+                    staffInfo = staffInfoServerResponse.getDataTransferObject();
+                    listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
+                    Collections.sort(listStaff, new Comparator<MessageTask>() {
+                        public int compare(MessageTask messageTask1, MessageTask messageTask2) {
+                            return messageTask2.getDate().compareTo(messageTask1.getDate());
+                        }
+                    });
+                    viewListTasks();
+                }
 
             } else {
                 Toast.makeText(MainActivity.this, R.string.errorSingIn, Toast.LENGTH_SHORT).show();
 
-//                SharedPreferences.Editor editor = preferences.edit();
-//                editor.putBoolean(IS_AUTHORIZATION, false);
-//                editor.apply();
-//                editor.commit();
-//
-//                intentMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intentMainActivity);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(IS_AUTHORIZATION, false);
+                editor.apply();
+                editor.commit();
+
+                intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentSplashActivity);
             }
 
         }
