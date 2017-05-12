@@ -11,4 +11,6 @@
     <color name="colorItemContext">#979797</color>
     <color name="colorBGItemNoRead">#e6e6e6</color>
 
+    <color name="transparent">#00000000</color>
+
 </resources>

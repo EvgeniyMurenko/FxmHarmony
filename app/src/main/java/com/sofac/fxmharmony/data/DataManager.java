@@ -3,15 +3,12 @@ package com.sofac.fxmharmony.data;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.Constants;
-import com.sofac.fxmharmony.data.dto.MessageTask;
-import com.sofac.fxmharmony.data.dto.StaffInfo;
+import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Set;
-
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -31,7 +28,7 @@ public class DataManager {
     }
 
 
-    public ServerResponse<StaffInfo> sendAuthorizationRequest(ServerRequest serverRequest) {
+    public ServerResponse<ManagerInfoDTO> sendAuthorizationRequest(ServerRequest serverRequest) {
 
 
         String response = sendRequest(serverRequest);
@@ -39,17 +36,36 @@ public class DataManager {
 
         if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
 
-            Type authorizationType = new TypeToken<ServerResponse<StaffInfo>>() {
+            Type authorizationType = new TypeToken<ServerResponse<ManagerInfoDTO>>() {
             }.getType();
 
-            ServerResponse<StaffInfo> staffInfoServerResponse = new Gson().fromJson(response, authorizationType);
+            ServerResponse<ManagerInfoDTO> managerInfoServerResponse = new Gson().fromJson(response, authorizationType);
 
-            return staffInfoServerResponse;
+            return managerInfoServerResponse;
 
         }
 
         return null;
     }
+//
+//    public ServerResponse<List<>> getCaseRequest (ServerRequest serverRequest) {
+//
+//        String response = sendRequest(serverRequest);
+//        Timber.i(response);
+//
+//        if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
+//
+//            Type caseType = new TypeToken<ServerResponse<List<>>>() {
+//            }.getType();
+//
+//            ServerResponse<List<>> listCaseDTOServerResponse = new Gson().fromJson(response, caseType);
+//
+//            return listCaseDTOServerResponse;
+//
+//        }
+//
+//        return null;
+//    }
 
 
     private String sendRequest(ServerRequest serverRequest) {

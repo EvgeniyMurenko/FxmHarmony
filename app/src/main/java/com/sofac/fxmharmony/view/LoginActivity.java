@@ -1,20 +1,28 @@
 package com.sofac.fxmharmony.view;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.DataManager;
 import com.sofac.fxmharmony.data.dto.Authorization;
-import com.sofac.fxmharmony.data.dto.StaffInfo;
+import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
@@ -59,7 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
             CheckAuthorizationOnServer task = new CheckAuthorizationOnServer();
-            task.execute(editLogin.getText().toString(),editPassword.getText().toString()); // TODO PassEnCode
+            task.execute(editLogin.getText().toString(),editPassword.getText().toString());
         }
     }
 
@@ -75,11 +83,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private class CheckAuthorizationOnServer extends AsyncTask<String, Void, String> {
-        ServerResponse<StaffInfo> staffInfoServerResponse;
+        ServerResponse<ManagerInfoDTO> managerInfoServerResponse;
+        ProgressDialog pd = new ProgressDialog(LoginActivity.this, R.style.MyTheme);
 
         @Override
         protected void onPreExecute() {
-            //on pre execute
+            pd.setCancelable(false);
+            pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            pd.show();
         }
 
         @Override
@@ -90,10 +101,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             ServerRequest serverRequest = new ServerRequest(Constants.AUTHORIZATION_REQUEST, authorization);
             DataManager dataManager = DataManager.getInstance();
-            staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
+            managerInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
 
-            if (staffInfoServerResponse != null) {
-                return staffInfoServerResponse.getResponseStatus();
+            if (managerInfoServerResponse != null) {
+                return managerInfoServerResponse.getResponseStatus();
             }
             return Constants.SERVER_REQUEST_ERROR;
         }
@@ -103,7 +114,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Timber.e("Response Server: " + result);
 
             if(result.equals(Constants.REQUEST_SUCCESS)){
-                StaffInfo staffInfo = staffInfoServerResponse.getDataTransferObject();
+                ManagerInfoDTO managerInfoDTO = managerInfoServerResponse.getDataTransferObject();
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -113,7 +124,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 SharedPreferences preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
                 SharedPreferences.Editor editorUser = preferences.edit();
-                editorUser.putLong(USER_ID_PREF, staffInfo.getId());
+                editorUser.putLong(USER_ID_PREF, managerInfoDTO.getId());
                 editorUser.apply();
                 editorUser.commit();
 
@@ -124,7 +135,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             } else {
                 Toast.makeText(LoginActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
             }
-
+            pd.dismiss();
         }
     }
 

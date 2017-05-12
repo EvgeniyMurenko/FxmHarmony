@@ -1,56 +1,42 @@
 package com.sofac.fxmharmony.view;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
+
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sofac.fxmharmony.Constants;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.adapter.AdapterCasesListView;
-import com.sofac.fxmharmony.adapter.AdapterTasksListView;
-import com.sofac.fxmharmony.data.DataManager;
-import com.sofac.fxmharmony.data.dto.MessageTask;
-import com.sofac.fxmharmony.data.dto.StaffInfo;
-import com.sofac.fxmharmony.data.dto.base.ServerRequest;
-import com.sofac.fxmharmony.data.dto.base.ServerResponse;
+import com.sofac.fxmharmony.adapter.AdapterPushListView;
+import com.sofac.fxmharmony.data.dto.PushMessage;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
-import timber.log.Timber;
-
+import static android.R.attr.type;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
-import static com.sofac.fxmharmony.Constants.TASK_INFO;
-import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-import static com.sofac.fxmharmony.Constants.VIEW_CASES_LIST;
-import static com.sofac.fxmharmony.Constants.VIEW_TASKS_LIST;
-import static com.sofac.fxmharmony.Constants.WHAT_KIND_VIEW_LIST;
+import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity {
     private static long backPressed;
-    public ArrayList<MessageTask> listStaff;
-    public AdapterTasksListView adapterTasksListView;
-    public AdapterCasesListView adapterCasesListView;
-    private static StaffInfo staffInfo;
-    private Intent intentSplashActivity;
-    private Intent intentDetailCaseActivity;
-    private Intent intentDetailTaskActivity;
-    public static SharedPreferences preferences;
+    public Intent intentSplashActivity;
+
+    public AdapterPushListView adapterTasksListView;
+    String gsonString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,65 +44,71 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_navigation_drawer);
 
         intentSplashActivity = new Intent(this, SplashActivity.class);
-        intentDetailCaseActivity = new Intent(this, DetailCaseActivity.class);
-        intentDetailTaskActivity = new Intent(this, DetailTaskActivity.class);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        return super.onCreateOptionsMenu(menu);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     protected void onResume() {
-        preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-        uploadListFromServer();
+        UpdateViewList();
         super.onResume();
     }
 
-    public void uploadListFromServer() {
-        GetListFromServer task = new GetListFromServer();
-        Timber.e((preferences.getLong(USER_ID_PREF, 0)) + "");
-        task.execute(preferences.getLong(USER_ID_PREF, 0), preferences.getLong(WHAT_KIND_VIEW_LIST, VIEW_TASKS_LIST));
+    protected void UpdateViewList() {
+        SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+        gsonString = preferences.getString(PUSH_MASSEGES, "null");
+        if (!"null".equals(gsonString)) {
+            Type type = new TypeToken<List<PushMessage>>() {
+            }.getType();
+            ArrayList<PushMessage> pushMessages = new Gson().fromJson(gsonString, type);
+
+            ListView listViewPush = (ListView) findViewById(R.id.listViewMain);
+            adapterTasksListView = new AdapterPushListView(this, pushMessages);
+            listViewPush.setAdapter(adapterTasksListView);
+        }
+//        listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+//                intentDetailTaskActivity.putExtra(TASK_INFO, listStaff.get(position));
+//                startActivity(intentDetailTaskActivity);
+//            }
+//        });
+
+
+//        TextView textView = (TextView) findViewById(R.id.textViewTest);
+//        textView.setText(pushMessages.toString());
     }
 
-    public void viewListCases() {
-        ListView listViewCases = (ListView) findViewById(R.id.listViewMain);
-
-        adapterCasesListView = new AdapterCasesListView(this, listStaff);
-        listViewCases.setAdapter(adapterCasesListView);
-
-        listViewCases.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                intentDetailCaseActivity.putExtra(TASK_INFO, listStaff.get(position));
-                startActivity(intentDetailCaseActivity);
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        switch (item.getItemId()) {
+            case R.id.menu_exit:
+                editor.putBoolean(IS_AUTHORIZATION, false);
+                editor.apply();
+                intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentSplashActivity);
+                break;
+            case R.id.menu_update:
+                UpdateViewList();
+            case R.id.menu_delete_all:
+                editor.putString(PUSH_MASSEGES, "null");
+                editor.apply();
+                UpdateViewList();
+                break;
+        }
+        editor.commit();
+        return super.onOptionsItemSelected(item);
     }
-
-    public void viewListTasks() {
-        ListView listViewTasks = (ListView) findViewById(R.id.listViewMain);
-
-        adapterTasksListView = new AdapterTasksListView(this, listStaff);
-        listViewTasks.setAdapter(adapterTasksListView);
-
-        listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                intentDetailTaskActivity.putExtra(TASK_INFO, listStaff.get(position));
-                startActivity(intentDetailTaskActivity);
-            }
-        });
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -134,106 +126,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        if (id == R.id.nav_cases) {
-            setTitle(getResources().getString(R.string.cases_name));
-            editor.putLong(WHAT_KIND_VIEW_LIST, VIEW_CASES_LIST);
-            editor.apply();
-            uploadListFromServer();
-        } else if (id == R.id.nav_tasks) {
-            setTitle(getResources().getString(R.string.tasks_name));
-            editor.putLong(WHAT_KIND_VIEW_LIST, VIEW_TASKS_LIST);
-            editor.apply();
-            uploadListFromServer();
-        } else if (id == R.id.nav_exit) {
-            editor.putBoolean(IS_AUTHORIZATION, false);
-            editor.apply();
-            intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intentSplashActivity);
-        }
-        editor.commit();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
-    /**
-     * Request to server class
-     */
-    private class GetListFromServer extends AsyncTask<Long, Void, String> {
-
-        ServerResponse<StaffInfo> staffInfoServerResponse;
-        Long idViewList;
-
-        @Override
-        protected void onPreExecute() {
-            //on pre execute
-        }
-
-        @Override
-        protected String doInBackground(Long... urls) {
-            idViewList = urls[1];
-            Timber.e("urls[1]:" + urls[1] + "");
-            if (idViewList.equals(Constants.VIEW_CASES_LIST)) {
-                //ServerRequest serverRequest = new ServerRequest(Constants.LOAD_ALL_CASES_REQUEST, "");
-                ServerRequest serverRequest = new ServerRequest(Constants.GET_STAFF_INFO_REQUEST, urls[0]);
-                DataManager dataManager = DataManager.getInstance();
-                staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
-            } else if (idViewList.equals(Constants.VIEW_TASKS_LIST)) {
-                ServerRequest serverRequest = new ServerRequest(Constants.GET_STAFF_INFO_REQUEST, urls[0]);
-                DataManager dataManager = DataManager.getInstance();
-                staffInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
-            }
-
-            if (staffInfoServerResponse != null) {
-                return staffInfoServerResponse.getResponseStatus();
-            }
-            return Constants.SERVER_REQUEST_ERROR;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Timber.i(result);
-            if (result.equals(Constants.REQUEST_SUCCESS)) {
-
-                if (idViewList.equals(VIEW_CASES_LIST)) {
-                    staffInfo = staffInfoServerResponse.getDataTransferObject();
-                    listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
-                    Collections.sort(listStaff, new Comparator<MessageTask>() {
-                        public int compare(MessageTask messageTask1, MessageTask messageTask2) {
-                            return messageTask2.getDate().compareTo(messageTask1.getDate());
-                        }
-                    });
-                    viewListTasks();
-                } else if (idViewList.equals(VIEW_TASKS_LIST)) {
-                    staffInfo = staffInfoServerResponse.getDataTransferObject();
-                    listStaff = (ArrayList<MessageTask>) staffInfo.getMessageTasks();
-                    Collections.sort(listStaff, new Comparator<MessageTask>() {
-                        public int compare(MessageTask messageTask1, MessageTask messageTask2) {
-                            return messageTask2.getDate().compareTo(messageTask1.getDate());
-                        }
-                    });
-                    viewListTasks();
-                }
-
-            } else {
-                Toast.makeText(MainActivity.this, R.string.errorSingIn, Toast.LENGTH_SHORT).show();
-
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(IS_AUTHORIZATION, false);
-                editor.apply();
-                editor.commit();
-
-                intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentSplashActivity);
-            }
-
-        }
-    }
 }

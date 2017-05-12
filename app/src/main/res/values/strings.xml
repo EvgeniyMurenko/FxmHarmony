@@ -35,5 +35,7 @@
 
     /* Menu Detail Task Activity */
     <string name="menu_back">Back</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_update">Update</string>
     <string name="accept_task">Accept task</string>
 </resources>

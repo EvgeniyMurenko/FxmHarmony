@@ -32,8 +32,6 @@
         <activity
             android:name=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.DetailTaskActivity" />
-        <activity android:name=".view.DetailCaseActivity"/>
 
         <!-- Push Google Cloud Messaging services -->
         <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">

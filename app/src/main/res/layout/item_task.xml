@@ -37,14 +37,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/idMessageItemTask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:text="Context"
             android:textColor="@color/colorItemContext" />
 
     </LinearLayout>

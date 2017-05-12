@@ -28,7 +28,7 @@
         <ImageView
             android:id="@+id/imageHarmony"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="120dp"
             android:contentDescription="@string/harmony"
             android:src="@drawable/harmony" />
 
