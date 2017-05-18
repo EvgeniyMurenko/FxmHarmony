@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,17 +25,22 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.type;
+import timber.log.Timber;
+
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
+import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 
 public class MainActivity extends BaseActivity {
     private static long backPressed;
     public Intent intentSplashActivity;
+    public Intent intentDetailTaskActivity;
 
     public AdapterPushListView adapterTasksListView;
     String gsonString;
+    ListView listViewPush;
+    ArrayList<PushMessage> pushMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +48,11 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_navigation_drawer);
 
         intentSplashActivity = new Intent(this, SplashActivity.class);
+        intentDetailTaskActivity = new Intent(this, DetailPushMessageActivity.class);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        listViewPush = (ListView) findViewById(R.id.listViewMain);
     }
 
     @Override
@@ -64,27 +70,27 @@ public class MainActivity extends BaseActivity {
 
     protected void UpdateViewList() {
         SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-        gsonString = preferences.getString(PUSH_MASSEGES, "null");
-        if (!"null".equals(gsonString)) {
+        gsonString = preferences.getString(PUSH_MASSEGES, "");
+        Timber.e("gsonString!!!!!!!!!"+gsonString);
+        if (!"".equals(gsonString)&&gsonString!=null) {
             Type type = new TypeToken<List<PushMessage>>() {
             }.getType();
-            ArrayList<PushMessage> pushMessages = new Gson().fromJson(gsonString, type);
+            pushMessages= new Gson().fromJson(gsonString, type);
 
-            ListView listViewPush = (ListView) findViewById(R.id.listViewMain);
             adapterTasksListView = new AdapterPushListView(this, pushMessages);
             listViewPush.setAdapter(adapterTasksListView);
         }
-//        listViewTasks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-//                intentDetailTaskActivity.putExtra(TASK_INFO, listStaff.get(position));
-//                startActivity(intentDetailTaskActivity);
-//            }
-//        });
+        listViewPush.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+                if (!"".equals(gsonString)&&gsonString!=null) {
+                    intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
+                    startActivity(intentDetailTaskActivity);
+                }
+            }
+        });
 
 
-//        TextView textView = (TextView) findViewById(R.id.textViewTest);
-//        textView.setText(pushMessages.toString());
     }
 
     @Override
@@ -100,10 +106,12 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.menu_update:
                 UpdateViewList();
+                break;
             case R.id.menu_delete_all:
-                editor.putString(PUSH_MASSEGES, "null");
+                editor.putString(PUSH_MASSEGES, "");
                 editor.apply();
-                UpdateViewList();
+                pushMessages.clear();
+                adapterTasksListView.notifyDataSetChanged();
                 break;
         }
         editor.commit();

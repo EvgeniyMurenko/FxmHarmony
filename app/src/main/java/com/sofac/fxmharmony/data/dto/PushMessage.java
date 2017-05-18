@@ -1,10 +1,12 @@
 package com.sofac.fxmharmony.data.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by Maxim on 11.05.2017.
  */
 
-public class PushMessage {
+public class PushMessage implements Serializable {
     private String title;
     private String message;
     private String date;

@@ -5,7 +5,7 @@
         android:id="@+id/menu_delete_all"
         android:orderInCategory="10"
         android:title="@string/menu_delete"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ic_delete_sweep"
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_update"

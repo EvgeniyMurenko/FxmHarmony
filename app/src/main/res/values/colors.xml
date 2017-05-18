@@ -12,5 +12,6 @@
     <color name="colorBGItemNoRead">#e6e6e6</color>
 
     <color name="transparent">#00000000</color>
+    <color name="colorTextDark">#515151</color>
 
 </resources>
