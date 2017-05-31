@@ -18,19 +18,11 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.SplashActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
 import timber.log.Timber;
 
-import static android.R.attr.type;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
-import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 
 

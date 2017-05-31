@@ -71,11 +71,11 @@ public class MainActivity extends BaseActivity {
     protected void UpdateViewList() {
         SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         gsonString = preferences.getString(PUSH_MASSEGES, "");
-        Timber.e("gsonString!!!!!!!!!"+gsonString);
-        if (!"".equals(gsonString)&&gsonString!=null) {
+        Timber.e("gsonString!!!!!!!!!" + gsonString);
+        if (!"".equals(gsonString) && gsonString != null) {
             Type type = new TypeToken<List<PushMessage>>() {
             }.getType();
-            pushMessages= new Gson().fromJson(gsonString, type);
+            pushMessages = new Gson().fromJson(gsonString, type);
 
             adapterTasksListView = new AdapterPushListView(this, pushMessages);
             listViewPush.setAdapter(adapterTasksListView);
@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity {
         listViewPush.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                if (!"".equals(gsonString)&&gsonString!=null) {
+                if (!"".equals(gsonString) && gsonString != null) {
                     intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
                     startActivity(intentDetailTaskActivity);
                 }
@@ -110,8 +110,10 @@ public class MainActivity extends BaseActivity {
             case R.id.menu_delete_all:
                 editor.putString(PUSH_MASSEGES, "");
                 editor.apply();
-                pushMessages.clear();
-                adapterTasksListView.notifyDataSetChanged();
+                if (pushMessages != null) {
+                    pushMessages.clear();
+                    adapterTasksListView.notifyDataSetChanged();
+                }
                 break;
         }
         editor.commit();

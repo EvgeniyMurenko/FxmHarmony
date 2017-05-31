@@ -75,4 +75,16 @@ public class ManagerInfoDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "ManagerInfoDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", birthday=" + birthday +
+                ", permissions=" + permissions +
+                '}';
+    }
 }
