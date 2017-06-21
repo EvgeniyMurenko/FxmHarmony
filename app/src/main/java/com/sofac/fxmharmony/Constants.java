@@ -18,11 +18,27 @@ public class Constants {
     public final static String ONE_PUSH_MESSAGE_DATA = "ONE_PUSH_MESSAGE_DATA";
 
 
-    public final static String BASE_URL = "http://52.211.242.225:8080/";
+    //    urls
 
-     //public final static String BASE_URL = "http://192.168.0.37:8080/";
+    //public final static String BASE_URL = "http://52.211.242.225:8080/";
+    //public final static String BASE_URL = "http://192.168.0.37:8080/";
+    public final static String BASE_URL = "http://192.168.0.45:8080/";
     // public final static String BASE_URL = "http://www.sofac.kr/";
 
 
+    //Group requests
+    public final static String LOAD_ALL_POSTS_REQUEST = "LOAD_ALL_POSTS_REQUEST";
+    public final static String LOAD_COMMENTS_REQUEST = "LOAD_COMMENTS_REQUEST";
+    public final static String WRITE_POST_REQUEST = "WRITE_POST_REQUEST";
+    public final static String WRITE_COMMENT_REQUEST = "WRITE_COMMENT_REQUEST";
+    public final static String DELETE_POST_REQUEST = "DELETE_POST_REQUEST";
+    public final static String DELETE_COMMENT_REQUEST = "DELETE_COMMENT_REQUEST";
+    public final static String UPDATE_POST_REQUEST = "UPDATE_POST_REQUEST";
+    public final static String UPDATE_COMMENT_REQUEST = "UPDATE_COMMENT_REQUEST";
+
+
+    // Controller's name
+    public final static String APP_EXCHANGE = "APP_EXCHANGE";
+    public final static String GROUP_EXCHANGE = "GROUP_EXCHANGE";
 
 }

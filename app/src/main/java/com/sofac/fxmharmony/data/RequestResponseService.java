@@ -19,6 +19,9 @@ public interface RequestResponseService {
     @POST("app-exchange")
     Call<ResponseBody> postAuthorizationRequest(@Body ServerRequest serverRequest);
 
+    @POST("group-exchange")
+    Call<ResponseBody> postGroupRequest(@Body ServerRequest serverRequest);
+
     /******** Helper class that sets up a new services *******/
     class Creator {
 

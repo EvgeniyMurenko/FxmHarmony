@@ -3,12 +3,15 @@ package com.sofac.fxmharmony.data;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.Constants;
+import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
+import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -31,7 +34,7 @@ public class DataManager {
     public ServerResponse<ManagerInfoDTO> sendAuthorizationRequest(ServerRequest serverRequest) {
 
 
-        String response = sendRequest(serverRequest);
+        String response = sendRequest(serverRequest , Constants.APP_EXCHANGE);
         Timber.i(response);
 
         if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
@@ -46,6 +49,33 @@ public class DataManager {
         }
 
         return null;
+    }
+
+    public ServerResponse postGroupRequest(ServerRequest serverRequest , String groupRequestType) {
+
+        String response = sendRequest(serverRequest, Constants.GROUP_EXCHANGE);
+        Timber.i(response);
+
+        if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
+            Type authorizationType = null;
+
+
+            if (groupRequestType.equals(Constants.LOAD_ALL_POSTS_REQUEST)){
+                authorizationType = new TypeToken<ServerResponse<List<PostDTO>>>() {
+                }.getType();
+            } else if (groupRequestType.equals(Constants.WRITE_POST_REQUEST)){
+                authorizationType = new TypeToken<ServerResponse<List<CommentDTO>>>() {
+                }.getType();
+            } else {
+                authorizationType = new TypeToken<ServerResponse>(){}.getType();
+            }
+
+            return new Gson().fromJson(response, authorizationType);
+
+        }
+
+        return null;
+
     }
 //
 //    public ServerResponse<List<>> getCaseRequest (ServerRequest serverRequest) {
@@ -68,10 +98,15 @@ public class DataManager {
 //    }
 
 
-    private String sendRequest(ServerRequest serverRequest) {
+    private String sendRequest(ServerRequest serverRequest, String type) {
 
-        Call<ResponseBody> call = requestResponseService.postAuthorizationRequest(serverRequest);
+        Call<ResponseBody> call = null;
 
+        if (type.equals(Constants.APP_EXCHANGE)) {
+            call = requestResponseService.postAuthorizationRequest(serverRequest);
+        } else if (type.equals(Constants.GROUP_EXCHANGE)) {
+            call = requestResponseService.postGroupRequest(serverRequest);
+        }
         String response = Constants.SERVER_REQUEST_ERROR;
 
         try (ResponseBody responseBody = call.execute().body()) {
