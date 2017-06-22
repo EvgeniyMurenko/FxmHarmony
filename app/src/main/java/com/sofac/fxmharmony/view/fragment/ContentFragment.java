@@ -31,6 +31,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static android.R.attr.type;
 import static android.content.Context.MODE_PRIVATE;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
@@ -77,13 +78,9 @@ public class ContentFragment extends ListFragment {
 
 
     protected void updateViewList() {
-        SharedPreferences preferences = this.getActivity().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-        gsonString = preferences.getString(PUSH_MASSEGES, "");
-        Timber.e("gsonString!!!!!!!!!" + gsonString);
-        if (!"".equals(gsonString) && gsonString != null) {
-            Type type = new TypeToken<List<PushMessage>>() {
-            }.getType();
-            pushMessages = new Gson().fromJson(gsonString, type);
+        pushMessages = (ArrayList<PushMessage>) PushMessage.listAll(PushMessage.class);
+
+        if (pushMessages != null) {
 
             adapterTasksListView = new AdapterPushListView(getActivity(), pushMessages);
 
@@ -94,7 +91,7 @@ public class ContentFragment extends ListFragment {
             listViewPush.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                    if (!"".equals(gsonString) && gsonString != null) {
+                    if (pushMessages != null) {
                         intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
                         startActivity(intentDetailTaskActivity);
                     }

@@ -40,24 +40,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Timber.e("Message data payload: " + remoteMessage.getData());
-            SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+            //SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
             buildNotificationToShow(remoteMessage.getData().get("message"), remoteMessage.getData().get("date"), remoteMessage.getData().get("title"));
+
             PushMessage newPushMessage = new PushMessage(remoteMessage.getData().get("title"), remoteMessage.getData().get("message"), remoteMessage.getData().get("date"));
+            newPushMessage.save();
 
-            List<PushMessage> pushMessages = new ArrayList<PushMessage>();
+            //List<PushMessage> pushMessages = new ArrayList<PushMessage>();
 
-            String stringPushPreferences = preferences.getString(PUSH_MASSEGES, "");
-            if (stringPushPreferences.length() > 4) {
-                pushMessages = new Gson().fromJson(stringPushPreferences, new TypeToken<List<PushMessage>>() {
-                }.getType());
-            }
-
-            pushMessages.add(newPushMessage);
-
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(PUSH_MASSEGES, new Gson().toJson(pushMessages));
-            editor.apply();
-            editor.commit();
+//            String stringPushPreferences = preferences.getString(PUSH_MASSEGES, "");
+//            if (stringPushPreferences.length() > 4) {
+//                pushMessages = new Gson().fromJson(stringPushPreferences, new TypeToken<List<PushMessage>>() {
+//                }.getType());
+//            }
+//
+//            pushMessages.add(newPushMessage);
+//
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putString(PUSH_MASSEGES, new Gson().toJson(pushMessages));
+//            editor.apply();
+//            editor.commit();
         }
 
         // Check if message contains a notification payload.
