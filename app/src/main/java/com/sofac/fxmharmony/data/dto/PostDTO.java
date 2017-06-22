@@ -1,8 +1,9 @@
 package com.sofac.fxmharmony.data.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PostDTO {
+public class PostDTO implements Serializable {
 
     public PostDTO(Long id, Long userID, Date date, String postText) {
         this.id = id;

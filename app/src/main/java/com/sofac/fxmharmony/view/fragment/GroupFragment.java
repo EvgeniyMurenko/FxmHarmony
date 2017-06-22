@@ -1,22 +1,27 @@
 package com.sofac.fxmharmony.view.fragment;
 
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.data.DataManager;
 import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
+
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import timber.log.Timber;
@@ -26,24 +31,50 @@ import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
 
 
-public class GroupFragment extends Fragment {
+public class GroupFragment extends ListFragment {
 
-
-    public GroupFragment() {
-
-    }
+    public AdapterPostGroup adapterPostGroup;
+    ListView listViewPost;
+    ArrayList<PostDTO> postDTOs;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_group, container, false);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        listViewPost = this.getListView();
+        updateViewList();
+    }
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        return inflater.inflate(R.layout.fragment_group, container, false);
+//
+//    }
+
+    @Override
+    public void onResume() {
+        updateViewList();
+        super.onResume();
+    }
+
+    protected void updateViewList() {
+        postDTOs = new ArrayList<>();
+        postDTOs.add(new PostDTO(1L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(3L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+
+            adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
+
+            GroupFragment.this.setListAdapter(adapterPostGroup);
+
+            //listViewPost = GroupFragment.this.getListView();
 
     }
 

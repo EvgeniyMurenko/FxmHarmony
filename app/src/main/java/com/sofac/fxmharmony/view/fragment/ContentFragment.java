@@ -12,26 +12,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
+
 import android.widget.ListView;
-import android.widget.Toast;
 
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
 import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
 
-import java.lang.reflect.Type;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 import timber.log.Timber;
 
-import static android.R.attr.type;
 import static android.content.Context.MODE_PRIVATE;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
@@ -46,11 +42,8 @@ public class ContentFragment extends ListFragment {
     public Intent intentDetailTaskActivity;
 
     public AdapterPushListView adapterTasksListView;
-    String gsonString;
     ListView listViewPush;
     ArrayList<PushMessage> pushMessages;
-
-    ListAdapter listAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
