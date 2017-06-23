@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="2.0">
+        android:weightSum="2.0"
+        android:id="@+id/linearLayout">
 
 
         <android.support.design.widget.AppBarLayout
@@ -32,9 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/tablayout"
-            android:layout_weight="1.5" />
-
-
+            android:layout_weight="1.9" />
     </LinearLayout>
 
     <android.support.design.widget.AppBarLayout
@@ -51,7 +50,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:visibility="invisible"
+        android:src="@drawable/ic_email_white_36dp"
+        android:layout_marginBottom="110px"
+        android:layout_marginRight="10px"
+        app:layout_anchor="@+id/linearLayout"
+        app:layout_anchorGravity="bottom|right" />
 
 </android.support.design.widget.CoordinatorLayout>

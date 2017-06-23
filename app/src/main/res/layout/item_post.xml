@@ -11,10 +11,10 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/icon_tollbar"            />
+            android:src="@drawable/icon_tollbar"/>-->
 
         <LinearLayout
             android:id="@+id/text"

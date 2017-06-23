@@ -3,6 +3,7 @@ package com.sofac.fxmharmony.view.fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.sofac.fxmharmony.data.dto.PostDTO;
 
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
+import com.sofac.fxmharmony.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +34,7 @@ import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
 
 
 public class GroupFragment extends ListFragment {
+
 
     public AdapterPostGroup adapterPostGroup;
     ListView listViewPost;
@@ -47,16 +50,11 @@ public class GroupFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         listViewPost = this.getListView();
         updateViewList();
-    }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_group, container, false);
-//
-//    }
+    }
 
     @Override
     public void onResume() {
@@ -69,6 +67,14 @@ public class GroupFragment extends ListFragment {
         postDTOs.add(new PostDTO(1L,2L,new Date(),"ASDSAdsds sds sdas asds"));
         postDTOs.add(new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asds"));
         postDTOs.add(new PostDTO(3L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(4L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(5L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(6L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(7L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(8L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(9L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(10L,2L,new Date(),"ASDSAdsds sds sdas asds"));
+        postDTOs.add(new PostDTO(11L,2L,new Date(),"ASDSAdsds sds sdas asds"));
 
             adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
 

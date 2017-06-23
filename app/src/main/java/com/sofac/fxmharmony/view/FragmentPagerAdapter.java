@@ -1,5 +1,6 @@
 package com.sofac.fxmharmony.view;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -15,6 +16,7 @@ public class FragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
+    FloatingActionButton fab;
 
     public FragmentPagerAdapter(FragmentManager fm) {
         super(fm);
