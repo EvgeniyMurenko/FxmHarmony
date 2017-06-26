@@ -24,7 +24,7 @@ public class WritePostActivity extends AppCompatActivity {
         setContentView(R.layout.create_post_message);
 
         postTextInput = (EditText) findViewById(R.id.post_text_input);
-        buttonCreatePost = (ImageButton) findViewById(R.id.menu_done);
+        buttonCreatePost = (ImageButton) findViewById(R.id.send_post_button);
 
 
         buttonCreatePost.setOnClickListener(new View.OnClickListener() {

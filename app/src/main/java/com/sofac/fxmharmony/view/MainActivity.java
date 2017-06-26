@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, WritePostActivity.class));
+                startActivity(new Intent(MainActivity.this, CreatePost.class));
             }
         });
 
