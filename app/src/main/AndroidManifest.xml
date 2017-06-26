@@ -48,7 +48,6 @@
             android:name=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".view.WritePostActivity" />
         <activity android:name=".view.DetailPushMessageActivity" />
         <activity android:name=".view.CreatePost"/>
         <activity android:name=".view.DetailPostActivity"/>

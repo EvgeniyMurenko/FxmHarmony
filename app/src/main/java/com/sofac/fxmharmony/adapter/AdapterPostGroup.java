@@ -59,7 +59,7 @@ public class AdapterPostGroup extends BaseAdapter {
         }
 
         PostDTO postDTO = getPostDTO(position);
-        ((TextView) view.findViewById(R.id.idTitleItemPost)).setText(postDTO.getId().toString());
+        ((TextView) view.findViewById(R.id.idTitleItemPost)).setText(postDTO.getUserName());
         ((TextView) view.findViewById(R.id.idDateItemPost)).setText(new SimpleDateFormat("d MMM yyyy", Locale.GERMAN).format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
         ((TextView) view.findViewById(R.id.idMessageItemPost)).setText(Html.fromHtml(postDTO.getPostText()));
 

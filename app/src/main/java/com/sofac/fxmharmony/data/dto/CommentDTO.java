@@ -5,14 +5,6 @@ import java.util.Date;
 
 public class CommentDTO  implements Serializable {
 
-    public CommentDTO(Long id, Long userID, Date date, String commentText, Long postID) {
-        this.id = id;
-        this.userID = userID;
-        this.date = date;
-        this.commentText = commentText;
-        this.postID = postID;
-    }
-
     public CommentDTO(Long id, Long userID, String userName, Date date, String commentText, Long postID) {
         this.id = id;
         this.userID = userID;
