@@ -66,8 +66,6 @@ public class GroupFragment extends ListFragment {
         listViewPost = this.getListView();
         getListView().setDivider(null);
 
-        updateViewList();
-
         String postText =  getActivity().getIntent().getStringExtra("postText");
         if (!"".equals(postText) && postText != null){
 
@@ -235,7 +233,6 @@ public class GroupFragment extends ListFragment {
                 switch (type) {
                     case LOAD_ALL_POSTS_REQUEST:
 
-
                         loadAllPostsServerResponse = serverResponse;
                         ArrayList<PostDTO> postDTOs = (ArrayList<PostDTO>) loadAllPostsServerResponse.getDataTransferObject();
                         PostDTO.deleteAll(PostDTO.class);
@@ -247,7 +244,6 @@ public class GroupFragment extends ListFragment {
                     case Constants.LOAD_COMMENTS_REQUEST: {
 
                         loadCommentsServerResponse = serverResponse;
-
                         break;
                     }
                 }

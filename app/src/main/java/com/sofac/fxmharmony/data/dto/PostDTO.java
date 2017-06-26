@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class PostDTO extends SugarRecord implements Serializable {
 
-    private  transient  Long id;
+    private  transient Long id;
     private Long userID;
     private String userName;
     private Date date;
