@@ -1,16 +1,14 @@
 package com.sofac.fxmharmony.data.dto;
 
+import com.orm.SugarRecord;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class PostDTO implements Serializable {
+public class PostDTO extends SugarRecord implements Serializable {
 
-    public PostDTO(Long id, Long userID, Date date, String postText) {
-        this.id = id;
-        this.userID = userID;
-        this.date = date;
-        this.postText = postText;
-    }
+
+    public PostDTO() {}
 
     public PostDTO(Long id, Long userID, String userName, Date date, String postText) {
         this.id = id;
@@ -21,13 +19,9 @@ public class PostDTO implements Serializable {
     }
 
     private Long id;
-
     private Long userID;
-
     private String userName;
-
     private Date date;
-
     private String postText;
 
 

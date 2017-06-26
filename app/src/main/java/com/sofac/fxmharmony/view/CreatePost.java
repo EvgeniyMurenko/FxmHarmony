@@ -66,7 +66,7 @@ public class CreatePost extends BaseActivity {
             case R.id.menu_done:
                 if(!postMessage.getText().toString().equals("")) {
 
-                    PostDTO postDTO = new PostDTO(1L, preferences.getLong(USER_ID_PREF,0L), new Date(), postMessage.getText().toString());
+                    PostDTO postDTO = new PostDTO(1L, preferences.getLong(USER_ID_PREF,0L),"Name", new Date(), postMessage.getText().toString());
 
                     Toast.makeText(this, "id = "+preferences.getLong(USER_ID_PREF,0L), Toast.LENGTH_SHORT).show();
 

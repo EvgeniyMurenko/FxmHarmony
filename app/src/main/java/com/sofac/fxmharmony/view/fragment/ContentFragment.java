@@ -1,23 +1,17 @@
 package com.sofac.fxmharmony.view.fragment;
 
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-
 import android.widget.ListView;
-
-
-
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
 import com.sofac.fxmharmony.data.dto.PushMessage;
@@ -25,21 +19,16 @@ import com.sofac.fxmharmony.view.DetailPushMessageActivity;
 import com.sofac.fxmharmony.view.MainActivity;
 
 
+import com.sofac.fxmharmony.view.SplashActivity;
 import java.util.ArrayList;
-
-
-import timber.log.Timber;
-
 import static android.content.Context.MODE_PRIVATE;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
-import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
+import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 
 public class ContentFragment extends ListFragment {
 
-
-    private static long backPressed;
     public Intent intentSplashActivity;
     public Intent intentDetailTaskActivity;
 
@@ -50,21 +39,18 @@ public class ContentFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
 
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+
         listViewPush = this.getListView();
-        updateViewList();
+        intentSplashActivity = new Intent(this.getActivity(), SplashActivity.class);
         intentDetailTaskActivity = new Intent(this.getActivity(), DetailPushMessageActivity.class);
-        Timber.i("listViewState +" + listViewPush);
-
-
     }
-
 
     @Override
     public void onResume() {
@@ -82,6 +68,8 @@ public class ContentFragment extends ListFragment {
             adapterTasksListView = new AdapterPushListView(getActivity(), pushMessages);
 
             ContentFragment.this.setListAdapter(adapterTasksListView);
+
+            adapterTasksListView.notifyDataSetChanged();
 
             listViewPush = ContentFragment.this.getListView();
 
@@ -123,6 +111,7 @@ public class ContentFragment extends ListFragment {
                 editor.apply();
                 if (pushMessages != null) {
                     pushMessages.clear();
+                    PushMessage.deleteAll(PushMessage.class);
                     adapterTasksListView.notifyDataSetChanged();
                 }
                 break;
@@ -130,6 +119,8 @@ public class ContentFragment extends ListFragment {
         editor.commit();
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }
 

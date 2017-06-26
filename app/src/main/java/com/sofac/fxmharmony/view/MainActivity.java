@@ -5,9 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
+
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.view.GravityCompat;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +24,7 @@ public class MainActivity extends BaseActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
+    private static long backPressed;
     private FragmentPagerAdapter fragmentAdapter;
 
     private FloatingActionButton floatingActionButton;
@@ -93,4 +94,20 @@ public class MainActivity extends BaseActivity {
     }
 
 
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (backPressed + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+                finishAffinity();
+            } else {
+                Toast.makeText(getBaseContext(), getString(R.string.ToastLogOut), Toast.LENGTH_SHORT).show();
+            }
+            backPressed = System.currentTimeMillis();
+        }
+    }
 }

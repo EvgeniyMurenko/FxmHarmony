@@ -12,9 +12,11 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.data.dto.PushMessage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class AdapterPostGroup extends BaseAdapter {
     private ArrayList<PostDTO> postDTOArrayList;
@@ -53,14 +55,13 @@ public class AdapterPostGroup extends BaseAdapter {
         // используем созданные, но не используемые view
         View view = convertView;
         if (view == null) {
-            view = inflater.inflate(R.layout.item_task, parent, false);
+            view = inflater.inflate(R.layout.item_post, parent, false);
         }
 
         PostDTO postDTO = getPostDTO(position);
-
-        ((TextView) view.findViewById(R.id.idTitleItemTask)).setText(postDTO.getId().toString());
-        ((TextView) view.findViewById(R.id.idDateItemTask)).setText(postDTO.getDate().toString());
-        ((TextView) view.findViewById(R.id.idMessageItemTask)).setText(Html.fromHtml(postDTO.getPostText()));
+        ((TextView) view.findViewById(R.id.idTitleItemPost)).setText(postDTO.getId().toString());
+        ((TextView) view.findViewById(R.id.idDateItemPost)).setText(new SimpleDateFormat("d MMM yyyy", Locale.GERMAN).format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
+        ((TextView) view.findViewById(R.id.idMessageItemPost)).setText(Html.fromHtml(postDTO.getPostText()));
 
         return view;
     }

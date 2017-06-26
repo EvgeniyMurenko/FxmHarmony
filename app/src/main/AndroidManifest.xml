@@ -22,7 +22,7 @@
             android:value="fxmharmony.db" />
         <meta-data
             android:name="VERSION"
-            android:value="1" />
+            android:value="4" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -66,6 +66,7 @@
             android:name=".view.WritePostActivity"
             android:label="@string/title_activity_write_post"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.DetailPostActivity"></activity>
     </application>
 
 </manifest>
