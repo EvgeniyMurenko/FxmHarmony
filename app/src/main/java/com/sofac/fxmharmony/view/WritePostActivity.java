@@ -15,19 +15,19 @@ import com.sofac.fxmharmony.R;
 public class WritePostActivity extends AppCompatActivity {
 
 
-    ImageButton sendPostButton;
+    ImageButton buttonCreatePost;
     EditText postTextInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_post);
+        setContentView(R.layout.create_post_message);
 
         postTextInput = (EditText) findViewById(R.id.post_text_input);
-        sendPostButton = (ImageButton) findViewById(R.id.send_post_button);
+        buttonCreatePost = (ImageButton) findViewById(R.id.menu_done);
 
 
-        sendPostButton.setOnClickListener(new View.OnClickListener() {
+        buttonCreatePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Editable text = postTextInput.getText();

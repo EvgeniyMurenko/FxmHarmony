@@ -79,14 +79,14 @@ public class GroupFragment extends ListFragment {
     }
 
     protected void updateViewList() {
-        new GroupExchangeOnServer<>(null, LOAD_ALL_POSTS_REQUEST).execute();
+        //new GroupExchangeOnServer<>(null, LOAD_ALL_POSTS_REQUEST).execute();
 
 
 
 
-/*new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asds").save();
-new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asds").save();
-new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asds").save();*/
+new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
+new PostDTO(2L,2L,"Zegna",new Date(),"ASDSAdsds sds sdas asds").save();
+new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
 //        postDTOs.add(new PostDTO(3L,2L,new Date(),"ASDSAdsds sds sdas asds"));

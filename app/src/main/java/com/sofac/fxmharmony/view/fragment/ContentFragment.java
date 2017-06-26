@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +15,6 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
 import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
-import com.sofac.fxmharmony.view.MainActivity;
-
 
 import com.sofac.fxmharmony.view.SplashActivity;
 import java.util.ArrayList;
