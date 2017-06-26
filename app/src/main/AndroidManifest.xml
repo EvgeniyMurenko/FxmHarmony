@@ -37,6 +37,9 @@
             android:name=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".view.CreatePost"></activity>
+
         <!-- Push Google Cloud Messaging services -->
         <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">
             <intent-filter>

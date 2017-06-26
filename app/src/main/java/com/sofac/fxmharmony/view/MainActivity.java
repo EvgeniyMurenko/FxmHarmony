@@ -1,5 +1,6 @@
 package com.sofac.fxmharmony.view;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -42,7 +43,7 @@ public class MainActivity extends BaseActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "add", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, CreatePost.class));
             }
         });
 

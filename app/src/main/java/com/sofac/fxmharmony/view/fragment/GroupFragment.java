@@ -56,6 +56,8 @@ public class GroupFragment extends ListFragment {
 
     }
 
+
+
     @Override
     public void onResume() {
         updateViewList();
@@ -111,6 +113,7 @@ public class GroupFragment extends ListFragment {
         protected void onPreExecute() {
             // progress dialog
         }
+
 
         @Override
         @SuppressWarnings("unchecked")
