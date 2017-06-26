@@ -59,12 +59,10 @@ public class CreatePost extends BaseActivity {
                     //Toast.makeText(this, "id = "+preferences.getLong(USER_ID_PREF,0L), Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, ""+text, Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(CreatePost.this, MainActivity.class);
-                    intent.putExtra("postText" , text.toString());
-                    startActivity(intent);
-
-
-
+                    //Intent intent = new Intent(CreatePost.this, MainActivity.class);
+                    //intent.putExtra("postText" , text.toString());
+                    //startActivity(intent);
+                    //this.onDestroy();
                     finish();
                 }else{
                     Toast.makeText(this, "Please input text message", Toast.LENGTH_SHORT).show();

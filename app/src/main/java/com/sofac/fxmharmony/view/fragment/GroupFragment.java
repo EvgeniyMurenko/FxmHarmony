@@ -86,12 +86,14 @@ public class GroupFragment extends ListFragment {
     }
 
     protected void updateViewList() {
+        new GroupExchangeOnServer<PostDTO>(null, LOAD_ALL_POSTS_REQUEST).execute();
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
 
         if (postDTOs != null) {
             adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
             GroupFragment.this.setListAdapter(adapterPostGroup);
+            adapterPostGroup.notifyDataSetChanged();
         }
 
         listViewPost = GroupFragment.this.getListView();
@@ -232,6 +234,7 @@ public class GroupFragment extends ListFragment {
 
                 switch (type) {
                     case LOAD_ALL_POSTS_REQUEST:
+
 
                         loadAllPostsServerResponse = serverResponse;
                         ArrayList<PostDTO> postDTOs = (ArrayList<PostDTO>) loadAllPostsServerResponse.getDataTransferObject();
