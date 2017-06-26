@@ -68,6 +68,13 @@ public class GroupFragment extends ListFragment {
 
         updateViewList();
 
+        String postText =  getActivity().getIntent().getStringExtra("postText");
+        if (!"".equals(postText) && postText != null){
+
+            new GroupExchangeOnServer<PostDTO>(new PostDTO(1l, 3l,"Name",null,postText), WRITE_POST_REQUEST).execute();
+            getActivity().getIntent().putExtra("postText", "");
+        }
+
     }
 
 
@@ -79,32 +86,8 @@ public class GroupFragment extends ListFragment {
     }
 
     protected void updateViewList() {
-        //new GroupExchangeOnServer<>(null, LOAD_ALL_POSTS_REQUEST).execute();
-
-
-
-
-new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
-new PostDTO(2L,2L,"Zegna",new Date(),"ASDSAdsds sds sdas asds").save();
-new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
-//        postDTOs.add(new PostDTO(3L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(4L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(5L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(6L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(7L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(8L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(9L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(10L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(11L,2L,new Date(),"ASDSAdsds sds sdas asds"));
-//        postDTOs.add(new PostDTO(1L,2L,new Date(),"ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df "));
-//        postDTOs.add(new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asdsasdsad sadsad  sdfdsf dfsdf sfsdfd sfsdASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df "));
-//        postDTOs.add(new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asdsasdsad sadsad  sdfdsf dfsdf sfsdfd sfsdASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df "));
-//        postDTOs.add(new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asdsasdsad sadsad  sdfdsf dfsdf sfsdfd sfsdASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df "));
-//        postDTOs.add(new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asdsasdsad sadsad  sdfdsf dfsdf sfsdfd sfsdASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df "));
-//        postDTOs.add(new PostDTO(2L,2L,new Date(),"ASDSAdsds sds sdas asdsasdsad sadsad  sdfdsf dfsdf sfsdfd sfsdASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df "));
-//        postDTOs.add(new PostDTO(3L,2L,new Date(),"ASDSAdsds sds sdas asds dsf dsf dfsdfsdfdsf sdf sdfsdf ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df ASDSAdsds sds sdas asds sadsad sads dasd asd asdsagfdsfdf fsdf sdf fds fdsfsd fsdf dsdf df "));
 
         if (postDTOs != null) {
             adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
@@ -124,13 +107,7 @@ new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
         });
 
 
-        String postText =  getActivity().getIntent().getStringExtra("postText");
-        if (!"".equals(postText) && postText != null){
 
-           /* new GroupExchangeOnServer<>(null, LOAD_ALL_POSTS_REQUEST).execute();*/
-            new GroupExchangeOnServer<PostDTO>(new PostDTO(1l, 3l,"Name",null,postText), WRITE_POST_REQUEST).execute();
-            getActivity().getIntent().putExtra("postText", "");
-        }
     }
 
 
@@ -143,7 +120,7 @@ new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
         private String type;
         private T serverObject;
 
-        ProgressDialog pd = new ProgressDialog(GroupFragment.this.getActivity(), R.style.MyTheme);
+       ProgressDialog pd = new ProgressDialog(GroupFragment.this.getActivity(), R.style.MyTheme);
 
         private GroupExchangeOnServer(T serverObject, String type) {
             this.serverObject = serverObject;
@@ -165,7 +142,6 @@ new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
 
             ServerRequest serverRequest = new ServerRequest(type, null);
             DataManager dataManager = DataManager.getInstance();
-            Timber.i("step2");
 
             PostDTO postDTO;
             CommentDTO commentDTO;
@@ -187,10 +163,6 @@ new PostDTO(2L,2L,"Kass",new Date(),"ASDSAdsds sds sdas asds").save();
 
                 case WRITE_POST_REQUEST:
 
-                    /*
-                    postDTO = (PostDTO) serverObject;
-                    serverRequest.setDataTransferObject(postDTO);
-                     */
                     postDTO = (PostDTO) serverObject;
 
                     serverRequest = new ServerRequest<PostDTO>(type, postDTO);
