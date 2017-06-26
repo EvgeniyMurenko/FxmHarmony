@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,10 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
+import static com.sofac.fxmharmony.Constants.LOAD_ALL_POSTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
+import static com.sofac.fxmharmony.Constants.WRITE_POST_REQUEST;
 
 
 public class GroupFragment extends ListFragment {
@@ -82,16 +85,16 @@ public class GroupFragment extends ListFragment {
 
             //listViewPost = GroupFragment.this.getListView();
 
+
+        String postText =  getActivity().getIntent().getStringExtra("postText");
+        if (!"".equals(postText) && postText != null){
+
+           /* new GroupExchangeOnServer<>(null, LOAD_ALL_POSTS_REQUEST).execute();*/
+            new GroupExchangeOnServer<PostDTO>(new PostDTO(1l, 3l,null,postText), WRITE_POST_REQUEST).execute();
+            getActivity().getIntent().putExtra("postText", "");
+        }
     }
 
-
-   /* public void onClick(View v) {
-        String password ="";
-        String login = "";
-
-        new GroupExchangeOnServer().execute();
-
-    }*/
 
     private class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
 
@@ -134,11 +137,11 @@ public class GroupFragment extends ListFragment {
 
                     break;
                 }
-                case Constants.WRITE_POST_REQUEST: {
+                case WRITE_POST_REQUEST: {
 
                     PostDTO postDTO = (PostDTO) serverObject;
-                    serverRequest.setDataTransferObject(postDTO);
 
+                    serverRequest = new ServerRequest<PostDTO>(type, postDTO);
                     serverResponse = dataManager.postGroupRequest(serverRequest, type);
 
                     break;
