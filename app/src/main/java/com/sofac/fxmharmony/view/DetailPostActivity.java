@@ -1,33 +1,25 @@
 package com.sofac.fxmharmony.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.ListView;
-import android.view.View;
-import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.adapter.AdapterComentsGroup;
+import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
 import com.sofac.fxmharmony.data.dto.CommentDTO;
-
-
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
-import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
-import com.sofac.fxmharmony.data.dto.PushMessage;
-import com.sofac.fxmharmony.view.fragment.GroupFragment;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,51 +28,74 @@ import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
+import static com.sofac.fxmharmony.Constants.WRITE_COMMENT_REQUEST;
 
-public class DetailPostActivity extends BaseActivity implements View.OnClickListener {
+public class DetailPostActivity extends BaseActivity {
 
     Button buttonSend;
-    TextView userNamePost;
-    TextView datePost;
-    TextView messagePost;
     Intent intent;
     View headerView;
     ArrayList<CommentDTO> arrayListComments;
     ListView listViewComments;
     PostDTO postDTO;
+    EditText editTextComment;
+    AdapterCommentsGroup adapterCommentsGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
 
-        new GroupExchangeOnServer<>(1L, LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
-            @Override
-            public void processFinish(Boolean output) {
-
-                List<CommentDTO> commentDTOs  = CommentDTO.listAll(CommentDTO.class);
-                for(CommentDTO commentDTO : commentDTOs) {
-                    Timber.i(commentDTO.getCommentText());
-                }
-
-            }
-        }).execute();
-
-        //buttonSend = (Button) findViewById(R.id.send_button);
-        //buttonSend.setOnClickListener(this);
-
-        listViewComments = (ListView) findViewById(R.id.idListViewComments);
-
         intent = getIntent();
-        PostDTO postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
-
+        postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
 
         if (postDTO != null) {
             headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostText());
         }
+
+        buttonSend = (Button) findViewById(R.id.sendComment);
+        editTextComment = (EditText) findViewById(R.id.edit_text_comment);
+        listViewComments = (ListView) findViewById(R.id.idListViewComments);
+
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!"".equals(editTextComment.getText().toString())) {
+                    new GroupExchangeOnServer<>(new CommentDTO(1L, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID()), WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponse() {
+                        @Override
+                        public void processFinish(Boolean isSuccess) {
+                            updateListView();
+                            editTextComment.setText("");
+                        }
+                    }).execute();
+                } else {
+                    Toast.makeText(DetailPostActivity.this, "Field empty!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         listViewComments.addHeaderView(headerView);
-        ArrayList<CommentDTO> arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
-        listViewComments.setAdapter(new AdapterComentsGroup(this,arrayListComments));
+    }
+
+    @Override
+    protected void onResume() {
+        updateListView();
+        super.onResume();
+    }
+
+    public void updateListView() {
+        new GroupExchangeOnServer<>(postDTO.getServerID(), LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+            @Override
+            public void processFinish(Boolean output) {
+                arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
+                adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
+                listViewComments.setAdapter(adapterCommentsGroup);
+                adapterCommentsGroup.notifyDataSetChanged();
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            }
+        }).execute();
     }
 
     View createPostView(String name, String date, String message) {
@@ -93,6 +108,7 @@ public class DetailPostActivity extends BaseActivity implements View.OnClickList
 
         return v;
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,16 +127,5 @@ public class DetailPostActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    protected void updateViewList() {
 
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.sendComment:
-                Toast.makeText(this, "!!! Comment add", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
 }

@@ -18,12 +18,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class AdapterComentsGroup extends BaseAdapter {
+public class AdapterCommentsGroup extends BaseAdapter {
     private ArrayList<CommentDTO> commentDTOArrayList;
     private Context ctx;
     private LayoutInflater inflater;
 
-    public AdapterComentsGroup(Context context, ArrayList<CommentDTO> commentDTOArrayList) {
+    public AdapterCommentsGroup(Context context, ArrayList<CommentDTO> commentDTOArrayList) {
         Collections.sort(commentDTOArrayList, new Comparator<CommentDTO>() {
             public int compare(CommentDTO o1, CommentDTO o2) {
                 return o2.getDate().compareTo(o1.getDate());
