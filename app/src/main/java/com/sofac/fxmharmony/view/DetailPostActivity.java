@@ -6,11 +6,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.adapter.AdapterComentsGroup;
+import com.sofac.fxmharmony.data.dto.CommentDTO;
 
 
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
@@ -21,6 +27,8 @@ import com.sofac.fxmharmony.view.fragment.GroupFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,44 +36,25 @@ import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
-import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
-import static com.sofac.fxmharmony.R.id.dateDetailPushMessage;
-import static com.sofac.fxmharmony.R.id.messageDetailPushMessage;
-import static com.sofac.fxmharmony.R.id.titleDetailPushMessage;
 
-public class DetailPostActivity extends BaseActivity {
+public class DetailPostActivity extends BaseActivity implements View.OnClickListener {
 
+    Button buttonSend;
     TextView userNamePost;
     TextView datePost;
     TextView messagePost;
-
-    Intent intentDetailPostActivity;
-    ListView listViewComment;
-    ArrayList<CommentDTO> commentDTOs;
+    Intent intent;
+    View headerView;
+    ArrayList<CommentDTO> arrayListComments;
+    ListView listViewComments;
+    PostDTO postDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
 
-        userNamePost = (TextView) findViewById(R.id.idNamePost);
-        datePost = (TextView) findViewById(R.id.idDatePost);
-        messagePost = (TextView) findViewById(R.id.idMessagePost);
-        listViewComment = (ListView) findViewById(R.id.commentListView);
-
-
-
-        Intent intent = getIntent();
-        PostDTO postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
-
-        if(postDTO!=null){
-            userNamePost.setText(postDTO.getId()+"");
-            datePost.setText(new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()));
-            messagePost.setText(postDTO.getPostText());
-        }
-
-
-        new GroupExchangeOnServer<>(new Long(1), LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+        new GroupExchangeOnServer<>(1L, LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
             @Override
             public void processFinish(Boolean output) {
 
@@ -77,6 +66,32 @@ public class DetailPostActivity extends BaseActivity {
             }
         }).execute();
 
+        //buttonSend = (Button) findViewById(R.id.send_button);
+        //buttonSend.setOnClickListener(this);
+
+        listViewComments = (ListView) findViewById(R.id.idListViewComments);
+
+        intent = getIntent();
+        PostDTO postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
+
+
+        if (postDTO != null) {
+            headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostText());
+        }
+        listViewComments.addHeaderView(headerView);
+        ArrayList<CommentDTO> arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
+        listViewComments.setAdapter(new AdapterComentsGroup(this,arrayListComments));
+    }
+
+    View createPostView(String name, String date, String message) {
+
+        View v = getLayoutInflater().inflate(R.layout.post_view_detail, null);
+
+        ((TextView) v.findViewById(R.id.idNamePost)).setText(name);
+        ((TextView) v.findViewById(R.id.idDatePost)).setText(date);
+        ((TextView) v.findViewById(R.id.idMessagePost)).setText(message);
+
+        return v;
     }
 
     @Override
@@ -98,20 +113,14 @@ public class DetailPostActivity extends BaseActivity {
 
     protected void updateViewList() {
 
-      /*  commentDTOs = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
+    }
 
-        listViewComment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                if (postDTOs != null) {
-                    intentDetailPostActivity.putExtra(ONE_POST_DATA, postDTOs.get(position));
-                    startActivity(intentDetailPostActivity);
-                }
-            }
-        });
-*/
-
-
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.sendComment:
+                Toast.makeText(this, "!!! Comment add", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

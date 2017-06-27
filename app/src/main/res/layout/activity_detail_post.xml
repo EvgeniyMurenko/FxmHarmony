@@ -7,129 +7,64 @@
     android:orientation="vertical"
     tools:context="com.sofac.fxmharmony.view.DetailPushMessageActivity">
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <LinearLayout
+        <ListView
+            android:id="@+id/idListViewComments"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_height="match_parent">
 
-            <CheckedTextView
-                android:id="@+id/checkedTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CheckedTextView" />
+        </ListView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="3dp">
+    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:src="@drawable/icon" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/idNamePost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Title"
-                        android:textColor="@color/colorItemTitle"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/idDatePost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:maxLines="1"
-                        android:text="date"
-                        android:textColor="@color/colorItemDate" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/idMessagePost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorItemContext" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="5dp"
-                android:background="#dddddd" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
-    <ListView
-        android:id="@+id/commentListView"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="4"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
+        android:layout_height="1dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="#dcdcdc" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="404dp">
+        android:background="@android:color/background_light"
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/commentInput"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <EditText
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@android:color/background_light"
+                android:textColor="@color/colorItemContext" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Send" />
+            <Button
+                android:id="@+id/sendComment"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="SEND" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
