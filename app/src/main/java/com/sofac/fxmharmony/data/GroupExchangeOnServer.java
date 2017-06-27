@@ -27,8 +27,6 @@ import static com.sofac.fxmharmony.Constants.WRITE_POST_REQUEST;
 
 public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
 
-    private ServerResponse<List<PostDTO>> loadAllPostsServerResponse;
-    private ServerResponse<List<CommentDTO>> loadCommentsServerResponse;
     private ServerResponse serverResponse;
 
     private String type;
@@ -41,7 +39,7 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
         void processFinish(Boolean isSuccess);
     }
 
-    AsyncResponse asyncResponse = null;
+    private AsyncResponse asyncResponse = null;
 
     public GroupExchangeOnServer(T serverObject, String type, Context context, AsyncResponse asyncResponse) {
         this.serverObject = serverObject;
@@ -90,7 +88,7 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
 
                 postDTO = (PostDTO) serverObject;
 
-                serverRequest = new ServerRequest<PostDTO>(type, postDTO);
+                serverRequest = new ServerRequest<>(type, postDTO);
                 serverResponse = dataManager.postGroupRequest(serverRequest, type);
 
                 break;
@@ -141,11 +139,11 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
         }
 
         if (serverResponse != null) {
-            return serverResponse.getResponseStatus().toString();
+            return serverResponse.getResponseStatus();
         }
 
 
-        return Constants.SERVER_REQUEST_ERROR.toString();
+        return Constants.SERVER_REQUEST_ERROR;
     }
 
 
@@ -158,7 +156,7 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
             switch (type) {
                 case LOAD_ALL_POSTS_REQUEST:
 
-                    loadAllPostsServerResponse = serverResponse;
+                    ServerResponse<List<PostDTO>> loadAllPostsServerResponse = serverResponse;
                     ArrayList<PostDTO> postDTOs = (ArrayList<PostDTO>) loadAllPostsServerResponse.getDataTransferObject();
 
                     PostDTO.deleteAll(PostDTO.class);
@@ -169,7 +167,7 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
                     break;
                 case Constants.LOAD_COMMENTS_REQUEST: {
 
-                    loadCommentsServerResponse = serverResponse;
+                    ServerResponse<List<CommentDTO>> loadCommentsServerResponse = serverResponse;
 
                     List<CommentDTO> oldCommentsDTO = CommentDTO.find(CommentDTO.class, "post_ID = ?", String.valueOf((Long) serverObject));
 

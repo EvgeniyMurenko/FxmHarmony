@@ -85,9 +85,6 @@ public class MainActivity extends BaseActivity {
             Timber.e("!!!!!!");
             return;
         }
-        SharedPreferences sharedPreferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-
-
     }
 
 

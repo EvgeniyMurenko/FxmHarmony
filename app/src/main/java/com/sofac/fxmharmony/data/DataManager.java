@@ -73,7 +73,7 @@ public class DataManager {
                 authorizationType = new TypeToken<ServerResponse>(){}.getType();
             }
 
-            ServerResponse<List<PostDTO>> serverResponsee =  new Gson().fromJson(response, authorizationType);
+
             return new Gson().fromJson(response, authorizationType);
 
         }
@@ -81,26 +81,6 @@ public class DataManager {
         return null;
 
     }
-//
-//    public ServerResponse<List<>> getCaseRequest (ServerRequest serverRequest) {
-//
-//        String response = sendRequest(serverRequest);
-//        Timber.i(response);
-//
-//        if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
-//
-//            Type caseType = new TypeToken<ServerResponse<List<>>>() {
-//            }.getType();
-//
-//            ServerResponse<List<>> listCaseDTOServerResponse = new Gson().fromJson(response, caseType);
-//
-//            return listCaseDTOServerResponse;
-//
-//        }
-//
-//        return null;
-//    }
-
 
     private String sendRequest(ServerRequest serverRequest, String type) {
 

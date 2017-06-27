@@ -11,8 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.adapter.AdapterCommentGroup;
-import com.sofac.fxmharmony.adapter.AdapterPostGroup;
+
+
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
@@ -40,7 +40,6 @@ public class DetailPostActivity extends BaseActivity {
     TextView messagePost;
 
     Intent intentDetailPostActivity;
-    AdapterCommentGroup adapterCommentGroup;
     ListView listViewComment;
     ArrayList<CommentDTO> commentDTOs;
 
@@ -99,14 +98,8 @@ public class DetailPostActivity extends BaseActivity {
 
     protected void updateViewList() {
 
-        commentDTOs = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
+      /*  commentDTOs = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
 
-        if (commentDTOs != null) {
-            adapterCommentGroup = new AdapterCommentGroup(this, commentDTOs);
-        /*    this.setListAdapter(adapterPostGroup);*/
-        }
-
-/*
         listViewComment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
