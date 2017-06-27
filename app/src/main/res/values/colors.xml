@@ -8,6 +8,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorItemTitle">#0d8ca1</color>
     <color name="colorItemDate">#9b9b9b</color>
+    <color name="colorItemDateComment">#b9b9b9</color>
     <color name="colorItemContext">#979797</color>
     <color name="colorBGItemNoRead">#e6e6e6</color>
 
@@ -15,5 +16,7 @@
 
     <color name="transparent">#00000000</color>
     <color name="colorTextDark">#515151</color>
+    <color name="colorCommentsBackground">#e6e6e6</color>
+
 
 </resources>

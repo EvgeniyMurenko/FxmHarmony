@@ -58,6 +58,7 @@ public class GroupFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intentDetailPostActivity = new Intent(this.getActivity(), DetailPostActivity.class);
+
     }
 
     @Override
@@ -67,7 +68,12 @@ public class GroupFragment extends ListFragment {
         listViewPost = this.getListView();
         getListView().setDivider(null);
 
-
+//        String postText =  getActivity().getIntent().getStringExtra("postText");
+//        if (!"".equals(postText) && postText != null){
+//
+//            new GroupExchangeOnServer<PostDTO>(new PostDTO(1l, 3l,"Name",null,postText), WRITE_POST_REQUEST).execute();
+//            getActivity().getIntent().putExtra("postText", "");
+//        }
     }
 
 

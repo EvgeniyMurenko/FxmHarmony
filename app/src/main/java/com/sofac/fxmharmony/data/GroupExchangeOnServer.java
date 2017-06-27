@@ -169,18 +169,15 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
 
                     ServerResponse<List<CommentDTO>> loadCommentsServerResponse = serverResponse;
 
-                    List<CommentDTO> oldCommentsDTO = CommentDTO.find(CommentDTO.class, "post_ID = ?", String.valueOf((Long) serverObject));
+                    //List<CommentDTO> oldCommentsDTO = CommentDTO.find(CommentDTO.class, "post_ID = ?", String.valueOf((Long) serverObject));
 
-                    for (CommentDTO commentDTO : oldCommentsDTO) {
-                        commentDTO.delete();
-                    }
+                    CommentDTO.deleteAll(CommentDTO.class);
 
                     ArrayList<CommentDTO> commentDTOs = (ArrayList<CommentDTO>) loadCommentsServerResponse.getDataTransferObject();
 
                     for (CommentDTO commentDTO : commentDTOs) {
                         commentDTO.save();
                     }
-
                     break;
                 }
             }
