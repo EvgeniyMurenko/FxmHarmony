@@ -8,6 +8,7 @@ import java.util.Date;
 public class PostDTO extends SugarRecord implements Serializable {
 
     private  transient Long id;
+    private Long serverID;
     private Long userID;
     private String userName;
     private Date date;
@@ -15,8 +16,9 @@ public class PostDTO extends SugarRecord implements Serializable {
 
     public PostDTO() {}
 
-    public PostDTO(Long id, Long userID, String userName, Date date, String postText) {
+    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postText) {
         this.id = id;
+        this.serverID = serverID;
         this.userID = userID;
         this.userName = userName;
         this.date = date;
@@ -63,4 +65,11 @@ public class PostDTO extends SugarRecord implements Serializable {
         this.userName = userName;
     }
 
+    public Long getServerID() {
+        return serverID;
+    }
+
+    public void setServerID(Long serverID) {
+        this.serverID = serverID;
+    }
 }
