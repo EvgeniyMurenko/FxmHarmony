@@ -1,9 +1,13 @@
 package com.sofac.fxmharmony.data.dto;
 
+import com.orm.SugarRecord;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class CommentDTO  implements Serializable {
+public class CommentDTO extends SugarRecord implements Serializable {
+
+    public CommentDTO(){}
 
     public CommentDTO(Long id, Long userID, String userName, Date date, String commentText, Long postID) {
         this.id = id;
@@ -14,7 +18,15 @@ public class CommentDTO  implements Serializable {
         this.postID = postID;
     }
 
-    private Long id;
+    public CommentDTO( Long userID, String userName, Date date, String commentText, Long postID){
+        this.userID = userID;
+        this.userName = userName;
+        this.date = date;
+        this.commentText = commentText;
+        this.postID = postID;
+    }
+
+    private transient Long id;
 
     private Long userID;
 

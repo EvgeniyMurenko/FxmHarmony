@@ -11,8 +11,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.data.GroupExchangeOnServer;
+import com.sofac.fxmharmony.data.dto.PostDTO;
 
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
+import static com.sofac.fxmharmony.Constants.WRITE_POST_REQUEST;
 
 
 public class CreatePost extends BaseActivity {
@@ -28,6 +31,8 @@ public class CreatePost extends BaseActivity {
 
 
         postTextInput = (EditText) findViewById(R.id.post_text_input);
+
+
 
 /*        Intent intent = getIntent();
         PushMessage pushMessage = (PushMessage) intent.getSerializableExtra(ONE_PUSH_MESSAGE_DATA);
@@ -56,17 +61,18 @@ public class CreatePost extends BaseActivity {
 
                     Editable text = postTextInput.getText();
 
-                    //Toast.makeText(this, "id = "+preferences.getLong(USER_ID_PREF,0L), Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(this, ""+text, Toast.LENGTH_SHORT).show();
+                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1l, preferences.getLong(USER_ID_PREF,0L), "Name", null, text.toString()), WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                        @Override
+                        public void processFinish(Boolean isSuccess) {
+                            Intent intent = new Intent(CreatePost.this, MainActivity.class);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                    }).execute();
 
-                    Intent intent = new Intent(CreatePost.this, MainActivity.class);
-                    intent.putExtra("PostText" , text.toString());
-                    setResult(RESULT_OK, intent);
-                    finish();
                 }else{
                     Toast.makeText(this, "Please input text message", Toast.LENGTH_SHORT).show();
                 }
-                //finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

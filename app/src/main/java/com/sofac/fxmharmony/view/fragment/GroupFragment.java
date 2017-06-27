@@ -20,6 +20,7 @@ import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.data.DataManager;
+import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
@@ -66,12 +67,6 @@ public class GroupFragment extends ListFragment {
         listViewPost = this.getListView();
         getListView().setDivider(null);
 
-        String postText =  getActivity().getIntent().getStringExtra("postText");
-        if (!"".equals(postText) && postText != null){
-
-            new GroupExchangeOnServer<PostDTO>(new PostDTO(1l, 3l,"Name",null,postText), WRITE_POST_REQUEST).execute();
-            getActivity().getIntent().putExtra("postText", "");
-        }
 
     }
 
@@ -81,10 +76,18 @@ public class GroupFragment extends ListFragment {
     public void onResume() {
         updateViewList();
         super.onResume();
+
+
+        new GroupExchangeOnServer<PostDTO>(null, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
+            @Override
+            public void processFinish(Boolean isSuccess) {
+                if (isSuccess) updateViewList();
+            }
+        }).execute();
     }
 
     protected void updateViewList() {
-        new GroupExchangeOnServer<PostDTO>(null, LOAD_ALL_POSTS_REQUEST).execute();
+
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
 
@@ -111,148 +114,6 @@ public class GroupFragment extends ListFragment {
     }
 
 
-    private class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
-
-        private ServerResponse<List<PostDTO>> loadAllPostsServerResponse;
-        private ServerResponse<List<CommentDTO>> loadCommentsServerResponse;
-        private ServerResponse serverResponse;
-
-        private String type;
-        private T serverObject;
-
-       ProgressDialog pd = new ProgressDialog(GroupFragment.this.getActivity(), R.style.MyTheme);
-
-        private GroupExchangeOnServer(T serverObject, String type) {
-            this.serverObject = serverObject;
-            this.type = type;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            Timber.i("on pre");
-            pd.setCancelable(false);
-            pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            pd.show();
-        }
-
-
-        @Override
-        @SuppressWarnings("unchecked")
-        protected String doInBackground(String... urls) {
-
-            ServerRequest serverRequest = new ServerRequest(type, null);
-            DataManager dataManager = DataManager.getInstance();
-
-            PostDTO postDTO;
-            CommentDTO commentDTO;
-
-            switch (type) {
-                case Constants.LOAD_ALL_POSTS_REQUEST:
-                    Timber.i(serverRequest.toString());
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);//postID = serverRequest
-
-                    break;
-
-                case Constants.LOAD_COMMENTS_REQUEST:
-
-                    serverRequest.setDataTransferObject(serverObject);
-
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                    break;
-
-                case WRITE_POST_REQUEST:
-
-                    postDTO = (PostDTO) serverObject;
-
-                    serverRequest = new ServerRequest<PostDTO>(type, postDTO);
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                    break;
-
-                case Constants.WRITE_COMMENT_REQUEST:
-
-                    commentDTO = (CommentDTO) serverObject;
-                    serverRequest.setDataTransferObject(commentDTO);
-
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                    break;
-
-                case Constants.DELETE_POST_REQUEST:
-
-                    serverRequest.setDataTransferObject(serverObject); //postID = serverRequest
-
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                    break;
-
-                case DELETE_COMMENT_REQUEST:
-
-                    Long commentID = (Long) serverObject;
-                    serverRequest.setDataTransferObject(commentID);
-
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                    break;
-                case UPDATE_POST_REQUEST:
-
-                    postDTO = (PostDTO) serverObject;
-                    serverRequest.setDataTransferObject(postDTO);
-
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                    break;
-
-                case UPDATE_COMMENT_REQUEST:
-
-                    commentDTO = (CommentDTO) serverObject;
-                    serverRequest.setDataTransferObject(commentDTO);
-
-                    serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                    break;
-
-            }
-
-            if (serverResponse != null) {
-                return serverResponse.getResponseStatus().toString();
-            }
-
-
-            return Constants.SERVER_REQUEST_ERROR.toString();
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            Timber.e("Response Server: " + result);
-
-            if (result.equals(Constants.REQUEST_SUCCESS)) {
-
-                switch (type) {
-                    case LOAD_ALL_POSTS_REQUEST:
-
-                        loadAllPostsServerResponse = serverResponse;
-                        ArrayList<PostDTO> postDTOs = (ArrayList<PostDTO>) loadAllPostsServerResponse.getDataTransferObject();
-                        PostDTO.deleteAll(PostDTO.class);
-                        for (int i = 0; i < postDTOs.size(); i++) {
-                            postDTOs.get(i).save();
-                        }
-
-                        break;
-                    case Constants.LOAD_COMMENTS_REQUEST: {
-
-                        loadCommentsServerResponse = serverResponse;
-                        break;
-                    }
-                }
-            } else {
-                Toast.makeText(getActivity(), R.string.errorConnection, Toast.LENGTH_SHORT).show();
-            }
-            pd.dismiss();
-        }
-    }
 }
 
 
