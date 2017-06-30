@@ -1,10 +1,15 @@
 package com.sofac.fxmharmony.view.fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PostDTO;
@@ -13,13 +18,13 @@ import java.util.ArrayList;
 import static com.sofac.fxmharmony.Constants.LOAD_ALL_POSTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 
-public class GroupFragment extends ListFragment {
-
+public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public Intent intentDetailPostActivity;
     public AdapterPostGroup adapterPostGroup;
     ListView listViewPost;
     ArrayList<PostDTO> postDTOs;
+    SwipeRefreshLayout groupSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,35 +34,38 @@ public class GroupFragment extends ListFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        listViewPost = this.getListView();
-        getListView().setDivider(null);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_group, container, false);
+        listViewPost = (ListView) rootView.findViewById(R.id.idListGroup);
+        listViewPost.setDivider(null);
+        groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
+        groupSwipeRefreshLayout.setOnRefreshListener(this);
+        return rootView;
     }
 
     @Override
     public void onResume() {
-        new GroupExchangeOnServer<PostDTO>(null, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
-            @Override
-            public void processFinish(Boolean isSuccess) {
-                if (isSuccess) updateViewList();
-            }
-        }).execute();
+        updateViewList(true);
         super.onResume();
     }
 
-    protected void updateViewList() {
+    protected void updateViewList(Boolean toDoProgressDialog) {
+
+        new GroupExchangeOnServer<PostDTO>(null, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
+            @Override
+            public void processFinish(Boolean isSuccess) {
+                if (isSuccess) {}
+            }
+        }).execute();
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
 
         if (postDTOs != null) {
             adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
-            GroupFragment.this.setListAdapter(adapterPostGroup);
+            listViewPost.setAdapter(adapterPostGroup);
             adapterPostGroup.notifyDataSetChanged();
         }
-
-        listViewPost = GroupFragment.this.getListView();
 
         listViewPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,6 +76,13 @@ public class GroupFragment extends ListFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        groupSwipeRefreshLayout.setRefreshing(true);
+        updateViewList(false);
+        groupSwipeRefreshLayout.setRefreshing(false);
     }
 }
 

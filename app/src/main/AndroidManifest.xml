@@ -39,19 +39,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".view.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".view.DetailPushMessageActivity" />
-        <activity android:name=".view.CreatePost"/>
-        <activity android:name=".view.DetailPostActivity"/>
-
+        <activity android:name=".view.CreatePost" />
+        <activity android:name=".view.DetailPostActivity" />
 
         <!-- Push Google Cloud Messaging services -->
         <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">
@@ -65,6 +58,10 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name=".view.NavigationActivity"
+            android:label="@string/title_activity_navigation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

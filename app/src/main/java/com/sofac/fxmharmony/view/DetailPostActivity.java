@@ -62,7 +62,7 @@ public class DetailPostActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!"".equals(editTextComment.getText().toString())) {
-                    new GroupExchangeOnServer<>(new CommentDTO(1L, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID()), WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponse() {
+                    new GroupExchangeOnServer<>(new CommentDTO(1L, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)),"Name", null, editTextComment.getText().toString(), postDTO.getServerID()), true, WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponse() {
                         @Override
                         public void processFinish(Boolean isSuccess) {
                             updateListView();
@@ -84,7 +84,7 @@ public class DetailPostActivity extends BaseActivity {
     }
 
     public void updateListView() {
-        new GroupExchangeOnServer<>(postDTO.getServerID(), LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+        new GroupExchangeOnServer<>(postDTO.getServerID(),true, LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
             @Override
             public void processFinish(Boolean output) {
                 arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);

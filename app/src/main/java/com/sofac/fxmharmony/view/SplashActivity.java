@@ -16,7 +16,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SplashActivity extends BaseActivity {
     public void checkAuthorization() {
         preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         if (preferences.getBoolean(IS_AUTHORIZATION, false)) {
-            startMainActivity();
+            startNavigationActivity();
         } else {
             startLoginActivity();
         }
@@ -39,8 +39,8 @@ public class SplashActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void startMainActivity() {
-        intent = new Intent(this, MainActivity.class);
+    public void startNavigationActivity() {
+        intent = new Intent(this, NavigationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

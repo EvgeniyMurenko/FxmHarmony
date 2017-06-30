@@ -26,7 +26,6 @@ import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 
 public class ContentFragment extends ListFragment {
 
-    public Intent intentSplashActivity;
     public Intent intentDetailTaskActivity;
 
     public AdapterPushListView adapterTasksListView;
@@ -45,7 +44,6 @@ public class ContentFragment extends ListFragment {
         setHasOptionsMenu(true);
 
         listViewPush = this.getListView();
-        intentSplashActivity = new Intent(this.getActivity(), SplashActivity.class);
         intentDetailTaskActivity = new Intent(this.getActivity(), DetailPushMessageActivity.class);
     }
 
@@ -85,8 +83,8 @@ public class ContentFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         getActivity().getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -94,12 +92,6 @@ public class ContentFragment extends ListFragment {
         SharedPreferences preferences = getActivity().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         switch (item.getItemId()) {
-            case R.id.menu_exit:
-                editor.putBoolean(IS_AUTHORIZATION, false);
-                editor.apply();
-                intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentSplashActivity);
-                break;
             case R.id.menu_update:
                 updateViewList();
                 break;

@@ -61,10 +61,10 @@ public class CreatePost extends BaseActivity {
 
                     Editable text = postTextInput.getText();
 
-                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, 1L, preferences.getLong(USER_ID_PREF,0L), "Name", null, text.toString()), WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, 1L, preferences.getLong(USER_ID_PREF,0L), "Name", null, text.toString()),true, WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
                         @Override
                         public void processFinish(Boolean isSuccess) {
-                            Intent intent = new Intent(CreatePost.this, MainActivity.class);
+                            Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
                             setResult(RESULT_OK, intent);
                             finish();
                         }

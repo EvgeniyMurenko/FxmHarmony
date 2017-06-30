@@ -1,6 +1,5 @@
 package com.sofac.fxmharmony;
 
-
 public class Constants {
 
     /*Имя хранения preference*/
@@ -18,12 +17,12 @@ public class Constants {
     public final static String ONE_PUSH_MESSAGE_DATA = "ONE_PUSH_MESSAGE_DATA";
     public final static String ONE_POST_DATA = "ONE_POST_DATA";
 
-    //    urls
+    // urls
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
     //public final static String BASE_URL = "http://192.168.0.37:8080/";
-    public final static String BASE_URL = "http://192.168.0.32:8080/";
-    // public final static String BASE_URL = "http://www.sofac.kr/";
+    //public final static String BASE_URL = "http://192.168.0.32:8080/";
+    public final static String BASE_URL = "http://52.211.242.225:8080/";
 
     //Group requests
     public final static String LOAD_ALL_POSTS_REQUEST = "LOAD_ALL_POSTS_REQUEST";

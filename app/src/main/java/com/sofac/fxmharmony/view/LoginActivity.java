@@ -49,7 +49,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         initUI();
         buttonLogin.setOnClickListener(this);
-        intent = new Intent (this, MainActivity.class);
+        intent = new Intent (this, NavigationActivity.class);
     }
 
     private void initUI(){

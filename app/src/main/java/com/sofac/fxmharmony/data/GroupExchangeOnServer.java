@@ -32,7 +32,7 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
     private String type;
     private T serverObject;
     private Context context;
-
+    Boolean toDoProgressDialog = false;
     private ProgressDialog pd;
 
     public interface AsyncResponse {
@@ -41,20 +41,22 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
 
     private AsyncResponse asyncResponse = null;
 
-    public GroupExchangeOnServer(T serverObject, String type, Context context, AsyncResponse asyncResponse) {
+    public GroupExchangeOnServer(T serverObject, Boolean toDoProgressDialog, String type, Context context, AsyncResponse asyncResponse) {
+        pd = new ProgressDialog(context, R.style.MyTheme);
         this.serverObject = serverObject;
         this.type = type;
+        this.toDoProgressDialog = toDoProgressDialog;
         this.context = context;
-        pd = new ProgressDialog(context, R.style.MyTheme);
         this.asyncResponse = asyncResponse;
     }
 
     @Override
     protected void onPreExecute() {
-        Timber.i("on pre");
-        pd.setCancelable(false);
-        pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        pd.show();
+        if (toDoProgressDialog) {
+            pd.setCancelable(false);
+            pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            pd.show();
+        }
     }
 
 
