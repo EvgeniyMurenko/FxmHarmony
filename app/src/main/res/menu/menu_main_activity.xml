@@ -7,10 +7,10 @@
         android:title="@string/menu_delete"
         android:icon="@drawable/ic_delete_sweep"
         app:showAsAction="ifRoom" />
-    <item
+<!--    <item
         android:id="@+id/menu_update"
         android:orderInCategory="11"
         android:title="@string/menu_update"
         android:icon="@android:drawable/stat_notify_sync"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" />-->
 </menu>

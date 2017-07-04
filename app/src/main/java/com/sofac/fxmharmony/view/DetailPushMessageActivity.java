@@ -14,7 +14,7 @@ import com.sofac.fxmharmony.data.dto.PushMessage;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 
-public class DetailPushMessageActivity extends BaseActivity {
+public class DetailPushMessageActivity extends NavigationActivity {
 
     TextView titleDetailPushMessage;
     TextView dateDetailPushMessage;
