@@ -13,12 +13,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
 
@@ -26,7 +24,7 @@ import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
-import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
+
 
 public class NavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -79,30 +77,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         super.onResume();
     }
 
-    //    private void setupViewPager(ViewPager viewPager) {
-
-//         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (position == 1) {
-//                    floatingActionButton.setVisibility(View.VISIBLE);
-//                } else {
-//                    floatingActionButton.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-//    }
-
     public void changeFragment(){
         fragmentManager = getSupportFragmentManager();
         try {
@@ -118,7 +92,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
             Timber.e("!!!!!!");
-            return;
         }
     }
 
@@ -163,15 +136,19 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 fragmentClass = ContentFragment.class;
                 floatingActionButton.setVisibility(View.INVISIBLE);
                 changeFragment();
+                setTitle(item.getTitle());
+                item.setChecked(true);
                 break;
             case R.id.idGroupItem:
                 fragmentClass = GroupFragment.class;
                 floatingActionButton.setVisibility(View.VISIBLE);
                 changeFragment();
+                setTitle(item.getTitle());
+                item.setChecked(true);
                 break;
             case R.id.idSettingItem:
-//                fragmentClass = ContentFragment.class;
-//                floatingActionButton.setVisibility(View.INVISIBLE);
+                Intent intentSettings = new Intent(NavigationActivity.this, SettingsActivity.class);
+                startActivity(intentSettings);
                 break;
             case R.id.idExitItem:
                 Intent intentSplashActivity = new Intent(this, SplashActivity.class);
@@ -184,9 +161,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 startActivity(intentSplashActivity);
                 break;
         }
-
-        item.setChecked(true);
-        setTitle(item.getTitle());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

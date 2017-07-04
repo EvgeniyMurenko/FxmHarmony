@@ -3,6 +3,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
         listViewPost = (ListView) rootView.findViewById(R.id.idListGroup);
         listViewPost.setDivider(null);
@@ -50,44 +50,41 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         });
         groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
+
+
         return rootView;
     }
 
     @Override
     public void onResume() {
-        updateViewList(true);
+
         super.onResume();
+        updateViewList(true);
     }
 
     protected void updateViewList(Boolean toDoProgressDialog) {
-
         new GroupExchangeOnServer<PostDTO>(null, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
             @Override
             public void processFinish(Boolean isSuccess) {
                 if (isSuccess) {
                     postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
+
+                    if (postDTOs != null) {
+                        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
+                        listViewPost.setAdapter(adapterPostGroup);
+                        adapterPostGroup.notifyDataSetChanged();
+                    }
                 }
             }
         }).execute();
-
-        if (postDTOs != null) {
-            adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
-            listViewPost.setAdapter(adapterPostGroup);
-            adapterPostGroup.notifyDataSetChanged();
-        }
-
-
     }
 
     @Override
     public void onRefresh() {
+        Log.e("!!!!!!","onRefresh() GroupFragment");
         groupSwipeRefreshLayout.setRefreshing(true);
-        new GroupExchangeOnServer<PostDTO>(null, false, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
-            @Override
-            public void processFinish(Boolean isSuccess) {
-                groupSwipeRefreshLayout.setRefreshing(false);
-            }
-        }).execute();
+        updateViewList(false);
+        groupSwipeRefreshLayout.setRefreshing(false);
 
     }
 }

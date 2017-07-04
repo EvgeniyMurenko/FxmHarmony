@@ -8,6 +8,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
+import android.util.Log;
 
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -38,46 +39,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        Timber.e("From: " + remoteMessage.getFrom());
+        Log.e("!!!!!!!!!!!!", ""+remoteMessage.toString());
 
          pushMessageType = remoteMessage.getData().get("type");
 
-        if (pushMessageType.equals(Constants.GROUP_PUSH_TYPE)){
+        if (Constants.GROUP_PUSH_TYPE.equals(pushMessageType)){
             buildNotificationToShow(remoteMessage.getData().get("message"), remoteMessage.getData().get("date"), remoteMessage.getData().get("title"));
         } else {
 
-            // Check if message contains a data payload.
             if (remoteMessage.getData().size() > 0) {
-                Timber.e("Message data payload: " + remoteMessage.getData());
-                //SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 buildNotificationToShow(remoteMessage.getData().get("message"), remoteMessage.getData().get("date"), remoteMessage.getData().get("title"));
 
                 PushMessage newPushMessage = new PushMessage(remoteMessage.getData().get("title"), remoteMessage.getData().get("message"), remoteMessage.getData().get("date"));
                 newPushMessage.save();
-
-                //List<PushMessage> pushMessages = new ArrayList<PushMessage>();
-
-//            String stringPushPreferences = preferences.getString(PUSH_MASSEGES, "");
-//            if (stringPushPreferences.length() > 4) {
-//                pushMessages = new Gson().fromJson(stringPushPreferences, new TypeToken<List<PushMessage>>() {
-//                }.getType());
-//            }
-//
-//            pushMessages.add(newPushMessage);
-//
-//            SharedPreferences.Editor editor = preferences.edit();
-//            editor.putString(PUSH_MASSEGES, new Gson().toJson(pushMessages));
-//            editor.apply();
-//            editor.commit();
             }
 
-            // Check if message contains a notification payload.
             if (remoteMessage.getNotification() != null) {
                 Timber.i("Message Notification Body: " + remoteMessage.getNotification().getBody());
             }
-
-            // Also if you intend on generating your own notifications as a result of a received FCM
-            // message, here is where that should be initiated. See sendNotification method below.
         }
     }
 
