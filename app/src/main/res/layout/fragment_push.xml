@@ -7,13 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.sofac.fxmharmony.view.NavigationActivity">
     <ListView
-        android:id="@id/android:list"
+        android:id="@+id/idListPost"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/list_is_empty"
-        android:gravity="center"/>
 </android.support.v4.widget.SwipeRefreshLayout>

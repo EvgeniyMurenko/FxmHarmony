@@ -1,64 +1,46 @@
 package com.sofac.fxmharmony.view;
-
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
 
 import timber.log.Timber;
-
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
 
 public class NavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Toolbar toolbar;
+    public Toolbar toolbar;
     private static long backPressed;
-    private FloatingActionButton floatingActionButton;
-    FragmentManager fragmentManager;
-    Fragment fragment;
-    Class fragmentClass;
-
+    ContentFragment contentFragment;
+    GroupFragment groupFragment;
+    FragmentTransaction fTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
         setTitle("Push");
 
-        fragment = null;
-        fragmentClass = ContentFragment.class;
-
+        contentFragment = new ContentFragment();
+        groupFragment = new GroupFragment();
+        changerFragment(contentFragment);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                startActivityForResult(new Intent(NavigationActivity.this, CreatePost.class), 1);
-            }
-        });
-        floatingActionButton.setVisibility(View.INVISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -73,20 +55,15 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
     @Override
     protected void onResume() {
-        changeFragment();
         super.onResume();
     }
 
-    public void changeFragment(){
-        fragmentManager = getSupportFragmentManager();
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        fragmentManager.beginTransaction().replace(R.id.idFragmentChanger, fragment).commit();
+    public void changerFragment(Fragment fragment){
+        FragmentTransaction fTrans = getFragmentManager().beginTransaction();
+        fTrans.replace(R.id.idFragmentChanger, fragment);
+        fTrans.commit();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -95,37 +72,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (backPressed + 2000 > System.currentTimeMillis()) {
-                super.onBackPressed();
-                finishAffinity();
-            } else {
-                Toast.makeText(getBaseContext(), getString(R.string.ToastLogOut), Toast.LENGTH_SHORT).show();
-            }
-            backPressed = System.currentTimeMillis();
-        }
-    }
-
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.navigation, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -133,16 +79,12 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
         switch (item.getItemId()) {
             case R.id.idPushItem:
-                fragmentClass = ContentFragment.class;
-                floatingActionButton.setVisibility(View.INVISIBLE);
-                changeFragment();
+                changerFragment(contentFragment);
                 setTitle(item.getTitle());
                 item.setChecked(true);
                 break;
             case R.id.idGroupItem:
-                fragmentClass = GroupFragment.class;
-                floatingActionButton.setVisibility(View.VISIBLE);
-                changeFragment();
+                changerFragment(groupFragment);
                 setTitle(item.getTitle());
                 item.setChecked(true);
                 break;
@@ -166,4 +108,21 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (backPressed + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+                finishAffinity();
+            } else {
+                Toast.makeText(getBaseContext(), getString(R.string.ToastLogOut), Toast.LENGTH_SHORT).show();
+            }
+            backPressed = System.currentTimeMillis();
+        }
+    }
+
 }
