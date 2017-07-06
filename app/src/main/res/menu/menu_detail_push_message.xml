@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_back"
+        android:icon="@drawable/ic_keyboard_backspace"
         android:orderInCategory="100"
         android:title="@string/menu_back"
-        android:icon="@drawable/ic_keyboard_backspace"
         app:showAsAction="always" />
 </menu>

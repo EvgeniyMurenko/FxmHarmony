@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         protected void onPostExecute(String result) {
             Timber.e("Response Server: " + result);
 
-            if(result.equals(Constants.REQUEST_SUCCESS)){
+            if(Constants.REQUEST_SUCCESS.equals(result)){
                 ManagerInfoDTO managerInfoDTO = managerInfoServerResponse.getDataTransferObject();
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);

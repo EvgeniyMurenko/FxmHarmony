@@ -20,9 +20,9 @@ public class Constants {
     // urls
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    //public final static String BASE_URL = "http://192.168.0.37:8080/";
+    public final static String BASE_URL = "http://192.168.3.106:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
-    public final static String BASE_URL = "http://52.211.242.225:8080/";
+    //public final static String BASE_URL = "http://52.211.242.225:8080/";
 
     //Group requests
     public final static String LOAD_ALL_POSTS_REQUEST = "LOAD_ALL_POSTS_REQUEST";
@@ -34,12 +34,26 @@ public class Constants {
     public final static String UPDATE_POST_REQUEST = "UPDATE_POST_REQUEST";
     public final static String UPDATE_COMMENT_REQUEST = "UPDATE_COMMENT_REQUEST";
 
+    //Settings requests
+    public final static String CHANGE_NAME_REQUEST = "CHANGE_NAME_REQUEST";
+    public final static String CHANGE_AVATAR_REQUEST = "CHANGE_AVATAR_REQUEST";
+    public final static String DELETE_AVATAR_REQUEST = "DELETE_AVATAR_REQUEST";
+
+
+
+
     // Controller's name
     public final static String APP_EXCHANGE = "APP_EXCHANGE";
     public final static String GROUP_EXCHANGE = "GROUP_EXCHANGE";
+    public final static String SETTINGS_EXCHANGE = "SETTINGS_EXCHANGE";
 
     // Push message types
     public final static String ESTIMATE_CASE_PUSH_TYPE = "ESTIMATE_CASE_PUSH_TYPE";
     public final static String GROUP_PUSH_TYPE = "GROUP_PUSH_TYPE";
+
+
+    // Push message state
+    public final static int PUSH_ON = 10001;
+    public final static int PUSH_OFF = 10002;
 
 }

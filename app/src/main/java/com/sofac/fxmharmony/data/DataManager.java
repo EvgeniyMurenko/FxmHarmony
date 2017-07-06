@@ -17,6 +17,7 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import timber.log.Timber;
 
 public class DataManager {
@@ -56,14 +57,13 @@ public class DataManager {
     public ServerResponse postGroupRequest(ServerRequest serverRequest , String groupRequestType) {
 
         String response = sendRequest(serverRequest, Constants.GROUP_EXCHANGE);
-        Log.i("TEST" , response);
         Timber.i(response);
 
         if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
             Type authorizationType = null;
 
             if (groupRequestType.equals(Constants.LOAD_ALL_POSTS_REQUEST)){
-                Log.i("TEST" , "LOAD_ALL_POSTS_REQUEST");
+
                 authorizationType = new TypeToken<ServerResponse<List<PostDTO>>>() {
                 }.getType();
             } else if (groupRequestType.equals(Constants.LOAD_COMMENTS_REQUEST)){
@@ -81,6 +81,17 @@ public class DataManager {
         return null;
 
     }
+
+
+    public Call<ResponseBody> postSettingsRequest(ServerRequest serverRequest){
+
+        String response = sendRequest(serverRequest, Constants.GROUP_EXCHANGE);
+
+        Type  authorizationType = new TypeToken<ServerResponse>(){}.getType();
+
+        return new Gson().fromJson(response, authorizationType);
+    }
+
 
     private String sendRequest(ServerRequest serverRequest, String type) {
 

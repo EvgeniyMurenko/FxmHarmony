@@ -22,6 +22,9 @@ public interface RequestResponseService {
     @POST("group-exchange")
     Call<ResponseBody> postGroupRequest(@Body ServerRequest serverRequest);
 
+    @POST("settings-exchange")
+    Call<ResponseBody> postSettingsRequest(@Body ServerRequest serverRequest);
+
     /******** Helper class that sets up a new services *******/
     class Creator {
 

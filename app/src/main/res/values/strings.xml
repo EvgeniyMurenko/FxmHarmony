@@ -40,6 +40,28 @@
     <string name="menu_update">Update</string>
     <string name="accept_task">Accept task</string>
 
+    <!--Settings Activity-->
+    <string name="push_message">Push Message</string>
+    <string name="language">Language</string>
+    <string name="edit_name">Edit name</string>
+    <string name="change_name">Change name</string>
+    <string name="new_name">New name</string>
+    <string name="logout">Logout</string>
+    <string name="photo_gallery">Gallery</string>
+    <string name="photo_camera">Camera</string>
+    <string name="photo_delete">Delete</string>
+    <string name="delete_photo_question"> Are you sure you want to delete?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="ukrainian">Ukrainian</string>
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
+    <string name="korean">Korean</string>
+    <string name="change_language">Change language</string>
+
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_write_post">WritePostActivity</string>
