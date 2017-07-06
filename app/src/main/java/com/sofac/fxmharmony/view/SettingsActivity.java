@@ -30,6 +30,7 @@ import com.sofac.fxmharmony.view.fragmentDialog.ChangeNameFragmentDialog;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -40,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView userPosition;
 
     private LinearLayout languageButton;
+    private TextView currentLanguage;
     private Switch pushMessageSwitch;
 
     private static final int PICK_PHOTO_FOR_AVATAR = 101;
@@ -64,6 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
         userPosition = (TextView) findViewById(R.id.userPosition);
         pushMessageSwitch = (Switch) findViewById(R.id.pushMessagesSwitch);
         languageButton = (LinearLayout) findViewById(R.id.languageButton);
+        currentLanguage = (TextView) findViewById(R.id.currentLanguage);
 
         changeNameFragmentDialog = ChangeNameFragmentDialog.newInstance();
         changeLanguageFragmentDialog = ChangeLanguageFragmentDialog.newInstance();
@@ -140,6 +143,8 @@ public class SettingsActivity extends AppCompatActivity {
                 changeLanguageFragmentDialog.show(getFragmentManager().beginTransaction(), "ChangeLanguageFragmentDialog");
             }
         });
+
+        currentLanguage.setText(Locale.getDefault().getLanguage());
 
     }
 

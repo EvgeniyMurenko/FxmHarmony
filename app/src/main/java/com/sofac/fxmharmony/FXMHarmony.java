@@ -1,15 +1,17 @@
 package com.sofac.fxmharmony;
 
-import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.orm.SchemaGenerator;
 import com.orm.SugarApp;
 import com.orm.SugarDb;
-import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.util.FakeCrashLibrary;
 
-import java.util.Date;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -34,9 +36,38 @@ public class FXMHarmony  extends SugarApp {
         SchemaGenerator schemaGenerator = new SchemaGenerator(this);
         schemaGenerator.createDatabase(new SugarDb(this).getDB());
 
+        initLanguage(this);
     }
 
-    /** A tree which logs important information for crash reporting. */
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        initLanguage(this);
+    }
+
+
+    public static void initLanguage(Context ctx) {
+
+        SharedPreferences sPref = ctx.getSharedPreferences("Locale", ctx.MODE_PRIVATE);
+        String language = sPref.getString("Locale", "");
+
+        if (!language.equals("")) {
+            Locale mNewLocale = new Locale(language);
+            Locale.setDefault(mNewLocale);
+            android.content.res.Configuration config = new android.content.res.Configuration();
+            config.locale = mNewLocale;
+            ctx.getResources().updateConfiguration(config, ctx.getResources().getDisplayMetrics());
+
+        }
+
+    }
+
+
+
+    /**
+     * A tree which logs important information for crash reporting.
+     */
     private static class CrashReportingTree extends Timber.Tree {
 
         @Override
@@ -58,3 +89,5 @@ public class FXMHarmony  extends SugarApp {
     }
 
 }
+
+

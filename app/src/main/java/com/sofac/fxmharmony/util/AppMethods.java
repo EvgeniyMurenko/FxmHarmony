@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.sofac.fxmharmony.Constants;
 
+import java.util.Locale;
+
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -30,4 +32,9 @@ public class AppMethods {
         editor.apply();
     }
 
+  /*  public static String getLanguage(Context context ){
+        SharedPreferences sPref = context.getSharedPreferences("Locale", MODE_PRIVATE);
+        return sPref.getString("Locale", Locale.ENGLISH.);
+    }
+*/
 }

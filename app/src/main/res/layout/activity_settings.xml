@@ -115,12 +115,11 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/itemState"
+                    android:id="@+id/currentLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="text"
                     android:textColor="@color/colorItemContext" />
 
             </LinearLayout>
