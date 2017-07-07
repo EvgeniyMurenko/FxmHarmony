@@ -15,7 +15,6 @@ import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.view.CreatePost;
 import com.sofac.fxmharmony.view.DetailPostActivity;
-import com.sofac.fxmharmony.view.NavigationActivity;
 
 import java.util.ArrayList;
 import static com.sofac.fxmharmony.Constants.LOAD_ALL_POSTS_REQUEST;

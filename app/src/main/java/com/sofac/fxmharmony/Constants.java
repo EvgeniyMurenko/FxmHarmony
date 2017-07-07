@@ -41,9 +41,6 @@ public class Constants {
     public final static String CHANGE_AVATAR_REQUEST = "CHANGE_AVATAR_REQUEST";
     public final static String DELETE_AVATAR_REQUEST = "DELETE_AVATAR_REQUEST";
 
-
-
-
     // Controller's name
     public final static String APP_EXCHANGE = "APP_EXCHANGE";
     public final static String GROUP_EXCHANGE = "GROUP_EXCHANGE";
@@ -52,7 +49,6 @@ public class Constants {
     // Push message types
     public final static String ESTIMATE_CASE_PUSH_TYPE = "ESTIMATE_CASE_PUSH_TYPE";
     public final static String GROUP_PUSH_TYPE = "GROUP_PUSH_TYPE";
-
 
     // Push message state
     public final static int PUSH_ON = 10001;
