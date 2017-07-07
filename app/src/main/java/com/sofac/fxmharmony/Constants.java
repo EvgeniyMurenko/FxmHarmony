@@ -2,6 +2,8 @@ package com.sofac.fxmharmony;
 
 public class Constants {
 
+    public static final String CLOUD_API_KEY = "AIzaSyDZJmgv9fvQnQkc5vvCx8bPFcUqSYDVhnM";
+
     /*Имя хранения preference*/
     public final static String IS_AUTHORIZATION = "IS_AUTHORIZATION";
     public final static String PUSH_MASSEGES = "PUSH_MASSEGES";
@@ -20,7 +22,7 @@ public class Constants {
     // urls
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    public final static String BASE_URL = "http://192.168.3.106:8080/";
+    public final static String BASE_URL = "http://192.168.3.110:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
 

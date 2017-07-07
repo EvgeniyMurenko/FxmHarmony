@@ -3,11 +3,14 @@ package com.sofac.fxmharmony;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.orm.SchemaGenerator;
 import com.orm.SugarApp;
+import com.orm.SugarContext;
 import com.orm.SugarDb;
 import com.sofac.fxmharmony.util.FakeCrashLibrary;
 
@@ -22,6 +25,8 @@ import timber.log.Timber;
 
 public class FXMHarmony  extends SugarApp {
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,6 +40,7 @@ public class FXMHarmony  extends SugarApp {
         // create table if not exists
         SchemaGenerator schemaGenerator = new SchemaGenerator(this);
         schemaGenerator.createDatabase(new SugarDb(this).getDB());
+
 
         initLanguage(this);
     }
@@ -62,7 +68,6 @@ public class FXMHarmony  extends SugarApp {
         }
 
     }
-
 
 
     /**
