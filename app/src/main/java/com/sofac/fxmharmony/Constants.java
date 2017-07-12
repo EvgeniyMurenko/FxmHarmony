@@ -2,6 +2,8 @@ package com.sofac.fxmharmony;
 
 public class Constants {
 
+    public static final String MULTIPART_FORM_DATA = "multipart/form-data";
+
     public static final String CLOUD_API_KEY = "AIzaSyDZJmgv9fvQnQkc5vvCx8bPFcUqSYDVhnM";
 
     /*Имя хранения preference*/
@@ -22,9 +24,11 @@ public class Constants {
     // urls
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    //public final static String BASE_URL = "http://192.168.3.110:8080/";
+    public final static String BASE_URL = "http://192.168.3.111:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
-    public final static String BASE_URL = "http://52.211.242.225:8080/";
+    //public final static String BASE_URL = "http://52.211.242.225:8080/";
+
+
 
     //Group requests
     public final static String LOAD_ALL_POSTS_REQUEST = "LOAD_ALL_POSTS_REQUEST";
@@ -36,15 +40,22 @@ public class Constants {
     public final static String UPDATE_POST_REQUEST = "UPDATE_POST_REQUEST";
     public final static String UPDATE_COMMENT_REQUEST = "UPDATE_COMMENT_REQUEST";
 
+    //Upload files requests
+    public final static String ATTACH_LOAD_FXM_POST_FILES = "ATTACH_LOAD_FXM_POST_FILES";
+
+
     //Settings requests
     public final static String CHANGE_NAME_REQUEST = "CHANGE_NAME_REQUEST";
     public final static String CHANGE_AVATAR_REQUEST = "CHANGE_AVATAR_REQUEST";
     public final static String DELETE_AVATAR_REQUEST = "DELETE_AVATAR_REQUEST";
 
+
     // Controller's name
     public final static String APP_EXCHANGE = "APP_EXCHANGE";
     public final static String GROUP_EXCHANGE = "GROUP_EXCHANGE";
     public final static String SETTINGS_EXCHANGE = "SETTINGS_EXCHANGE";
+    public final static String UPLOAD_MULTI_FILE_EXCHANGE = "UPLOAD_MULTI_FILE_EXCHANGE";
+
 
     // Push message types
     public final static String ESTIMATE_CASE_PUSH_TYPE = "ESTIMATE_CASE_PUSH_TYPE";

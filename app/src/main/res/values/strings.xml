@@ -2,6 +2,8 @@
     /* All app */
     <string name="app_name">FXM Harmony</string>
     <string name="ToastLogOut">Click again to exit</string>
+    <string name="upload_start">Upload start...</string>
+    <string name="upload_success">Upload done successfully</string>
 
     /* Login Activity */
     <string name="logo">Logo</string>

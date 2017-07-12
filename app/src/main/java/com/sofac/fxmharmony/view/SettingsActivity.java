@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +27,17 @@ import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.service.BackgroundFileUploadService;
 import com.sofac.fxmharmony.util.AppMethods;
+import com.sofac.fxmharmony.util.RequestMethods;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeLanguageFragmentDialog;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeNameFragmentDialog;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -156,14 +164,20 @@ public class SettingsActivity extends AppCompatActivity {
                 //Display an error
                 return;
             }
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
 
-           /* try {
-                InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }*/
-            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
+            Uri uri = data.getData();
+            ArrayList<Uri> uris = new ArrayList<>();
+
+            uris.add(uri);
+
+
+            RequestMethods.startServiceAttachLoadFilesToPost(this,uris,1l);
+
+
+
+            Log.i("PHOTO", uri.getPath());
+
+
         }
     }
 
@@ -171,7 +185,6 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_settings, menu);
-
         return true;
     }
 
