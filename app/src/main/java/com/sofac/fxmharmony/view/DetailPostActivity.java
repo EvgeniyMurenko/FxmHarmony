@@ -22,6 +22,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
 import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
+import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 
 import java.text.SimpleDateFormat;
@@ -201,7 +202,17 @@ public class DetailPostActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail_post, menu);
+        PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, 1L);
+        if(permissionDTO.getTranslatePermission()&&postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)){
+            getMenuInflater().inflate(R.menu.menu_detail_post, menu);
+            getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
+        } else if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
+            getMenuInflater().inflate(R.menu.menu_detail_post, menu);
+        } else if (permissionDTO.getTranslatePermission()) {
+            getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
+        } else {
+            return false;
+        }
         return true;
     }
 
@@ -216,6 +227,9 @@ public class DetailPostActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_delete:
                 Toast.makeText(this, "menu_delete", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_translate_post:
+                Toast.makeText(this, "menu_translate_post", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

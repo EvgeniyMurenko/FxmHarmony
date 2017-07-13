@@ -1,6 +1,7 @@
 package com.sofac.fxmharmony.data.dto;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -35,6 +36,7 @@ public class ManagerInfoDTO extends SugarRecord implements Serializable {
 
     private Date birthday;
 
+    @Ignore
     private PermissionDTO permissions;
 
     private String avatarImage;

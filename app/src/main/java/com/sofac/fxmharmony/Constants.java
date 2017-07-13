@@ -27,7 +27,7 @@ public class Constants {
     // urls
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    public final static String BASE_URL = "http://192.168.3.104:8080/";
+    public final static String BASE_URL = "http://192.168.3.113:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";

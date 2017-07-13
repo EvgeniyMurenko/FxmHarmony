@@ -31,9 +31,7 @@ import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
-
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-
 
 /**
  * Activity login & password authorization, validation input field, if validate data start MainActivity.class
@@ -52,10 +50,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.activity_login);
         initUI();
         buttonLogin.setOnClickListener(this);
-        intent = new Intent (this, NavigationActivity.class);
+        intent = new Intent(this, NavigationActivity.class);
     }
 
-    private void initUI(){
+    private void initUI() {
         editPassword = (EditText) findViewById(R.id.editPassword);
         editLogin = (EditText) findViewById(R.id.editLogin);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
@@ -66,11 +64,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         String password = editPassword.getText().toString();
         String login = editLogin.getText().toString();
 
-        if("".equals(password)&&"".equals(login)){
+        if ("".equals(password) && "".equals(login)) {
             Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
             CheckAuthorizationOnServer task = new CheckAuthorizationOnServer();
-            task.execute(editLogin.getText().toString(),editPassword.getText().toString());
+            task.execute(editLogin.getText().toString(), editPassword.getText().toString());
         }
     }
 
@@ -99,8 +97,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         @Override
         protected String doInBackground(String... urls) {
 
-            SharedPreferences sharedPref =  PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-            Authorization authorization = new Authorization(urls[0],urls[1], sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE,""));
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+            Authorization authorization = new Authorization(urls[0], urls[1], sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, ""));
 
             ServerRequest serverRequest = new ServerRequest(Constants.AUTHORIZATION_REQUEST, authorization);
             DataManager dataManager = DataManager.getInstance();
@@ -116,15 +114,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         protected void onPostExecute(String result) {
             Timber.e("Response Server: " + result);
 
-            if(Constants.REQUEST_SUCCESS.equals(result)){
-                ManagerInfoDTO managerInfoDTO = managerInfoServerResponse.getDataTransferObject();
-                PermissionDTO permissionDTO = managerInfoDTO.getPermissions();
-
+            if (Constants.REQUEST_SUCCESS.equals(result)) {
                 ManagerInfoDTO.deleteAll(ManagerInfoDTO.class);
+                PermissionDTO.deleteAll(PermissionDTO.class);
+
+                ManagerInfoDTO managerInfoDTO = managerInfoServerResponse.getDataTransferObject();
                 managerInfoDTO.save();
 
-                PermissionDTO.deleteAll(PermissionDTO.class);
+                PermissionDTO permissionDTO = managerInfoServerResponse.getDataTransferObject().getPermissions();
+                permissionDTO.setId(1L);
                 permissionDTO.save();
+
+                Toast.makeText(LoginActivity.this, permissionDTO.getTranslatePermission().toString(), Toast.LENGTH_SHORT).show();
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -138,7 +139,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 editorUser.apply();
                 editorUser.commit();
 
-                Timber.e(preferences.getLong(USER_ID_PREF,0L)+"");
+                Timber.e(preferences.getLong(USER_ID_PREF, 0L) + "");
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

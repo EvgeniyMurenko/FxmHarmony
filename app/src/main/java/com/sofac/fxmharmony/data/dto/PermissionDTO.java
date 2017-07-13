@@ -21,6 +21,8 @@ public class PermissionDTO extends SugarRecord implements Serializable {
         this.translatePermission = translatePermission;
     }
 
+    private transient Long id;
+
     private Boolean superAdminPermission;
 
     private Boolean estimatePermission;
@@ -109,6 +111,16 @@ public class PermissionDTO extends SugarRecord implements Serializable {
 
     public void setTranslatePermission(Boolean translatePermission) {
         this.translatePermission = translatePermission;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

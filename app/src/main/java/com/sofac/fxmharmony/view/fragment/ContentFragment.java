@@ -25,9 +25,6 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-import static android.R.attr.id;
-import static android.R.id.empty;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 
@@ -67,8 +64,10 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
 
         ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, 9L);
-        PermissionDTO permissionDTOs = PermissionDTO.findById(PermissionDTO.class, 1L);
-        Timber.e("!!!!!!!!!!!"+managerInfoDTO+"!!!!!!!!!!!!!!!"+permissionDTOs);
+        PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, 1L);
+        ArrayList<PermissionDTO> permissionDTOs = (ArrayList<PermissionDTO>) PermissionDTO.listAll(PermissionDTO.class);
+
+        Timber.e("!!!!!!!!!!!"+managerInfoDTO+"\n !!!!!!!!!!!!!!!"+permissionDTO+"\n !!!!!!!!!!!!!!!"+permissionDTOs);
 
         return rootView;
     }

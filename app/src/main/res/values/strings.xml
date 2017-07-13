@@ -41,6 +41,7 @@
     <string name="menu_done">Done</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_edit">Edit</string>
+    <string name="menu_translate_post">Translate post</string>
     <string name="menu_update">Update</string>
     <string name="accept_task">Accept task</string>
 
