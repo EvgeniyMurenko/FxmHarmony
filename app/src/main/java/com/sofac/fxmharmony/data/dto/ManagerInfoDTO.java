@@ -1,14 +1,17 @@
 package com.sofac.fxmharmony.data.dto;
 
+import com.orm.SugarRecord;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 
-public class ManagerInfoDTO implements Serializable {
+public class ManagerInfoDTO extends SugarRecord implements Serializable {
 
-    public ManagerInfoDTO(Long id, String name, String phone, String email, Date birthday, List<String> permissions, String avatarImage) {
+    public ManagerInfoDTO(Long id, Long idServer, String name, String phone, String email, Date birthday, PermissionDTO permissions, String avatarImage) {
         this.id = id;
+        this.idServer = idServer;
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -17,7 +20,12 @@ public class ManagerInfoDTO implements Serializable {
         this.avatarImage = avatarImage;
     }
 
-    private Long id;
+    public ManagerInfoDTO() {
+    }
+
+    private transient Long id;
+
+    private Long idServer;
 
     private String name;
 
@@ -27,15 +35,15 @@ public class ManagerInfoDTO implements Serializable {
 
     private Date birthday;
 
-    private List<String> permissions;
+    private PermissionDTO permissions;
 
     private String avatarImage;
 
-    public List<String> getPermissions() {
+    public PermissionDTO getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<String> permissions) {
+    public void setPermissions(PermissionDTO permissions) {
         this.permissions = permissions;
     }
 
@@ -87,15 +95,24 @@ public class ManagerInfoDTO implements Serializable {
         this.avatarImage = avatarImage;
     }
 
+    public Long getIdServer() {
+        return idServer;
+    }
+
+    public void setIdServer(Long idServer) {
+        this.idServer = idServer;
+    }
+
     @Override
     public String toString() {
         return "ManagerInfoDTO{" +
                 "id=" + id +
+                ", idServer=" + idServer +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
-                ", permissions=" + permissions +
+                ", permissions='" + permissions + '\'' +
                 '}';
     }
 }

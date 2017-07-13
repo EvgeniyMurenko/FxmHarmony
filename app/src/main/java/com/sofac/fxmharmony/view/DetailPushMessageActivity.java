@@ -24,6 +24,8 @@ public class DetailPushMessageActivity extends BaseActivity {
         dateDetailPushMessage = (TextView) findViewById(R.id.dateDetailPushMessage);
         messageDetailPushMessage = (TextView) findViewById(R.id.messageDetailPushMessage);
 
+        setTitle(getString(R.string.push_message));
+
         Intent intent = getIntent();
         PushMessage pushMessage = (PushMessage) intent.getSerializableExtra(ONE_PUSH_MESSAGE_DATA);
 

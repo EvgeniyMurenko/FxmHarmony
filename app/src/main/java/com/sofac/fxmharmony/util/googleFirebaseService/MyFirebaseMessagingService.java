@@ -38,9 +38,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        Log.e("!!!!!!!!!!!!", ""+remoteMessage.toString());
-
          pushMessageType = remoteMessage.getData().get("type");
 
         if (Constants.GROUP_PUSH_TYPE.equals(pushMessageType)){

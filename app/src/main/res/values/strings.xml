@@ -16,6 +16,7 @@
     <string name="title_activity_login">Login Activity</string>
     <string name="fieldEmpty">Field empty</string>
     <string name="errorConnection">No connection to server / Incorrect login or password</string>
+    <string name="errorServer">No connection to server</string>
     <string name="errorSingIn">Error Sign In</string>
 
     /* Navigation drawer - TasksActivity */
@@ -39,6 +40,7 @@
     <string name="menu_back">Back</string>
     <string name="menu_done">Done</string>
     <string name="menu_delete">Delete</string>
+    <string name="menu_edit">Edit</string>
     <string name="menu_update">Update</string>
     <string name="accept_task">Accept task</string>
 
@@ -62,8 +64,6 @@
     <string name="change_language">Change language</string>
     <string name="empty_name_error">Empty name should not be empty</string>
     <string name="size_name_error">Name should be in range from 3 to 16 characters</string>
-
-
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -150,4 +150,19 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="list_is_empty">List is Empty</string>
+    <string name="update_list">Update list</string>
+    <string name="write_post">Write post</string>
+
+    <string name="list_comments_empty">The list of the comments is empty</string>
+    <string name="list_post_empty">The list of the posts is empty</string>
+    <string name="list_push_empty">The list of the push is empty</string>
+
+    <string name="text_orig">Original</string>
+    <string name="text_eng">English</string>
+    <string name="text_kor">Korean</string>
+    <string name="text_rus">Russian</string>
+
+
+
+
 </resources>

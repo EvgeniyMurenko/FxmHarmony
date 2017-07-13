@@ -9,6 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,10 +22,13 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.data.dto.PushMessage;
+import com.sofac.fxmharmony.view.ChangePost;
 import com.sofac.fxmharmony.view.CreatePost;
 import com.sofac.fxmharmony.view.DetailPostActivity;
-
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
@@ -40,11 +46,15 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public SwipeRefreshLayout groupSwipeRefreshLayout;
     SharedPreferences preferences;
     public FloatingActionButton floatingActionButton;
+    public static Long idPost;
+    public static PostDTO postDTO;
+    public Intent intentChangePost;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intentDetailPostActivity = new Intent(this.getActivity(), DetailPostActivity.class);
+        intentChangePost = new Intent(this.getActivity(), ChangePost.class);
         preferences = getActivity().getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
     }
 
@@ -56,6 +66,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         listViewPost.setDivider(null);
         groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
+        setHasOptionsMenu(true);
 
         floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -68,23 +79,25 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         listViewPost.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final PostDTO postDTO = postDTOs.get(position);
+                postDTO = postDTOs.get(position);
+                GroupFragment.idPost = postDTOs.get(position).getServerID();
+
                 if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    //builder.setTitle("Pick a color");
                     builder.setItems(R.array.choice_double_click_post, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
-                                case 0:
-                                    Toast.makeText(getActivity(), "Double click 1111!", Toast.LENGTH_SHORT).show();
+                                case 0: //Edit
+                                    writePost();
                                     break;
-                                case 1:
-                                    Toast.makeText(getActivity(), "Double click 2222!", Toast.LENGTH_SHORT).show();
-                                    new GroupExchangeOnServer<Long>(postDTO.getId(), true, DELETE_POST_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
+                                case 1: //Delete
+                                    new GroupExchangeOnServer<>(GroupFragment.idPost, true, DELETE_POST_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
                                         @Override
                                         public void processFinish(Boolean isSuccess) {
                                             if (isSuccess) {
+                                                updateViewList(true);
+                                                Toast.makeText(getActivity(), "Post was delete!", Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }).execute();
@@ -112,11 +125,15 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         return rootView;
     }
 
-
     @Override
     public void onResume() {
         updateViewList(true);
         super.onResume();
+    }
+
+    public void writePost(){
+        intentChangePost.putExtra(ONE_POST_DATA, postDTO);
+        startActivity(intentChangePost);
     }
 
     protected void updateViewList(Boolean toDoProgressDialog) {
@@ -137,7 +154,6 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         }).execute();
 
-
     }
 
     @Override
@@ -145,6 +161,25 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         groupSwipeRefreshLayout.setRefreshing(true);
         updateViewList(false);
         groupSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_group, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_update_list_post:
+                updateViewList(true);
+                break;
+            case R.id.menu_write_post:
+                startActivityForResult(new Intent(GroupFragment.this.getActivity(), CreatePost.class), 1);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

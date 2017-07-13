@@ -12,14 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
+import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
+import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
+import static android.R.attr.id;
+import static android.R.id.empty;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 
 public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -45,6 +54,22 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
         groupSwipeRefreshLayout.setOnRefreshListener(this);
         setHasOptionsMenu(true);
 
+        listViewPush.setEmptyView(rootView.findViewById(R.id.id_list_empty));
+
+        listViewPush.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+                if (pushMessages != null) {
+                    intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
+                    startActivity(intentDetailTaskActivity);
+                }
+            }
+        });
+
+        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, 9L);
+        PermissionDTO permissionDTOs = PermissionDTO.findById(PermissionDTO.class, 1L);
+        Timber.e("!!!!!!!!!!!"+managerInfoDTO+"!!!!!!!!!!!!!!!"+permissionDTOs);
+
         return rootView;
     }
 
@@ -56,23 +81,11 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     protected void updateViewList() {
-
-        pushMessages = (ArrayList<PushMessage>) PushMessage.listAll(PushMessage.class);
-        if (pushMessages != null) {
-            adapterTasksListView = new AdapterPushListView(this.getActivity(), pushMessages);
-            listViewPush.setAdapter(adapterTasksListView);
-            adapterTasksListView.notifyDataSetChanged();
-        }
-
-        listViewPush.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                if (pushMessages != null) {
-                    intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
-                    startActivity(intentDetailTaskActivity);
-                }
-            }
-        });
+        pushMessages = (ArrayList<PushMessage>) listAll(PushMessage.class);
+        adapterTasksListView = new AdapterPushListView(this.getActivity(), pushMessages);
+        listViewPush.setAdapter(adapterTasksListView);
+        //adapterTasksListView.notifyDataSetChanged();
+        groupSwipeRefreshLayout.setRefreshing(false);
     }
 
 
@@ -100,7 +113,7 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onRefresh() {
         groupSwipeRefreshLayout.setRefreshing(true);
         updateViewList();
-        groupSwipeRefreshLayout.setRefreshing(false);
+
     }
 
 }

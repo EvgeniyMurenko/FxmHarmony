@@ -105,8 +105,8 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
                 break;
 
             case Constants.DELETE_POST_REQUEST:
-
-                serverRequest.setDataTransferObject(serverObject); //postID = serverRequest
+                Long postID = (Long) serverObject;
+                serverRequest.setDataTransferObject(postID); //postID = serverRequest
 
                 serverResponse = dataManager.postGroupRequest(serverRequest, type);
 
@@ -185,7 +185,7 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
             }
             asyncResponse.processFinish(true);
         } else {
-            Toast.makeText(context, R.string.errorConnection, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.errorServer, Toast.LENGTH_SHORT).show();
             asyncResponse.processFinish(false);
         }
         pd.dismiss();

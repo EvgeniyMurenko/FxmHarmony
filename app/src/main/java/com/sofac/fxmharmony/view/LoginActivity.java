@@ -23,6 +23,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.DataManager;
 import com.sofac.fxmharmony.data.dto.Authorization;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
+import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
@@ -117,6 +118,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             if(Constants.REQUEST_SUCCESS.equals(result)){
                 ManagerInfoDTO managerInfoDTO = managerInfoServerResponse.getDataTransferObject();
+                PermissionDTO permissionDTO = managerInfoDTO.getPermissions();
+
+                ManagerInfoDTO.deleteAll(ManagerInfoDTO.class);
+                managerInfoDTO.save();
+
+                PermissionDTO.deleteAll(PermissionDTO.class);
+                permissionDTO.save();
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -127,7 +135,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 SharedPreferences preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
                 SharedPreferences.Editor editorUser = preferences.edit();
                 editorUser.putString(USER_NAME_PREF , managerInfoDTO.getName());
-                editorUser.putLong(USER_ID_PREF, managerInfoDTO.getId());
+                editorUser.putLong(USER_ID_PREF, managerInfoDTO.getIdServer());
                 editorUser.putString(USER_AVATAR_IMAGE_PREF , managerInfoDTO.getAvatarImage());
                 editorUser.apply();
                 editorUser.commit();

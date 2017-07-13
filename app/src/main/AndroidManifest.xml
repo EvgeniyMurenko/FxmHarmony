@@ -30,7 +30,7 @@
             android:value="fxmharmony.db" />
         <meta-data
             android:name="VERSION"
-            android:value="17" />
+            android:value="35" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -52,7 +52,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.DetailPushMessageActivity" />
         <activity android:name=".view.CreatePost" />
-        <activity android:name=".view.DetailPostActivity" />
+        <activity android:name=".view.ChangePost" />
+        <activity android:name=".view.DetailPostActivity"
+            android:logo="@drawable/ic_keyboard_backspace"/>
 
         <!-- Push Google Cloud Messaging services -->
         <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">
@@ -72,12 +74,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings"
+            android:logo="@drawable/ic_keyboard_backspace">
+
+        </activity>
 
         <service
             android:name=".service.BackgroundFileUploadService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+
+        </service>
     </application>
 
 </manifest>

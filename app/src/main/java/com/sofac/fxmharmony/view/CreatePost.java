@@ -5,9 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
@@ -22,29 +24,18 @@ public class CreatePost extends BaseActivity {
 
     public SharedPreferences preferences;
     private EditText postTextInput;
+    TabHost.TabSpec tabSpec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_post_message);
+
+        setTitle("Create post");
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
-
         postTextInput = (EditText) findViewById(R.id.post_text_input);
-
-
-
-/*        Intent intent = getIntent();
-        PushMessage pushMessage = (PushMessage) intent.getSerializableExtra(ONE_PUSH_MESSAGE_DATA);
-
-        if(pushMessage!=null){
-            titleDetailPushMessage.setText(pushMessage.getTitle());
-            dateDetailPushMessage.setText(pushMessage.getDate());
-            messageDetailPushMessage.setText(pushMessage.getMessage());
-        }*/
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,7 +52,7 @@ public class CreatePost extends BaseActivity {
 
                     Editable text = postTextInput.getText();
 
-                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, 1L, preferences.getLong(USER_ID_PREF,0L), "Name", null, text.toString()),true, WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, 1L, preferences.getLong(USER_ID_PREF,0L), "Name", null, text.toString(),null,null,null),true, WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
                         @Override
                         public void processFinish(Boolean isSuccess) {
                             Intent intent = new Intent(CreatePost.this, NavigationActivity.class);

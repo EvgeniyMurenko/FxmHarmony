@@ -2,6 +2,7 @@ package com.sofac.fxmharmony.adapter;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +62,7 @@ public class AdapterPostGroup extends BaseAdapter {
         PostDTO postDTO = getPostDTO(position);
         ((TextView) view.findViewById(R.id.idTitleItemPost)).setText(postDTO.getUserName());
         ((TextView) view.findViewById(R.id.idDateItemPost)).setText(new SimpleDateFormat("d MMM yyyy", Locale.GERMAN).format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
-        ((TextView) view.findViewById(R.id.idMessageItemPost)).setText(Html.fromHtml(postDTO.getPostText()));
-
+        if(postDTO.getPostTextOriginal()!=null)((TextView) view.findViewById(R.id.idMessageItemPost)).setText(postDTO.getPostTextOriginal().replaceAll("<(.*?)>"," "));
         return view;
     }
 

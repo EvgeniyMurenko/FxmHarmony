@@ -4,10 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/idRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.sofac.fxmharmony.view.NavigationActivity">
-    <ListView
-        android:id="@+id/idListPost"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/idListPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/id_list_empty"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:textSize="15sp"
+            android:textColor="@color/colorItemContext"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:text="@string/list_push_empty"/>
+    </LinearLayout>
+
 </android.support.v4.widget.SwipeRefreshLayout>

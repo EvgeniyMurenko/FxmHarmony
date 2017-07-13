@@ -7,18 +7,12 @@ import java.util.Date;
 
 public class CommentDTO extends SugarRecord implements Serializable {
 
-    public CommentDTO(){}
-
-    public CommentDTO(Long id, Long userID, String userName, Date date, String commentText, Long postID) {
-        this.id = id;
-        this.userID = userID;
-        this.userName = userName;
-        this.date = date;
-        this.commentText = commentText;
-        this.postID = postID;
+    public CommentDTO() {
     }
 
-    public CommentDTO( Long userID, String userName, Date date, String commentText, Long postID){
+    public CommentDTO(Long id, Long serverID, Long userID, String userName, Date date, String commentText, Long postID) {
+        this.id = id;
+        this.serverID = serverID;
         this.userID = userID;
         this.userName = userName;
         this.date = date;
@@ -27,15 +21,11 @@ public class CommentDTO extends SugarRecord implements Serializable {
     }
 
     private transient Long id;
-
+    private Long serverID;
     private Long userID;
-
     private String userName;
-
     private Date date;
-
     private String commentText;
-
     private Long postID;
 
     public Long getId() {
@@ -84,5 +74,26 @@ public class CommentDTO extends SugarRecord implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Long getServerID() {
+        return serverID;
+    }
+
+    public void setServerID(Long serverID) {
+        this.serverID = serverID;
+    }
+
+    @Override
+    public String toString() {
+        return "CommentDTO{" +
+                "id=" + id +
+                ", serverID=" + serverID +
+                ", userID=" + userID +
+                ", userName='" + userName + '\'' +
+                ", date=" + date +
+                ", commentText='" + commentText + '\'' +
+                ", postID=" + postID +
+                '}';
     }
 }

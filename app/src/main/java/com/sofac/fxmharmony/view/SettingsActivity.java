@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -80,6 +81,9 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
 
         AppMethods.putAvatarIntoImageView(this, avatarImage);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         userName.setText(AppMethods.getUserName(this));
         userPosition.setText("Manager"); //temp
@@ -247,6 +251,10 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
         if (id == R.id.editName) {
             changeNameFragmentDialog.show(getFragmentManager().beginTransaction(), "ChangeNameFragmentDialog");
             return true;

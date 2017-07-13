@@ -14,11 +14,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/icon" />
@@ -26,8 +26,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center_vertical">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/idNamePost"
@@ -46,6 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
+                    android:textSize="13sp"
                     android:maxLines="1"
                     android:text="date"
                     android:textColor="@color/colorItemDate" />
@@ -56,15 +56,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/idMessagePost"
                 android:text="Text text text!"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorItemContext" />
+                android:textColor="@color/colorTextDarkPostDetail" />
         </LinearLayout>
 
     </LinearLayout>
