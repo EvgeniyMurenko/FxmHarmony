@@ -20,6 +20,7 @@ import com.sofac.fxmharmony.data.DataManager;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
+import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.PathUtil;
 
 import java.io.File;
@@ -77,7 +78,7 @@ public class BackgroundFileUploadService extends Service {
 
     private class FileExchangeRunnable<T> implements Runnable {
 
-        private ServerResponse serverResponse;
+        private ServerResponse<T> serverResponse;
 
         private String type;
         private T serverObject;
@@ -104,20 +105,20 @@ public class BackgroundFileUploadService extends Service {
 
             ServerRequest serverRequest = new ServerRequest(type, null);
 
-            switch (type) {
-                case Constants.ATTACH_LOAD_FXM_POST_FILES:
-                    Timber.i(serverRequest.toString());
+            Timber.i(serverRequest.toString());
 
-                    serverRequest.setDataTransferObject(serverObject);
+            serverRequest.setDataTransferObject(serverObject);
 
-                    serverResponse = dataManager.postUploadFileRequest(serverRequest, files);
-
-                    break;
-
-            }
+            serverResponse = dataManager.postUploadFileRequest(serverRequest, files);
 
             if (serverResponse != null) {
                 onEnd(serverResponse.getResponseStatus());
+            }
+
+            if (type.equals(Constants.ATTACH_LOAD_USER_AVATAR)) {
+                String avatarName = (String) serverResponse.getDataTransferObject();
+                Log.i("TEST" , avatarName);
+                AppMethods.putToPrefAvatarImageName(context, avatarName);
             }
 
             onEnd(Constants.SERVER_REQUEST_ERROR);

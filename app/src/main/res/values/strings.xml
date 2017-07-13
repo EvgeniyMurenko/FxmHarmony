@@ -2,7 +2,7 @@
     /* All app */
     <string name="app_name">FXM Harmony</string>
     <string name="ToastLogOut">Click again to exit</string>
-    <string name="upload_start">Upload start...</string>
+    <string name="upload_start">Upload start</string>
     <string name="upload_success">Upload done successfully</string>
 
     /* Login Activity */
@@ -60,7 +60,8 @@
     <string name="english">English</string>
     <string name="korean">Korean</string>
     <string name="change_language">Change language</string>
-
+    <string name="empty_name_error">Empty name should not be empty</string>
+    <string name="size_name_error">Name should be in range from 3 to 16 characters</string>
 
 
 

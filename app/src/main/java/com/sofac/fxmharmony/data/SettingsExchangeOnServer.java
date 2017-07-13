@@ -1,4 +1,3 @@
-/*
 package com.sofac.fxmharmony.data;
 
 import android.app.ProgressDialog;
@@ -10,19 +9,10 @@ import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.CommentDTO;
-import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import timber.log.Timber;
-
-import static com.sofac.fxmharmony.Constants.CHANGE_AVATAR_REQUEST;
-import static com.sofac.fxmharmony.Constants.CHANGE_NAME_REQUEST;
-import static com.sofac.fxmharmony.Constants.DELETE_AVATAR_REQUEST;
 
 
 public class SettingsExchangeOnServer<T> extends AsyncTask<String, Void, String> {
@@ -32,31 +22,27 @@ public class SettingsExchangeOnServer<T> extends AsyncTask<String, Void, String>
     private String type;
     private T serverObject;
     private Context context;
-    Boolean toDoProgressDialog = false;
     private ProgressDialog pd;
 
-    public interface AsyncResponse {
+    public interface SettingsAsyncResponse {
         void processFinish(Boolean isSuccess);
     }
 
-    private GroupExchangeOnServer.AsyncResponse asyncResponse = null;
+    private SettingsExchangeOnServer.SettingsAsyncResponse asyncResponse = null;
 
-    public SettingsExchangeOnServer(T serverObject, Boolean toDoProgressDialog, String type, Context context, GroupExchangeOnServer.AsyncResponse asyncResponse) {
+    public SettingsExchangeOnServer(T serverObject, String type, Context context, SettingsExchangeOnServer.SettingsAsyncResponse asyncResponse) {
         pd = new ProgressDialog(context, R.style.MyTheme);
         this.serverObject = serverObject;
         this.type = type;
-        this.toDoProgressDialog = toDoProgressDialog;
         this.context = context;
         this.asyncResponse = asyncResponse;
     }
 
     @Override
     protected void onPreExecute() {
-        if (toDoProgressDialog) {
-            pd.setCancelable(false);
-            pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            pd.show();
-        }
+        pd.setCancelable(false);
+        pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        pd.show();
     }
 
 
@@ -64,42 +50,16 @@ public class SettingsExchangeOnServer<T> extends AsyncTask<String, Void, String>
     @SuppressWarnings("unchecked")
     protected String doInBackground(String... urls) {
 
-        ServerRequest serverRequest = new ServerRequest(type, null);
+        ServerRequest serverRequest = new ServerRequest(type, serverObject);
         DataManager dataManager = DataManager.getInstance();
 
-        PostDTO postDTO;
-        CommentDTO commentDTO;
+        Timber.i(serverRequest.toString());
 
-
-        switch (type) {
-            case CHANGE_NAME_REQUEST:
-                Timber.i(serverRequest.toString());
-                serverResponse = dataManager.postGroupRequest(serverRequest, type);//postID = serverRequest
-
-                break;
-
-            case CHANGE_AVATAR_REQUEST:
-
-                serverRequest.setDataTransferObject(serverObject);
-
-                serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                break;
-
-            case DELETE_AVATAR_REQUEST:
-
-                postDTO = (PostDTO) serverObject;
-
-                serverRequest = new ServerRequest<>(type, postDTO);
-                serverResponse = dataManager.postGroupRequest(serverRequest, type);
-
-                break;
-        }
+        serverResponse = dataManager.postSettingsRequest(serverRequest);
 
         if (serverResponse != null) {
             return serverResponse.getResponseStatus();
         }
-
 
         return Constants.SERVER_REQUEST_ERROR;
     }
@@ -119,5 +79,5 @@ public class SettingsExchangeOnServer<T> extends AsyncTask<String, Void, String>
     }
 
 }
-*/
+
 

@@ -10,14 +10,22 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
+import com.squareup.picasso.Picasso;
 
 import timber.log.Timber;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
+import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
 
@@ -25,6 +33,8 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
     public Toolbar toolbar;
     private static long backPressed;
+    private ImageView avatarImage;
+    private TextView userName;
     ContentFragment contentFragment;
     GroupFragment groupFragment;
     FragmentTransaction fTrans;
@@ -51,11 +61,19 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        avatarImage = (ImageView) header.findViewById(R.id.navAvatarImage);
+        userName = (TextView) header.findViewById(R.id.idNavDrawNameManager);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        AppMethods.putAvatarIntoImageView(this, avatarImage);
+        userName.setText(AppMethods.getUserName(this));
+
     }
 
     public void changerFragment(Fragment fragment){

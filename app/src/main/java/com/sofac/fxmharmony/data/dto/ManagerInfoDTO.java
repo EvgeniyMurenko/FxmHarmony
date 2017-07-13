@@ -7,13 +7,14 @@ import java.util.List;
 
 public class ManagerInfoDTO implements Serializable {
 
-    public ManagerInfoDTO(Long id, String name, String phone, String email, Date birthday, List<String> permissions) {
+    public ManagerInfoDTO(Long id, String name, String phone, String email, Date birthday, List<String> permissions, String avatarImage) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.birthday = birthday;
         this.permissions = permissions;
+        this.avatarImage = avatarImage;
     }
 
     private Long id;
@@ -27,6 +28,8 @@ public class ManagerInfoDTO implements Serializable {
     private Date birthday;
 
     private List<String> permissions;
+
+    private String avatarImage;
 
     public List<String> getPermissions() {
         return permissions;
@@ -74,6 +77,14 @@ public class ManagerInfoDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAvatarImage() {
+        return avatarImage;
+    }
+
+    public void setAvatarImage(String avatarImage) {
+        this.avatarImage = avatarImage;
     }
 
     @Override

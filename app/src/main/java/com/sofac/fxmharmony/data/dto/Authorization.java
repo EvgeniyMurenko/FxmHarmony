@@ -19,6 +19,8 @@ public class Authorization implements Serializable{
 
     private String googleCloudKey;
 
+
+
     public String getSsoId() {
         return ssoId;
     }

@@ -2,24 +2,41 @@ package com.sofac.fxmharmony.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
+import android.widget.ImageView;
 
 import com.sofac.fxmharmony.Constants;
+import com.sofac.fxmharmony.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
+import retrofit2.Call;
+
 import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.USER_SERVICE;
+import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
+import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.PUSH_MESSAGES_STATE;
+import static com.sofac.fxmharmony.Constants.USER_AVATAR_IMAGE_PREF;
+import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
+import static com.sofac.fxmharmony.Constants.USER_NAME_PREF;
 
 
 public class AppMethods {
 
     public static int getPushState(Context context) {
-        SharedPreferences sPref = context.getSharedPreferences("PushState", MODE_PRIVATE);
+        SharedPreferences sPref = context.getSharedPreferences(PUSH_MESSAGES_STATE, MODE_PRIVATE);
         return sPref.getInt("State", Constants.PUSH_ON);
     }
 
     public static void changePushState(Context context) {
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("PushState", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PUSH_MESSAGES_STATE, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int state = sharedPreferences.getInt("State", Constants.PUSH_ON);
 
@@ -32,9 +49,67 @@ public class AppMethods {
         editor.apply();
     }
 
+    public static String getAvatarImageUrl(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        String fileName = sharedPreferences.getString(USER_AVATAR_IMAGE_PREF, "");
+        return BASE_URL + "get-file/avatar/" + fileName;
+    }
+
+    public static void putToPrefAvatarImageName(Context context, String avatarName) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_AVATAR_IMAGE_PREF, avatarName);
+        editor.apply();
+
+    }
+
+    public static Long getUserId(Context context) {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        return sharedPreferences.getLong(USER_ID_PREF, 0);
+
+    }
+
+    public static File getOutputMediaFile() {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "CameraDemo");
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return null;
+            }
+        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        return new File(mediaStorageDir.getPath() + File.separator +
+                "IMG_" + timeStamp + ".jpg");
+    }
+
+    public static void saveUserName(Context context, String newName) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_NAME_PREF, newName);
+        editor.apply();
+    }
+
+    public static String getUserName(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        return sharedPreferences.getString(USER_NAME_PREF, "");
+    }
+
+    public static void putAvatarIntoImageView(Context context, ImageView imageView) {
+        Picasso.with(context)
+                .load(AppMethods.getAvatarImageUrl(context))
+                .error(context.getDrawable(R.drawable.icon_toolbar))
+                .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+                .centerCrop()
+                .into(imageView);
+    }
+}
+
+
+
   /*  public static String getLanguage(Context context ){
         SharedPreferences sPref = context.getSharedPreferences("Locale", MODE_PRIVATE);
         return sPref.getString("Locale", Locale.ENGLISH.);
     }
 */
-}

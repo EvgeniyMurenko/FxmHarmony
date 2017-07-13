@@ -5,8 +5,9 @@ import android.graphics.Bitmap;
 
 
 public class ImageUtils {
+
     public static Bitmap scaleDownImage(Bitmap realImage, float maxImageSize,
-                                   boolean filter) {
+                                        boolean filter) {
         float ratio = Math.min(
                 (float) maxImageSize / realImage.getWidth(),
                 (float) maxImageSize / realImage.getHeight());
@@ -16,5 +17,5 @@ public class ImageUtils {
         Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
                 height, filter);
         return newBitmap;
-        }
     }
+}

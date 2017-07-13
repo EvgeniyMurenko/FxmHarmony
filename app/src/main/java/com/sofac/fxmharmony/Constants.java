@@ -18,16 +18,19 @@ public class Constants {
 
     public final static String REQUEST_SUCCESS = "REQUEST_SUCCESS";
     public final static String USER_ID_PREF = "USER_ID_PREF";
+    public final static String USER_NAME_PREF = "USER_NAME_PREF";
+    public final static String USER_AVATAR_IMAGE_PREF = "USER_AVATAR_IMAGE_PREF";
     public final static String ONE_PUSH_MESSAGE_DATA = "ONE_PUSH_MESSAGE_DATA";
     public final static String ONE_POST_DATA = "ONE_POST_DATA";
+
+    public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
     // urls
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    public final static String BASE_URL = "http://192.168.3.111:8080/";
+    public final static String BASE_URL = "http://192.168.3.104:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-
 
 
     //Group requests
@@ -42,11 +45,11 @@ public class Constants {
 
     //Upload files requests
     public final static String ATTACH_LOAD_FXM_POST_FILES = "ATTACH_LOAD_FXM_POST_FILES";
+    public final static String ATTACH_LOAD_USER_AVATAR = "ATTACH_LOAD_USER_AVATAR";
 
 
     //Settings requests
     public final static String CHANGE_NAME_REQUEST = "CHANGE_NAME_REQUEST";
-    public final static String CHANGE_AVATAR_REQUEST = "CHANGE_AVATAR_REQUEST";
     public final static String DELETE_AVATAR_REQUEST = "DELETE_AVATAR_REQUEST";
 
 
@@ -64,5 +67,7 @@ public class Constants {
     // Push message state
     public final static int PUSH_ON = 10001;
     public final static int PUSH_OFF = 10002;
+
+    public final static int AVATAR_IMAGE_SIZE = 128;
 
 }

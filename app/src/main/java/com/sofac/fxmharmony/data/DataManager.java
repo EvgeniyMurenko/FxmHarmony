@@ -99,15 +99,37 @@ public class DataManager {
         String response = sendRequest(serverRequest, Constants.UPLOAD_MULTI_FILE_EXCHANGE, files);
         Timber.i(response);
 
-
         if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
-            return new ServerResponse(response , null);
-        }
-        else {
+            Type authorizationType = new TypeToken<ServerResponse>() {
+            }.getType();
+
+            if (response.equals(Constants.ATTACH_LOAD_USER_AVATAR)) {
+                authorizationType = new TypeToken<ServerResponse<String>>() {
+                }.getType();
+            }
+
+            return new Gson().fromJson(response, authorizationType);
+
+        } else {
             return null;
         }
 
     }
+
+    public ServerResponse postSettingsRequest(ServerRequest serverRequest) {
+
+        String response = sendRequest(serverRequest, Constants.SETTINGS_EXCHANGE, null);
+        Timber.i(response);
+
+        if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
+            Type authorizationType = new TypeToken<ServerResponse>() {
+            }.getType();
+            return new Gson().fromJson(response, authorizationType);
+        } else {
+            return null;
+        }
+    }
+
 
     private String sendRequest(ServerRequest serverRequest, String type, Map<String, RequestBody> files) {
 
@@ -118,8 +140,11 @@ public class DataManager {
         } else if (type.equals(Constants.GROUP_EXCHANGE)) {
             call = requestResponseService.postGroupRequest(serverRequest);
         } else if (type.equals(Constants.UPLOAD_MULTI_FILE_EXCHANGE)) {
-            call = requestResponseService.postUploadFilesRequest(files , serverRequest);
+            call = requestResponseService.postUploadFilesRequest(files, serverRequest);
+        } else if (type.equals(Constants.SETTINGS_EXCHANGE)) {
+            call = requestResponseService.postSettingsRequest(serverRequest);
         }
+
         String response = Constants.SERVER_REQUEST_ERROR;
 
         try (ResponseBody responseBody = call.execute().body()) {
