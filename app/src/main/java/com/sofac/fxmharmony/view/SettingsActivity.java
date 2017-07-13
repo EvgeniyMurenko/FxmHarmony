@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.SettingsExchangeOnServer;
 import com.sofac.fxmharmony.service.BackgroundFileUploadService;
 import com.sofac.fxmharmony.util.AppMethods;
+import com.sofac.fxmharmony.util.PermissionManager;
 import com.sofac.fxmharmony.util.RequestMethods;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeLanguageFragmentDialog;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeNameFragmentDialog;
@@ -79,6 +82,10 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
         setContentView(R.layout.activity_settings);
         initUI();
 
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
+
         AppMethods.putAvatarIntoImageView(this, avatarImage);
 
         ActionBar actionBar = getSupportActionBar();
@@ -100,59 +107,61 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.photo_camera) {
-
-
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    imageFileUri = Uri.fromFile(AppMethods.getOutputMediaFile());
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-                    startActivityForResult(intent, MAKE_PHOTO_FOR_AVATAR);
-
+                if (!PermissionManager.checkPermissionGranted(SettingsActivity.this, PermissionManager.REQUEST_CAMERA) || !PermissionManager.checkPermissionGranted(SettingsActivity.this, PermissionManager.REQUEST_STORAGE)) {
+                    PermissionManager.verifyCameraPermissions(SettingsActivity.this);
+                    PermissionManager.verifyStoragePermissions(SettingsActivity.this);
                     return true;
+                } else {
+
+                    if (id == R.id.photo_camera) {
+
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        imageFileUri = Uri.fromFile(AppMethods.getOutputMediaFile());
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+                        startActivityForResult(intent, MAKE_PHOTO_FOR_AVATAR);
+
+                        return true;
+                    }
+
+
+                    if (id == R.id.photo_gallery) {
+
+                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.setType("image/*");
+                        startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
+                        return true;
+                    }
+                    if (id == R.id.photo_delete) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                        builder.setTitle(R.string.delete_photo_question);
+                        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                new SettingsExchangeOnServer<Long>(AppMethods.getUserId(SettingsActivity.this), DELETE_AVATAR_REQUEST, SettingsActivity.this, new SettingsExchangeOnServer.SettingsAsyncResponse() {
+                                    @Override
+                                    public void processFinish(Boolean isSuccess) {
+                                        Picasso.with(SettingsActivity.this)
+                                                .load(R.drawable.icon_toolbar)
+                                                .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+                                                .centerCrop()
+                                                .into(avatarImage);
+                                    }
+                                }).execute();
+
+                            }
+                        });
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        return true;
+                    }
                 }
-
-
-                if (id == R.id.photo_gallery) {
-
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
-                    return true;
-                }
-                if (id == R.id.photo_delete)
-
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                    builder.setTitle(R.string.delete_photo_question);
-                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                            new SettingsExchangeOnServer<Long>(AppMethods.getUserId(SettingsActivity.this), DELETE_AVATAR_REQUEST, SettingsActivity.this, new SettingsExchangeOnServer.SettingsAsyncResponse() {
-                                @Override
-                                public void processFinish(Boolean isSuccess) {
-                                    Picasso.with(SettingsActivity.this)
-                                            .load(R.drawable.icon_toolbar)
-                                            .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
-                                            .centerCrop()
-                                            .into(avatarImage);
-                                }
-                            }).execute();
-
-                        }
-                    });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    return true;
-                }
-                return
-
-                        onOptionsItemSelected(item);
+                return onOptionsItemSelected(item);
             }
         });
 

@@ -18,8 +18,7 @@ public class Constants {
 
     public final static String REQUEST_SUCCESS = "REQUEST_SUCCESS";
     public final static String USER_ID_PREF = "USER_ID_PREF";
-    public final static String USER_NAME_PREF = "USER_NAME_PREF";
-    public final static String USER_AVATAR_IMAGE_PREF = "USER_AVATAR_IMAGE_PREF";
+
     public final static String ONE_PUSH_MESSAGE_DATA = "ONE_PUSH_MESSAGE_DATA";
     public final static String ONE_POST_DATA = "ONE_POST_DATA";
 
@@ -28,7 +27,7 @@ public class Constants {
     // urls
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    public final static String BASE_URL = "http://192.168.3.113:8080/";
+    public final static String BASE_URL = "http://192.168.3.104:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";

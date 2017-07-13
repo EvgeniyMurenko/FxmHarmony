@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -22,9 +23,8 @@ import static android.content.Context.USER_SERVICE;
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.PUSH_MESSAGES_STATE;
-import static com.sofac.fxmharmony.Constants.USER_AVATAR_IMAGE_PREF;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-import static com.sofac.fxmharmony.Constants.USER_NAME_PREF;
+
 
 
 public class AppMethods {
@@ -50,16 +50,16 @@ public class AppMethods {
     }
 
     public static String getAvatarImageUrl(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-        String fileName = sharedPreferences.getString(USER_AVATAR_IMAGE_PREF, "");
+        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
+        String fileName = managerInfoDTO.getAvatarImage();
         return BASE_URL + "get-file/avatar/" + fileName;
     }
 
-    public static void putToPrefAvatarImageName(Context context, String avatarName) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(USER_AVATAR_IMAGE_PREF, avatarName);
-        editor.apply();
+    public static void saveAvatarImageName(Context context, String avatarName) {
+
+        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
+        managerInfoDTO.setAvatarImage(avatarName);
+        managerInfoDTO.save();
 
     }
 
@@ -85,15 +85,14 @@ public class AppMethods {
     }
 
     public static void saveUserName(Context context, String newName) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(USER_NAME_PREF, newName);
-        editor.apply();
+        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
+        managerInfoDTO.setName(newName);
+
     }
 
     public static String getUserName(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-        return sharedPreferences.getString(USER_NAME_PREF, "");
+        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
+        return managerInfoDTO.getName();
     }
 
     public static void putAvatarIntoImageView(Context context, ImageView imageView) {

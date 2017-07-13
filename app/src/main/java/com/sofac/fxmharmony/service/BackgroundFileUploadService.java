@@ -3,9 +3,7 @@ package com.sofac.fxmharmony.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.DataManager;
-import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 import com.sofac.fxmharmony.util.AppMethods;
@@ -118,7 +115,7 @@ public class BackgroundFileUploadService extends Service {
             if (type.equals(Constants.ATTACH_LOAD_USER_AVATAR)) {
                 String avatarName = (String) serverResponse.getDataTransferObject();
                 Log.i("TEST" , avatarName);
-                AppMethods.putToPrefAvatarImageName(context, avatarName);
+                AppMethods.saveAvatarImageName(context, avatarName);
             }
 
             onEnd(Constants.SERVER_REQUEST_ERROR);

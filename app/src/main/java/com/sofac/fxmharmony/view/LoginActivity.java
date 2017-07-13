@@ -31,9 +31,9 @@ import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
-import static com.sofac.fxmharmony.Constants.USER_AVATAR_IMAGE_PREF;
+
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-import static com.sofac.fxmharmony.Constants.USER_NAME_PREF;
+
 
 /**
  * Activity login & password authorization, validation input field, if validate data start MainActivity.class
@@ -134,9 +134,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 SharedPreferences preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
                 SharedPreferences.Editor editorUser = preferences.edit();
-                editorUser.putString(USER_NAME_PREF , managerInfoDTO.getName());
                 editorUser.putLong(USER_ID_PREF, managerInfoDTO.getIdServer());
-                editorUser.putString(USER_AVATAR_IMAGE_PREF , managerInfoDTO.getAvatarImage());
                 editorUser.apply();
                 editorUser.commit();
 
