@@ -24,14 +24,9 @@ public class Constants {
 
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
-    // urls
-
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
     public final static String BASE_URL = "http://192.168.3.113:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
-    //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    //public final static String BASE_URL = "http://52.211.242.225:8080/";
-
 
     //Group requests
     public final static String LOAD_ALL_POSTS_REQUEST = "LOAD_ALL_POSTS_REQUEST";
@@ -58,7 +53,6 @@ public class Constants {
     public final static String GROUP_EXCHANGE = "GROUP_EXCHANGE";
     public final static String SETTINGS_EXCHANGE = "SETTINGS_EXCHANGE";
     public final static String UPLOAD_MULTI_FILE_EXCHANGE = "UPLOAD_MULTI_FILE_EXCHANGE";
-
 
     // Push message types
     public final static String ESTIMATE_CASE_PUSH_TYPE = "ESTIMATE_CASE_PUSH_TYPE";

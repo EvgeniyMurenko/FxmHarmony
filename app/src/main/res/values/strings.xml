@@ -164,6 +164,11 @@
     <string name="text_rus">Russian</string>
 
 
-
+    <string-array name="language_list">
+        <item>Original</item>
+        <item>English</item>
+        <item>Korean</item>
+        <item>Russian</item>
+    </string-array>
 
 </resources>

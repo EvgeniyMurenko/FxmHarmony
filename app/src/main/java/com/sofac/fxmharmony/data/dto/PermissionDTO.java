@@ -5,9 +5,7 @@ import java.io.Serializable;
 
 public class PermissionDTO extends SugarRecord implements Serializable {
 
-
     public PermissionDTO(){}
-
 
     public PermissionDTO(Boolean superAdminPermission, Boolean estimatePermission, Boolean casePermission, Boolean customerPermission, Boolean projectsPermission, Boolean staffPermission, Boolean noticePermission, Boolean permissionManagement, Boolean translatePermission) {
         this.superAdminPermission = superAdminPermission;
@@ -20,8 +18,6 @@ public class PermissionDTO extends SugarRecord implements Serializable {
         this.permissionManagement = permissionManagement;
         this.translatePermission = translatePermission;
     }
-
-    private transient Long id;
 
     private Boolean superAdminPermission;
 
@@ -114,19 +110,10 @@ public class PermissionDTO extends SugarRecord implements Serializable {
     }
 
     @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
     public String toString() {
         return "PermissionDTO{" +
-                "superAdminPermission=" + superAdminPermission +
+                "id=" + getId() +
+                ", superAdminPermission=" + superAdminPermission +
                 ", estimatePermission=" + estimatePermission +
                 ", casePermission=" + casePermission +
                 ", customerPermission=" + customerPermission +

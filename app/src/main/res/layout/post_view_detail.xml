@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-    android:background="@color/colorDetailPostBackground">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorDetailPostBackground"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="40dp"
@@ -24,15 +24,15 @@
                 android:src="@drawable/icon" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/idNamePost"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="Title"
@@ -45,10 +45,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="end"
-                    android:textSize="13sp"
                     android:maxLines="1"
                     android:text="date"
-                    android:textColor="@color/colorItemDate" />
+                    android:textColor="@color/colorItemDate"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <Spinner
+                    android:id="@+id/spinner_language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>
@@ -60,9 +72,9 @@
 
             <TextView
                 android:id="@+id/idMessagePost"
-                android:text="Text text text!"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Text text text!"
                 android:textColor="@color/colorTextDarkPostDetail" />
         </LinearLayout>
 
@@ -71,15 +83,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#dddddd"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp" />
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="5dp"
+        android:background="#dddddd" />
 
     <TextView
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="COMMENTS:"/>
+        android:padding="5dp"
+        android:text="COMMENTS:" />
 
 </LinearLayout>

@@ -51,6 +51,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         initUI();
         buttonLogin.setOnClickListener(this);
         intent = new Intent(this, NavigationActivity.class);
+
+        ManagerInfoDTO.deleteAll(ManagerInfoDTO.class);
+        PermissionDTO.deleteAll(PermissionDTO.class);
+        Timber.e("Clear DB");
     }
 
     private void initUI() {
@@ -115,17 +119,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Timber.e("Response Server: " + result);
 
             if (Constants.REQUEST_SUCCESS.equals(result)) {
-                ManagerInfoDTO.deleteAll(ManagerInfoDTO.class);
-                PermissionDTO.deleteAll(PermissionDTO.class);
 
                 ManagerInfoDTO managerInfoDTO = managerInfoServerResponse.getDataTransferObject();
-                managerInfoDTO.save();
 
                 PermissionDTO permissionDTO = managerInfoServerResponse.getDataTransferObject().getPermissions();
-                permissionDTO.setId(1L);
-                permissionDTO.save();
+                permissionDTO.setId(managerInfoDTO.getIdServer());
 
-                Toast.makeText(LoginActivity.this, permissionDTO.getTranslatePermission().toString(), Toast.LENGTH_SHORT).show();
+                managerInfoDTO.save();
+                permissionDTO.save();
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -138,8 +139,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 editorUser.putLong(USER_ID_PREF, managerInfoDTO.getIdServer());
                 editorUser.apply();
                 editorUser.commit();
-
-                Timber.e(preferences.getLong(USER_ID_PREF, 0L) + "");
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

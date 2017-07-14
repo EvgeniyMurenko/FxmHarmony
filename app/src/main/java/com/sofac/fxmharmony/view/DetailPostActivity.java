@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
+import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
@@ -50,25 +52,25 @@ public class DetailPostActivity extends AppCompatActivity {
     public static Long idComment = 0L;
     public static Boolean isCreatingComment = true;
     public static CommentDTO commentDTO;
-
+    public Intent intentChangePost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
+        setTitle("FXM group");
 
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-        setTitle("FXM group");
+
+        //ActionBar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        //Toast.makeText(this, getSupportActionBar().getTitle().toString(), Toast.LENGTH_SHORT).show();
 
+        intentChangePost = new Intent(this, ChangePost.class);
         intent = getIntent();
         postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
-        if (postDTO != null) {
-            headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
-        }
+
 
         buttonSend = (Button) findViewById(R.id.sendComment);
         editTextComment = (EditText) findViewById(R.id.edit_text_comment);
@@ -125,11 +127,9 @@ public class DetailPostActivity extends AppCompatActivity {
                     }
                 }
 
-
                 return true;
             }
         });
-
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +167,57 @@ public class DetailPostActivity extends AppCompatActivity {
                 }
             }
         });
-        listViewComments.addHeaderView(headerView);
+        initialHeaderPost();
+    }
+
+    public void initialHeaderPost() {
+        if (postDTO != null) {
+            headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
+            Spinner spinnerLanguage = (Spinner) headerView.findViewById(R.id.spinner_language);
+
+            ArrayList<String> stringsSpinnerLanguage = new ArrayList<>();
+            if(postDTO.getPostTextEn()!=null&&!postDTO.getPostTextEn().isEmpty())stringsSpinnerLanguage.add("English");
+            if(postDTO.getPostTextKo()!=null&&!postDTO.getPostTextKo().isEmpty())stringsSpinnerLanguage.add("Korean");
+            if(postDTO.getPostTextRu()!=null&&!postDTO.getPostTextRu().isEmpty())stringsSpinnerLanguage.add("Russian");
+            if(!stringsSpinnerLanguage.isEmpty()) stringsSpinnerLanguage.add(0,"Original");
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsSpinnerLanguage);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            spinnerLanguage.setAdapter(adapter);
+            if(stringsSpinnerLanguage.isEmpty())spinnerLanguage.setVisibility(View.INVISIBLE);
+            listViewComments.addHeaderView(headerView);
+
+            spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (parent.getSelectedItem().toString()){
+                        case "Original":
+                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextOriginal());
+                            //Toast.makeText(DetailPostActivity.this, "Original", Toast.LENGTH_SHORT).show();
+                            break;
+                        case "English":
+                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextEn());
+                            //Toast.makeText(DetailPostActivity.this, "English", Toast.LENGTH_SHORT).show();
+                            break;
+                        case "Korean":
+                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextKo());
+                            //Toast.makeText(DetailPostActivity.this, "Korean", Toast.LENGTH_SHORT).show();
+                            break;
+                        case "Russian":
+                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextRu());
+                            //Toast.makeText(DetailPostActivity.this, "Russian", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+        }
     }
 
     View createPostView(String name, String date, String message) {
@@ -193,6 +243,7 @@ public class DetailPostActivity extends AppCompatActivity {
             public void processFinish(Boolean output) {
                 arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
                 adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
+
                 listViewComments.setAdapter(adapterCommentsGroup);
                 adapterCommentsGroup.notifyDataSetChanged();
             }
@@ -202,8 +253,8 @@ public class DetailPostActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, 1L);
-        if(permissionDTO.getTranslatePermission()&&postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)){
+        PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L));
+        if (permissionDTO.getTranslatePermission() != null && permissionDTO.getTranslatePermission() && postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
             getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
         } else if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
@@ -223,18 +274,38 @@ public class DetailPostActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.menu_edit:
-                Toast.makeText(this, "menu_edit", Toast.LENGTH_SHORT).show();
+                intentChangePost.putExtra(ONE_POST_DATA, postDTO);
+                startActivity(intentChangePost);
                 return true;
             case R.id.menu_delete:
-                Toast.makeText(this, "menu_delete", Toast.LENGTH_SHORT).show();
+                new GroupExchangeOnServer<>(postDTO.getServerID(), true, DELETE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                    @Override
+                    public void processFinish(Boolean isSuccess) {
+                        if (isSuccess) {
+                            Toast.makeText(DetailPostActivity.this, "Post was delete!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                }).execute();
                 return true;
             case R.id.menu_translate_post:
-                Toast.makeText(this, "menu_translate_post", Toast.LENGTH_SHORT).show();
+                Intent intentTranslatePost = new Intent(this, TranslatePost.class);
+                intentTranslatePost.putExtra(ONE_POST_DATA, postDTO);
+                startActivityForResult(intentTranslatePost, 1);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 2) {
+            postDTO = (PostDTO) getIntent().getSerializableExtra(ONE_POST_DATA);
+            initialHeaderPost();
+            updateListView();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
