@@ -52,8 +52,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         buttonLogin.setOnClickListener(this);
         intent = new Intent(this, NavigationActivity.class);
 
-        ManagerInfoDTO.deleteAll(ManagerInfoDTO.class);
-        PermissionDTO.deleteAll(PermissionDTO.class);
+
+        try {
+            ManagerInfoDTO.deleteAll(ManagerInfoDTO.class);
+            PermissionDTO.deleteAll(PermissionDTO.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Timber.e("Clear DB");
     }
 

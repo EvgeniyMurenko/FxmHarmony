@@ -25,12 +25,12 @@
             android:contentDescription="@string/logo"
             android:src="@drawable/logo" />
 
-        <ImageView
-            android:id="@+id/imageHarmony"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:contentDescription="@string/harmony"
-            android:src="@drawable/harmony" />
+        <!--<ImageView-->
+            <!--android:id="@+id/imageHarmony"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="120dp"-->
+            <!--android:contentDescription="@string/harmony"-->
+            <!--android:src="@drawable/harmony" />-->
 
     </LinearLayout>
 
