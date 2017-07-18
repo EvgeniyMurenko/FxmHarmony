@@ -41,7 +41,7 @@ public class TranslatePost extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.translate_post);
-        setTitle("Translate post");
+        setTitle(getString(R.string.translate_post));
 
         postDTO = (PostDTO) getIntent().getSerializableExtra(ONE_POST_DATA);
         assert (postDTO == null);

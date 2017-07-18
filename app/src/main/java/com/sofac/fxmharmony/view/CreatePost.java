@@ -31,7 +31,7 @@ public class CreatePost extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_post_message);
 
-        setTitle("Create post");
+        setTitle(getString(R.string.create_post));
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
         postTextInput = (EditText) findViewById(R.id.post_text_input);
@@ -62,7 +62,7 @@ public class CreatePost extends BaseActivity {
                     }).execute();
 
                 }else{
-                    Toast.makeText(this, "Please input text message", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_input_text_message, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:

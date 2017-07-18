@@ -58,7 +58,7 @@ public class DetailPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
-        setTitle("FXM group");
+        setTitle(getString(R.string.FXM_group));
 
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
@@ -112,7 +112,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                                 public void processFinish(Boolean isSuccess) {
                                                     if (isSuccess) {
                                                         updateListView();
-                                                        Toast.makeText(DetailPostActivity.this, "Comment was delete!", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(DetailPostActivity.this, R.string.comment_was_delete, Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                             }).execute();
@@ -123,7 +123,7 @@ public class DetailPostActivity extends AppCompatActivity {
                             builder.show();
                         }
                     } else {
-                        Toast.makeText(DetailPostActivity.this, "Problem with ID comments!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailPostActivity.this, R.string.problem_with_ID_comment, Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -143,7 +143,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                     updateListView();
                                     editTextComment.setText("");
                                 } else {
-                                    Toast.makeText(DetailPostActivity.this, "Create comment error!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(DetailPostActivity.this, R.string.create_comment_error, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }).execute();
@@ -156,14 +156,14 @@ public class DetailPostActivity extends AppCompatActivity {
                                     editTextComment.setText("");
                                     isCreatingComment = true;
                                 } else {
-                                    Toast.makeText(DetailPostActivity.this, "Edit comment error!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(DetailPostActivity.this, R.string.edit_comment_error, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }).execute();
                     }
 
                 } else {
-                    Toast.makeText(DetailPostActivity.this, "Field empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailPostActivity.this, R.string.field_empty, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -176,38 +176,41 @@ public class DetailPostActivity extends AppCompatActivity {
             Spinner spinnerLanguage = (Spinner) headerView.findViewById(R.id.spinner_language);
 
             ArrayList<String> stringsSpinnerLanguage = new ArrayList<>();
-            if(postDTO.getPostTextEn()!=null&&!postDTO.getPostTextEn().isEmpty())stringsSpinnerLanguage.add("English");
-            if(postDTO.getPostTextKo()!=null&&!postDTO.getPostTextKo().isEmpty())stringsSpinnerLanguage.add("Korean");
-            if(postDTO.getPostTextRu()!=null&&!postDTO.getPostTextRu().isEmpty())stringsSpinnerLanguage.add("Russian");
-            if(!stringsSpinnerLanguage.isEmpty()) stringsSpinnerLanguage.add(0,"Original");
+            if (postDTO.getPostTextEn() != null && !postDTO.getPostTextEn().isEmpty())
+                stringsSpinnerLanguage.add(getString(R.string.english_spinner));
+            if (postDTO.getPostTextKo() != null && !postDTO.getPostTextKo().isEmpty())
+                stringsSpinnerLanguage.add(getString(R.string.korean_spinner));
+            if (postDTO.getPostTextRu() != null && !postDTO.getPostTextRu().isEmpty())
+                stringsSpinnerLanguage.add(getString(R.string.russian_spinner));
+            if (!stringsSpinnerLanguage.isEmpty())
+                stringsSpinnerLanguage.add(0, getString(R.string.original_spinner));
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsSpinnerLanguage);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             spinnerLanguage.setAdapter(adapter);
-            if(stringsSpinnerLanguage.isEmpty())spinnerLanguage.setVisibility(View.INVISIBLE);
+            if (stringsSpinnerLanguage.isEmpty()) spinnerLanguage.setVisibility(View.INVISIBLE);
             listViewComments.addHeaderView(headerView);
 
             spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    switch (parent.getSelectedItem().toString()){
-                        case "Original":
-                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextOriginal());
-                            //Toast.makeText(DetailPostActivity.this, "Original", Toast.LENGTH_SHORT).show();
-                            break;
-                        case "English":
-                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextEn());
-                            //Toast.makeText(DetailPostActivity.this, "English", Toast.LENGTH_SHORT).show();
-                            break;
-                        case "Korean":
-                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextKo());
-                            //Toast.makeText(DetailPostActivity.this, "Korean", Toast.LENGTH_SHORT).show();
-                            break;
-                        case "Russian":
-                            ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextRu());
-                            //Toast.makeText(DetailPostActivity.this, "Russian", Toast.LENGTH_SHORT).show();
-                            break;
+
+                    if (parent.getSelectedItem().toString() == getString(R.string.original_spinner)) {
+                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextOriginal());
+                        //Toast.makeText(DetailPostActivity.this, "Original", Toast.LENGTH_SHORT).show();
+
+                    } else if (parent.getSelectedItem().toString() == getString(R.string.english_spinner)) {
+                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextEn());
+                        //Toast.makeText(DetailPostActivity.this, "English", Toast.LENGTH_SHORT).show();
+
+                    } else if (parent.getSelectedItem().toString() == getString(R.string.korean_spinner)) {
+                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextKo());
+                        //Toast.makeText(DetailPostActivity.this, "Korean", Toast.LENGTH_SHORT).show();
+
+                    } else if (parent.getSelectedItem().toString() == getString(R.string.russian_spinner)) {
+                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextRu());
+                        //Toast.makeText(DetailPostActivity.this, "Russian", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -282,7 +285,7 @@ public class DetailPostActivity extends AppCompatActivity {
                     @Override
                     public void processFinish(Boolean isSuccess) {
                         if (isSuccess) {
-                            Toast.makeText(DetailPostActivity.this, "Post was delete!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DetailPostActivity.this, R.string.post_was_delete, Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }

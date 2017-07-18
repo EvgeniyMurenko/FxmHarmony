@@ -5,23 +5,23 @@
         <item
             android:id="@+id/idPushItem"
             android:icon="@drawable/receipt"
-            android:title="Push" />
+            android:title="@string/push_menu" />
         <item
             android:id="@+id/idGroupItem"
             android:icon="@drawable/account_multiple"
-            android:title="FXM Group" />
+            android:title="@string/FXM_group" />
     </group>
 
-    <item android:title="Configuration">
+    <item android:title="@string/configuration">
         <menu>
             <item
                 android:id="@+id/idSettingItem"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Settings" />
+                android:title="@string/settings" />
             <item
                 android:id="@+id/idExitItem"
                 android:icon="@drawable/exit_to_app"
-                android:title="Exit" />
+                android:title="@string/exit" />
         </menu>
     </item>
 

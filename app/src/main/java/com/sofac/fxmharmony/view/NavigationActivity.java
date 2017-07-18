@@ -43,7 +43,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        setTitle("Push");
+        setTitle(getString(R.string.push_tile));
 
         contentFragment = new ContentFragment();
         groupFragment = new GroupFragment();

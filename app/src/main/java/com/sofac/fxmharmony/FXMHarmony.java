@@ -40,7 +40,6 @@ public class FXMHarmony  extends SugarApp {
         SchemaGenerator schemaGenerator = new SchemaGenerator(this);
         schemaGenerator.createDatabase(new SugarDb(this).getDB());
 
-
         initLanguage(this);
     }
 

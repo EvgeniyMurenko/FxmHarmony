@@ -30,7 +30,7 @@ public class ChangePost extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_post);
 
-        setTitle("Change post");
+        setTitle(getString(R.string.change_post));
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
         Intent intent = getIntent();
         postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
@@ -65,7 +65,7 @@ public class ChangePost extends BaseActivity {
                     }).execute();
 
                 } else {
-                    Toast.makeText(this, "Please input text post", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.please_input_text_post, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:
