@@ -2,6 +2,7 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,11 +27,11 @@
             android:src="@drawable/logo" />
 
         <!--<ImageView-->
-            <!--android:id="@+id/imageHarmony"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="120dp"-->
-            <!--android:contentDescription="@string/harmony"-->
-            <!--android:src="@drawable/harmony" />-->
+        <!--android:id="@+id/imageHarmony"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="120dp"-->
+        <!--android:contentDescription="@string/harmony"-->
+        <!--android:src="@drawable/harmony" />-->
 
     </LinearLayout>
 
@@ -43,31 +44,54 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <EditText
-            android:id="@+id/editLogin"
-            android:layout_width="250dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/account"
-            android:ems="10"
-            android:hint="@string/login"
-            android:inputType="textEmailAddress"
-            android:paddingEnd="5dp"
-            android:paddingStart="5dp"
-            android:textColor="@color/colorText"
-            android:textColorHint="@color/colorHint" />
+            android:orientation="horizontal"
+            android:gravity="center_horizontal|center_vertical">
 
-        <EditText
-            android:id="@+id/editPassword"
-            android:layout_width="250dp"
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/account" />
+
+            <EditText
+                android:id="@+id/editLogin"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/login"
+                android:inputType="textEmailAddress"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorHint" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/lock"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingEnd="5dp"
-            android:paddingStart="5dp"
-            android:textColor="@color/colorText"
-            android:textColorHint="@color/colorHint" />
+            android:orientation="horizontal"
+            android:gravity="center_horizontal|center_vertical">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:srcCompat="@drawable/lock" />
+
+            <EditText
+                android:id="@+id/editPassword"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:textColor="@color/colorText"
+                android:textColorHint="@color/colorHint" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/buttonLogin"
@@ -89,8 +113,8 @@
         android:gravity="bottom|center_horizontal"
         android:padding="20dp"
         android:text="@string/softwareFactory"
+        android:textColor="@color/colorText"
         android:textSize="12sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorText"/>
+        android:textStyle="bold" />
 
 </LinearLayout>

@@ -96,12 +96,12 @@ public class AppMethods {
     }
 
     public static void putAvatarIntoImageView(Context context, ImageView imageView) {
-        Picasso.with(context)
-                .load(AppMethods.getAvatarImageUrl(context))
-                .error(context.getDrawable(R.drawable.icon_toolbar))
-                .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
-                .centerCrop()
-                .into(imageView);
+//        Picasso.with(context)
+//                .load(AppMethods.getAvatarImageUrl(context))
+//                .error(context.getDrawable(R.drawable.icon_toolbar))
+//                .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+//                .centerCrop()
+//                .into(imageView);
     }
 }
 

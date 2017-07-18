@@ -53,12 +53,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         intent = new Intent(this, NavigationActivity.class);
 
 
-        try {
+//        try {
             ManagerInfoDTO.deleteAll(ManagerInfoDTO.class);
             PermissionDTO.deleteAll(PermissionDTO.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         Timber.e("Clear DB");
     }
 
@@ -130,8 +130,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 PermissionDTO permissionDTO = managerInfoServerResponse.getDataTransferObject().getPermissions();
                 permissionDTO.setId(managerInfoDTO.getIdServer());
 
+                Timber.e(managerInfoDTO.toString());
+                Timber.e(permissionDTO.toString());
+
                 managerInfoDTO.save();
                 permissionDTO.save();
+
 
                 preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();

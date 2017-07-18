@@ -1,21 +1,15 @@
 package com.sofac.fxmharmony;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
-import android.text.TextUtils;
 import android.util.Log;
-
 import com.orm.SchemaGenerator;
 import com.orm.SugarApp;
 import com.orm.SugarContext;
 import com.orm.SugarDb;
 import com.sofac.fxmharmony.util.FakeCrashLibrary;
-
 import java.util.Locale;
-
 import timber.log.Timber;
 
 /**
@@ -25,11 +19,16 @@ import timber.log.Timber;
 
 public class FXMHarmony  extends SugarApp {
 
-
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        SugarContext.init(getApplicationContext());
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
@@ -67,6 +66,12 @@ public class FXMHarmony  extends SugarApp {
 
         }
 
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        SugarContext.terminate();
     }
 
 
