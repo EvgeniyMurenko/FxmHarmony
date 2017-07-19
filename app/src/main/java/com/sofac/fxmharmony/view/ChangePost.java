@@ -98,17 +98,14 @@ public class ChangePost extends BaseActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                        Log.i("TEST" , "SWITCH FILE UI");
-                       /* if (!PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_CAMERA) || !PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_STORAGE)) {
+                        Log.i("TEST", "SWITCH FILE UI");
+                        if (!PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_CAMERA) || !PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_STORAGE)) {
                             PermissionManager.verifyCameraPermissions(ChangePost.this);
                             PermissionManager.verifyStoragePermissions(ChangePost.this);
-                            return true;
-                        } else*/ {
-
+                            return false;
+                        } else {
 
                             switch (item.getItemId()) {
-
-
 
                                 case R.id.action_take_photo:
 
@@ -137,7 +134,6 @@ public class ChangePost extends BaseActivity {
                                 case R.id.add_files:
 
                                     showFileUI();
-                                    Log.i("TEST" , "FILE UI");
                                     return true;
 
                             }
@@ -205,16 +201,30 @@ public class ChangePost extends BaseActivity {
 
                     postDTO.setPostTextOriginal(postTextInput.getText().toString());
 
-/*
-                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), null, null, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                    String images = "";
+                    String videos = "";
+                    String files = "";
+
+                    for (String image : imageList) {
+                        images += image + ";#";
+                    }
+                    for (String video : videoList) {
+                        videos = video + ";#";
+                    }
+                    for (String file : fileList) {
+                        files = file + ";#";
+                    }
+
+
+                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), null, null, null, files, videos, images, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
                         @Override
                         public void processFinish(Boolean isSuccess) {
                             if (isSuccess) {
+                                RequestMethods.startServiceAttachLoadFilesToPost(ChangePost.this, (ArrayList<Uri>) fileListToSend, postDTO.getServerID());
                                 finish();
-                                RequestMethods.startServiceAttachLoadFilesToPost(this, fileListToSend , );
                             }
                         }
-                    }).execute();*/
+                    }).execute();
 
 
                 } else {

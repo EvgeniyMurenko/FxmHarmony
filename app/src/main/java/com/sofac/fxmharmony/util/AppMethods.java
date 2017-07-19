@@ -3,20 +3,18 @@ package com.sofac.fxmharmony.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
+
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
-import com.squareup.picasso.Picasso;
+
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-
-import retrofit2.Call;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
@@ -95,12 +93,12 @@ public class AppMethods {
     }
 
     public static void putAvatarIntoImageView(Context context, ImageView imageView) {
-//        Picasso.with(context)
-//                .load(AppMethods.getAvatarImageUrl(context))
-//                .error(context.getDrawable(R.drawable.icon_toolbar))
-//                .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
-//                .centerCrop()
-//                .into(imageView);
+        Glide.with(context)
+                .load(AppMethods.getAvatarImageUrl(context))
+                .error(R.drawable.icon_toolbar)
+                .override(AVATAR_IMAGE_SIZE , AVATAR_IMAGE_SIZE)
+                .centerCrop()
+                .into(imageView);
     }
 
     public static int getPxFromDp(int dimensionDp, Context context) {
