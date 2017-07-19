@@ -1,11 +1,11 @@
 package com.sofac.fxmharmony.util;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
@@ -16,13 +16,13 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.PUSH_MESSAGES_STATE;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-
 
 public class AppMethods {
 
@@ -95,9 +95,9 @@ public class AppMethods {
     public static void putAvatarIntoImageView(Context context, ImageView imageView) {
         Glide.with(context)
                 .load(AppMethods.getAvatarImageUrl(context))
-                .error(R.drawable.icon_toolbar)
-                .override(AVATAR_IMAGE_SIZE , AVATAR_IMAGE_SIZE)
-                .centerCrop()
+                .bitmapTransform(new CropCircleTransformation(context))
+                .error(R.drawable.no_avatar)
+                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
                 .into(imageView);
     }
 

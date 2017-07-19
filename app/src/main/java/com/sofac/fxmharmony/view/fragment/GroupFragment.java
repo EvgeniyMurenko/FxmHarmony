@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
+import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.ChangePost;
@@ -56,6 +57,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         intentDetailPostActivity = new Intent(this.getActivity(), DetailPostActivity.class);
         intentChangePost = new Intent(this.getActivity(), ChangePost.class);
         preferences = getActivity().getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+
     }
 
     @Override
@@ -76,13 +78,17 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         });
 
+
         listViewPost.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 postDTO = postDTOs.get(position);
                 GroupFragment.idPost = postDTOs.get(position).getServerID();
+                PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, preferences.getLong(USER_ID_PREF, 1L));
+                Timber.e("!!!!!!!!!!"+permissionDTO.toString());
 
-                if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
+
+                if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setItems(R.array.choice_double_click_post, new DialogInterface.OnClickListener() {
                         @Override
