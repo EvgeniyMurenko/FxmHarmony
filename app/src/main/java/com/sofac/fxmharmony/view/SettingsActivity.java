@@ -82,6 +82,8 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
         setContentView(R.layout.activity_settings);
         initUI();
 
+        setTitle(getString(R.string.title_activity_settings));
+
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();

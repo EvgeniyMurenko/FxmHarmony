@@ -1,6 +1,7 @@
 package com.sofac.fxmharmony.view.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,11 +26,11 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-import static android.R.attr.id;
-import static android.R.id.empty;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.USER_SERVICE;
 import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
+import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -65,11 +66,6 @@ public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
             }
         });
-
-        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, 9L);
-        PermissionDTO permissionDTOs = PermissionDTO.findById(PermissionDTO.class, 1L);
-        Timber.e("!!!!!!!!!!!"+managerInfoDTO+"!!!!!!!!!!!!!!!"+permissionDTOs);
-
         return rootView;
     }
 

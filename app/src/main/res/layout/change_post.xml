@@ -29,7 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
-                android:inputType="text"
                 android:padding="5dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </ScrollView>

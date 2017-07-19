@@ -24,10 +24,10 @@ public class Constants {
 
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
-    // urls
+
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    public final static String BASE_URL = "http://192.168.3.102:8080/";
+    public final static String BASE_URL = "http://192.168.3.103:8080/";
     //public final static String BASE_URL = "http://192.168.0.32:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
     //public final static String BASE_URL = "http://52.211.242.225:8080/";

@@ -8,41 +8,24 @@
     /* Login Activity */
     <string name="logo">Logo</string>
     <string name="harmony">harmony</string>
-    <string name="sofac">SoFAC</string>
     <string name="softwareFactory">SoFAC : Software Factory</string>
     <string name="loginButton">Login</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="title_activity_login">Login Activity</string>
     <string name="fieldEmpty">Field empty</string>
     <string name="errorConnection">No connection to server / Incorrect login or password</string>
     <string name="errorServer">No connection to server</string>
-    <string name="errorSingIn">Error Sign In</string>
 
     /* Navigation drawer - TasksActivity */
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    /* Menu TasksActivity */
-    <string name="action_search">Search</string>
-    <string name="tasks_name">Tasks</string>
-
-    /* Menu TasksActivity */
-    <string name="cases_name">Cases</string>
-
-    /* Menu Navigation drawer */
-    <string name="hello_staff">Hello Staff</string>
-    <string name="setting">Setting</string>
-    <string name="exit">Exit</string>
-    <string name="tasks">Tasks</string>
 
     /* Menu Detail Task Activity */
     <string name="menu_back">Back</string>
     <string name="menu_done">Done</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_edit">Edit</string>
-    <string name="menu_update">Update</string>
-    <string name="accept_task">Accept task</string>
+    <string name="menu_translate_post">Translate post</string>
 
     <!--Settings Activity-->
     <string name="push_message">Push Message</string>
@@ -73,39 +56,60 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_write_post">WritePostActivity</string>
     <string name="title_activity_navigation">NavigationActivity</string>
-
-    <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
+    <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message history</string>
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
-
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+
+
+
+
+    <string name="translate_post">Translate post</string>
+    <string name="change_post">Change post</string>
+    <string name="please_input_text_post">Please input text post</string>
+    <string name="create_post">Create post</string>
+    <string name="please_input_text_message">Please input text message</string>
+    <string name="FXM_group">FXM group</string>
+    <string name="comment_was_delete">Comment was delete!</string>
+    <string name="problem_with_ID_comment">Problem with ID comments!</string>
+    <string name="create_comment_error">Create comment error!</string>
+    <string name="edit_comment_error">Edit comment error!</string>
+    <string name="field_empty">Field empty!</string>
+    <string name="english_spinner">English</string>
+    <string name="korean_spinner">Korean</string>
+    <string name="russian_spinner">Russian</string>
+    <string name="original_spinner">Original</string>
+    <string name="post_was_delete">Post was delete!</string>
+    <string name="push_tile">Push</string>
+    <string name="send">SEND</string>
+    <string name="event_date">Event date:</string>
+    <string name="manager">Manager</string>
+    <string name="comments">COMMENTS:</string>
+    <string name="push_menu">Push</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
+    <string name="configuration">Configuration</string>
+
+    <!--Need check-->
+
     <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
         <item>Never</item>
     </string-array>
+
     <string-array name="pref_example_list_values">
         <item>1</item>
         <item>0</item>
         <item>-1</item>
     </string-array>
 
-    <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
-
     <string name="pref_title_sync_frequency">Sync frequency</string>
+
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -114,6 +118,7 @@
         <item>6 hours</item>
         <item>Never</item>
     </string-array>
+
     <string-array name="pref_sync_frequency_values">
         <item>15</item>
         <item>30</item>
@@ -157,13 +162,13 @@
     <string name="update_list">Update list</string>
     <string name="write_post">Write post</string>
 
-    <string name="list_comments_empty">The list of the comments is empty</string>
-    <string name="list_post_empty">The list of the posts is empty</string>
-    <string name="list_push_empty">The list of the push is empty</string>
+<string name="list_comments_empty">The list of the comments is empty</string>
+<string name="list_post_empty">The list of the posts is empty</string>
+<string name="list_push_empty">The list of the push is empty</string>
 
-    <string name="text_orig">Original</string>
-    <string name="text_eng">English</string>
-    <string name="text_kor">Korean</string>
+<string name="text_orig">Original</string>
+<string name="text_eng">English</string>
+<string name="text_kor">Korean</string>
     <string name="text_rus">Russian</string>
 
 

@@ -1,16 +1,13 @@
 package com.sofac.fxmharmony.data.dto;
 
 import com.orm.SugarRecord;
-
+import com.orm.dsl.Ignore;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-
 
 public class ManagerInfoDTO extends SugarRecord implements Serializable {
 
-    public ManagerInfoDTO(Long id, Long idServer, String name, String phone, String email, Date birthday, PermissionDTO permissions, String avatarImage) {
-        this.id = id;
+    public ManagerInfoDTO(Long idServer, String name, String phone, String email, Date birthday, PermissionDTO permissions, String avatarImage) {
         this.idServer = idServer;
         this.name = name;
         this.phone = phone;
@@ -23,8 +20,6 @@ public class ManagerInfoDTO extends SugarRecord implements Serializable {
     public ManagerInfoDTO() {
     }
 
-    private transient Long id;
-
     private Long idServer;
 
     private String name;
@@ -35,6 +30,7 @@ public class ManagerInfoDTO extends SugarRecord implements Serializable {
 
     private Date birthday;
 
+    @Ignore
     private PermissionDTO permissions;
 
     private String avatarImage;
@@ -79,14 +75,6 @@ public class ManagerInfoDTO extends SugarRecord implements Serializable {
         this.birthday = birthday;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getAvatarImage() {
         return avatarImage;
     }
@@ -106,7 +94,7 @@ public class ManagerInfoDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "ManagerInfoDTO{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", idServer=" + idServer +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +

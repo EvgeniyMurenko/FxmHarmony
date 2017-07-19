@@ -5,9 +5,7 @@ import java.io.Serializable;
 
 public class PermissionDTO extends SugarRecord implements Serializable {
 
-
     public PermissionDTO(){}
-
 
     public PermissionDTO(Boolean superAdminPermission, Boolean estimatePermission, Boolean casePermission, Boolean customerPermission, Boolean projectsPermission, Boolean staffPermission, Boolean noticePermission, Boolean permissionManagement, Boolean translatePermission) {
         this.superAdminPermission = superAdminPermission;
@@ -114,7 +112,8 @@ public class PermissionDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "PermissionDTO{" +
-                "superAdminPermission=" + superAdminPermission +
+                "id=" + getId() +
+                ", superAdminPermission=" + superAdminPermission +
                 ", estimatePermission=" + estimatePermission +
                 ", casePermission=" + casePermission +
                 ", customerPermission=" + customerPermission +

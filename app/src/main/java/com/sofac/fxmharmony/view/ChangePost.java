@@ -97,12 +97,17 @@ public class ChangePost extends BaseActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        if (!PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_CAMERA) || !PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_STORAGE)) {
+
+                        Log.i("TEST" , "SWITCH FILE UI");
+                       /* if (!PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_CAMERA) || !PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_STORAGE)) {
                             PermissionManager.verifyCameraPermissions(ChangePost.this);
                             PermissionManager.verifyStoragePermissions(ChangePost.this);
                             return true;
-                        } else {
+                        } else*/ {
+
+
                             switch (item.getItemId()) {
+
 
 
                                 case R.id.action_take_photo:
@@ -132,7 +137,9 @@ public class ChangePost extends BaseActivity {
                                 case R.id.add_files:
 
                                     showFileUI();
+                                    Log.i("TEST" , "FILE UI");
                                     return true;
+
                             }
                             return true;
                         }
