@@ -7,20 +7,10 @@ import java.util.Date;
 
 public class PostDTO extends SugarRecord implements Serializable {
 
-    private transient Long id;
-    private Long serverID;
-    private Long userID;
-    private String userName;
-    private Date date;
-    private String postTextOriginal;
-    private String postTextRu;
-    private String postTextEn;
-    private String postTextKo;
-
     public PostDTO() {
     }
 
-    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postTextOriginal, String postTextRu, String postTextEn, String postTextKo) {
+    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postTextOriginal, String postTextRu, String postTextEn, String postTextKo ,String linksFile , String linksVideo , String linksImage , String postUserAvatarImage) {
         this.id = id;
         this.serverID = serverID;
         this.userID = userID;
@@ -30,7 +20,40 @@ public class PostDTO extends SugarRecord implements Serializable {
         this.postTextRu = postTextRu;
         this.postTextEn = postTextEn;
         this.postTextKo = postTextKo;
+        this.linksFile = linksFile;
+        this.linksVideo = linksVideo;
+        this.linksImage = linksImage;
+        this.postUserAvatarImage = postUserAvatarImage;
     }
+
+
+    private transient Long id;
+
+    private Long serverID;
+
+    private Long userID;
+
+    private String userName;
+
+    private Date date;
+
+    private String postTextOriginal;
+
+    private String postTextRu;
+
+    private String postTextEn;
+
+    private String postTextKo;
+
+    private String linksFile;
+
+    private String linksImage;
+
+    private String linksVideo;
+
+    private String postUserAvatarImage;
+
+
 
     public Long getId() {
         return id;
@@ -103,6 +126,38 @@ public class PostDTO extends SugarRecord implements Serializable {
 
     public void setServerID(Long serverID) {
         this.serverID = serverID;
+    }
+
+    public String getLinksFile() {
+        return linksFile;
+    }
+
+    public void setLinksFile(String linksFile) {
+        this.linksFile = linksFile;
+    }
+
+    public String getLinksImage() {
+        return linksImage;
+    }
+
+    public void setLinksImage(String linksImage) {
+        this.linksImage = linksImage;
+    }
+
+    public String getLinksVideo() {
+        return linksVideo;
+    }
+
+    public void setLinksVideo(String linksVideo) {
+        this.linksVideo = linksVideo;
+    }
+
+    public String getPostUserAvatarImage() {
+        return postUserAvatarImage;
+    }
+
+    public void setPostUserAvatarImage(String postUserAvatarImage) {
+        this.postUserAvatarImage = postUserAvatarImage;
     }
 
     @Override

@@ -26,7 +26,6 @@ import static com.sofac.fxmharmony.Constants.PUSH_MESSAGES_STATE;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 
-
 public class AppMethods {
 
     public static int getPushState(Context context) {
@@ -103,6 +102,12 @@ public class AppMethods {
                 .centerCrop()
                 .into(imageView);
     }
+
+    public static int getPxFromDp(int dimensionDp, Context context) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return (int) (dimensionDp * density + 0.5f);
+    }
+
 }
 
 

@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -20,11 +22,13 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.SplashActivity;
 
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
 
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 
@@ -36,9 +40,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     NotificationManager mNotificationManager;
     String pushMessageType = "";
 
+
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
          pushMessageType = remoteMessage.getData().get("type");
+
 
         if (Constants.GROUP_PUSH_TYPE.equals(pushMessageType)){
             buildNotificationToShow(remoteMessage.getData().get("message"), remoteMessage.getData().get("date"), remoteMessage.getData().get("title"));

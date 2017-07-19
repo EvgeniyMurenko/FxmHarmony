@@ -65,6 +65,10 @@
     <string name="empty_name_error">Empty name should not be empty</string>
     <string name="size_name_error">Name should be in range from 3 to 16 characters</string>
 
+
+   <!-- Change post activity-->
+    <string name="change_post_activity_name">Change Post</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_write_post">WritePostActivity</string>
@@ -161,8 +165,6 @@
     <string name="text_eng">English</string>
     <string name="text_kor">Korean</string>
     <string name="text_rus">Russian</string>
-
-
 
 
 </resources>
