@@ -257,12 +257,12 @@ public class DetailPostActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L));
-        if (permissionDTO.getTranslatePermission() != null && permissionDTO.getTranslatePermission() && postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
+        if (permissionDTO.getTranslatePermission() == null && permissionDTO.getTranslatePermission() && postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)|| permissionDTO.getSuperAdminPermission()) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
             getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
-        } else if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
+        } else if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)|| permissionDTO.getSuperAdminPermission()) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
-        } else if (permissionDTO.getTranslatePermission()) {
+        } else if (permissionDTO.getTranslatePermission() == null && permissionDTO.getTranslatePermission()) {
             getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
         } else {
             return false;
