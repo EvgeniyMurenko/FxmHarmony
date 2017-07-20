@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -74,7 +76,12 @@ public class ChangePost extends BaseActivity {
         postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
         fxmPostFile = new FxmPostFile(postDTO);
 
-        postTextInput.setText(postDTO.getPostTextOriginal());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            postTextInput.setText(Html.fromHtml(postDTO.getPostTextOriginal() , Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            postTextInput.setText(Html.fromHtml(postDTO.getPostTextOriginal()));
+        }
+
 
         videoList = fxmPostFile.getVideoList();
         imageList = fxmPostFile.getImageList();
@@ -83,13 +90,13 @@ public class ChangePost extends BaseActivity {
         fileListToSend = new ArrayList<>();
 
         for (String imgName : imageList) {
-            imagesGalleryLayout.addView(new PhotoVideoItemWithCancel(this, Uri.parse(BASE_URL + GET_POST_FILES_END_URL + imgName), imageList, fileListToSend));
+            imagesGalleryLayout.addView(new PhotoVideoItemWithCancel(this, Uri.parse(BASE_URL + GET_POST_FILES_END_URL + imgName), imageList, fileListToSend, false));
         }
         for (String videoName : videoList) {
-            videoGalleryLayout.addView(new PhotoVideoItemWithCancel(this, Uri.parse(BASE_URL + GET_POST_FILES_END_URL + videoName), videoList, fileListToSend));
+            videoGalleryLayout.addView(new PhotoVideoItemWithCancel(this, Uri.parse(BASE_URL + GET_POST_FILES_END_URL + videoName), videoList, fileListToSend , true));
         }
         for (String fileName : fileList) {
-            videoGalleryLayout.addView(new FileItemWithCancel(this, Uri.parse(BASE_URL + GET_POST_FILES_END_URL + fileName), fileList, fileListToSend));
+            fileGalleryLayout.addView(new FileItemWithCancel(this, Uri.parse(BASE_URL + GET_POST_FILES_END_URL + fileName), fileList, fileListToSend));
         }
 
 
@@ -98,7 +105,6 @@ public class ChangePost extends BaseActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                        Log.i("TEST", "SWITCH FILE UI");
                         if (!PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_CAMERA) || !PermissionManager.checkPermissionGranted(ChangePost.this, PermissionManager.REQUEST_STORAGE)) {
                             PermissionManager.verifyCameraPermissions(ChangePost.this);
                             PermissionManager.verifyStoragePermissions(ChangePost.this);
@@ -172,12 +178,12 @@ public class ChangePost extends BaseActivity {
 
                 if (requestCode == REQUEST_TAKE_PHOTO) {
 
-                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, imageList, fileListToSend);
+                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, imageList, fileListToSend , false);
                     imagesGalleryLayout.addView(photoVideoItemWithCancel);
 
                 } else if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
 
-                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, videoList, fileListToSend);
+                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, videoList, fileListToSend , false);
                     videoGalleryLayout.addView(photoVideoItemWithCancel);
 
                 } else if (requestCode == REQUEST_TAKE_FILE) {
@@ -215,13 +221,18 @@ public class ChangePost extends BaseActivity {
                         files = file + ";#";
                     }
 
-
-                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), null, null, null, files, videos, images, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                    final PostDTO postDTOtoSend =  new PostDTO(postDTO.getId(), postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), postDTO.getDate(), postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, postDTO.getPostUserAvatarImage());
+                    new GroupExchangeOnServer<PostDTO>( new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
                         @Override
                         public void processFinish(Boolean isSuccess) {
                             if (isSuccess) {
-                                RequestMethods.startServiceAttachLoadFilesToPost(ChangePost.this, (ArrayList<Uri>) fileListToSend, postDTO.getServerID());
+                                if (fileListToSend.size() > 0) {
+                                    RequestMethods.startServiceAttachLoadFilesToPost(ChangePost.this, (ArrayList<Uri>) fileListToSend, postDTO.getServerID());
+                                }
                                 finish();
+                                Intent intentDetailPost = new Intent(ChangePost.this, DetailPostActivity.class);
+                                intentDetailPost.putExtra(ONE_POST_DATA, postDTOtoSend);
+                                startActivity(intentDetailPost);
                             }
                         }
                     }).execute();
@@ -234,11 +245,6 @@ public class ChangePost extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        hideFileUI();
     }
 
 

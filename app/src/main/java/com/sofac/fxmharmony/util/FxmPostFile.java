@@ -43,10 +43,10 @@ public class FxmPostFile {
         return fxmPost;
     }
 
-    private List<String> parserPathFile(String path){
-        if (path != null) {
+    private List<String> parserPathFile(String path) {
+        if (path != null && !"".equals(path)) {
             String[] pathArr = path.split(";#");
-            List<String> pathList = Arrays.asList(pathArr);
+            List<String> pathList = new ArrayList<>(Arrays.asList(pathArr));
             return pathList;
         }
         return new ArrayList<>();

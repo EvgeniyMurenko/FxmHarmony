@@ -21,7 +21,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
-import com.squareup.picasso.Picasso;
+
 
 import timber.log.Timber;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;

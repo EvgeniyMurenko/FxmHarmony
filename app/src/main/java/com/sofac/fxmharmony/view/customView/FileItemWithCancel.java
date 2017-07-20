@@ -48,7 +48,7 @@ public class FileItemWithCancel extends RelativeLayout {
         this.addView(cancelButton);
 
         final RelativeLayout.LayoutParams fileLayoutParams = (RelativeLayout.LayoutParams) textView.getLayoutParams();
-        fileLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+    /*    fileLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);*/
         fileLayoutParams.addRule(RelativeLayout.ALIGN_LEFT, cancelButton.getId());
         fileLayoutParams.addRule(RelativeLayout.ALIGN_END, cancelButton.getId());
         fileLayoutParams.addRule(CENTER_VERTICAL);
@@ -58,13 +58,14 @@ public class FileItemWithCancel extends RelativeLayout {
 
         RelativeLayout.LayoutParams cancelButtonLayoutParams = (RelativeLayout.LayoutParams) cancelButton.getLayoutParams();
         cancelButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        cancelButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        cancelButtonLayoutParams.topMargin = padding;
+        cancelButtonLayoutParams.rightMargin = padding;
         cancelButtonLayoutParams.width = AppMethods.getPxFromDp(30, context);
         cancelButtonLayoutParams.height = AppMethods.getPxFromDp(30, context);
 
 
         cancelButton.setBackground(context.getDrawable(R.drawable.remove_symbol));
-        cancelButton.setPadding(padding, padding, padding, padding);
+
 
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -73,15 +74,15 @@ public class FileItemWithCancel extends RelativeLayout {
                 Iterator<String> fileListIterator = FileItemWithCancel.this.fileList.iterator();
                 while (fileListIterator.hasNext()) {
                     String fileURL = fileListIterator.next();
-                    if (fileURL.equals(fileUri.getPath())) {
+                    if (fileURL.equals(fileUri.toString())) {
                         fileListIterator.remove();
                     }
                 }
 
                 Iterator<Uri> fileListToSendIterator = FileItemWithCancel.this.fileListToSend.iterator();
                 while (fileListToSendIterator.hasNext()) {
-                    Uri fileUri = fileListToSendIterator.next();
-                    if (fileUri.equals(fileUri)) {
+                    Uri fileUrl = fileListToSendIterator.next();
+                    if (fileUrl.equals(fileUri)) {
                         fileListToSendIterator.remove();
                     }
                 }

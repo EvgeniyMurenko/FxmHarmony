@@ -2,6 +2,7 @@ package com.sofac.fxmharmony.view.customView;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -14,9 +15,11 @@ import android.widget.RelativeLayout;
 
 
 import com.bumptech.glide.Glide;
+import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.AppMethods;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,13 +30,18 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
 
     private List<String> photoVideoList;
     private List<Uri> photoVideoListToSend;
+    private boolean isRemoteVideo;
 
-    public PhotoVideoItemWithCancel(Context context, Uri uri, List<String> photoVideoList, List<Uri> photoVideoListToSend) {
+
+
+    public PhotoVideoItemWithCancel(Context context, Uri uri, List<String> photoVideoList, List<Uri> photoVideoListToSend, boolean isRemoteVideo) {
         super(context);
 
         this.pictureUri = uri;
         this.photoVideoList = photoVideoList;
         this.photoVideoListToSend = photoVideoListToSend;
+        this.isRemoteVideo = isRemoteVideo;
+
 
         int padding = AppMethods.getPxFromDp(5, context);
         int height = AppMethods.getPxFromDp(100, context);
@@ -64,12 +72,29 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
         cancelButtonLayoutParams.width = AppMethods.getPxFromDp(30, context);
         cancelButtonLayoutParams.height = AppMethods.getPxFromDp(30, context);
 
-
-        Glide.with(context)
-                .load(uri)
-                .override(height, height)
-                .centerCrop()
-                .into(imagePhoto);
+        if (!isRemoteVideo) {
+            Glide.with(context)
+                    .load(uri)
+                    .error(R.drawable.icon_toolbar)
+                    .override(height, height)
+                    .centerCrop()
+                    .into(imagePhoto);
+        } else {
+            Bitmap videoThumbnail = null;
+            try {
+                videoThumbnail = AppMethods.retrieveVideoFrameFromVideo(uri.toString());
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            videoThumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Glide.with(context)
+                    .load(stream.toByteArray())
+                    .error(R.drawable.icon_toolbar)
+                    .override(height, height)
+                    .centerCrop()
+                    .into(imagePhoto);
+        }
 
 
         cancelButton.setBackground(context.getDrawable(R.drawable.remove_symbol));
@@ -78,22 +103,45 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
             @Override
             public void onClick(View v) {
 
+                Log.i("FILETEST", "ON DISSMISS");
 
                 Iterator<String> photoVideoListIterator = PhotoVideoItemWithCancel.this.photoVideoList.iterator();
                 while (photoVideoListIterator.hasNext()) {
-                    String photoVideoURL = photoVideoListIterator.next();
-                    if (photoVideoURL.equals(pictureUri.getPath())) {
+                    String photoVideoURL = Constants.BASE_URL + Constants.GET_POST_FILES_END_URL + photoVideoListIterator.next();
+                    Log.i("FILETEST", "ORIGINAL" + pictureUri + "  AND " + photoVideoURL);
+                    if (photoVideoURL.equals(pictureUri.toString())) {
+                        Log.i("FILETEST", "BEFORE files equals REMOVE ACTION");
                         photoVideoListIterator.remove();
+                        Log.i("FILETEST", "files equals REMOVE ACTION");
                     }
                 }
 
+                Log.i("FILETEST", "VIDEO TO SEND CHECK");
                 Iterator<Uri> photoVideoListToSendIterator = PhotoVideoItemWithCancel.this.photoVideoListToSend.iterator();
                 while (photoVideoListToSendIterator.hasNext()) {
                     Uri photoVideoUri = photoVideoListToSendIterator.next();
                     if (photoVideoUri.equals(pictureUri)) {
                         photoVideoListToSendIterator.remove();
+                        Log.i("FILETEST", "filesToSend equals REMOVE ACTION");
                     }
                 }
+
+                Log.i("FILETEST", "FROM SERVER");
+                Iterator<String> photoVideoListIterators = PhotoVideoItemWithCancel.this.photoVideoList.iterator();
+                while (photoVideoListIterators.hasNext()) {
+                    String photoVideoURL = photoVideoListIterators.next();
+                    Log.i("FILETEST", "image " + photoVideoURL);
+                }
+
+                Log.i("FILETEST", "VIDEO TO SEND CHECK");
+                Iterator<Uri> photoVideoListToSendIterators = PhotoVideoItemWithCancel.this.photoVideoListToSend.iterator();
+                while (photoVideoListToSendIterators.hasNext()) {
+                    Uri photoVideoUri = photoVideoListToSendIterators.next();
+                    Log.i("FILETEST", "image " + photoVideoUri);
+                }
+
+                Log.i("FILETEST", "OB END");
+
                 LinearLayoutGallery parent = (LinearLayoutGallery) PhotoVideoItemWithCancel.this.getParent();
                 parent.removeView(PhotoVideoItemWithCancel.this);
 

@@ -2,6 +2,9 @@ package com.sofac.fxmharmony.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Environment;
 
 import android.widget.ImageView;
@@ -15,6 +18,7 @@ import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
@@ -96,7 +100,7 @@ public class AppMethods {
         Glide.with(context)
                 .load(AppMethods.getAvatarImageUrl(context))
                 .error(R.drawable.icon_toolbar)
-                .override(AVATAR_IMAGE_SIZE , AVATAR_IMAGE_SIZE)
+                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
                 .centerCrop()
                 .into(imageView);
     }
@@ -104,6 +108,32 @@ public class AppMethods {
     public static int getPxFromDp(int dimensionDp, Context context) {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (dimensionDp * density + 0.5f);
+    }
+
+    public static Bitmap retrieveVideoFrameFromVideo(String videoPath)
+            throws Throwable {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever mediaMetadataRetriever = null;
+        try {
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            if (Build.VERSION.SDK_INT >= 14)
+                mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
+            else
+                mediaMetadataRetriever.setDataSource(videoPath);
+            //   mediaMetadataRetriever.setDataSource(videoPath);
+            bitmap = mediaMetadataRetriever.getFrameAtTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Throwable(
+                    "Exception in retriveVideoFrameFromVideo(String videoPath)"
+                            + e.getMessage());
+
+        } finally {
+            if (mediaMetadataRetriever != null) {
+                mediaMetadataRetriever.release();
+            }
+        }
+        return bitmap;
     }
 
 }

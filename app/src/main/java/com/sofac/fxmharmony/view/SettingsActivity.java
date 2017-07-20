@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -30,6 +31,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
@@ -40,7 +42,7 @@ import com.sofac.fxmharmony.util.PermissionManager;
 import com.sofac.fxmharmony.util.RequestMethods;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeLanguageFragmentDialog;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeNameFragmentDialog;
-import com.squareup.picasso.Picasso;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -86,7 +88,9 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        builder.detectFileUriExposure();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            builder.detectFileUriExposure();
+        }
 
         AppMethods.putAvatarIntoImageView(this, avatarImage);
 
@@ -142,11 +146,12 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
                                 new SettingsExchangeOnServer<Long>(AppMethods.getUserId(SettingsActivity.this), DELETE_AVATAR_REQUEST, SettingsActivity.this, new SettingsExchangeOnServer.SettingsAsyncResponse() {
                                     @Override
                                     public void processFinish(Boolean isSuccess) {
-                                        Picasso.with(SettingsActivity.this)
+                                        Glide.with(SettingsActivity.this)
                                                 .load(R.drawable.icon_toolbar)
-                                                .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+                                                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
                                                 .centerCrop()
                                                 .into(avatarImage);
+
                                     }
                                 }).execute();
 
@@ -237,11 +242,14 @@ public class SettingsActivity extends AppCompatActivity implements DialogInterfa
 
             RequestMethods.startServiceAttachLoadAvatarToUser(this, imageFileUri);
 
-            Picasso.with(this)
+
+            Glide.with(SettingsActivity.this)
                     .load(imageFileUri)
-                    .resize(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+                    .error(R.drawable.icon_toolbar)
+                    .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
                     .centerCrop()
                     .into(avatarImage);
+
 
         }
     }

@@ -24,8 +24,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.SettingsExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.ChangeNameDTO;
 import com.sofac.fxmharmony.util.AppMethods;
-import com.sofac.fxmharmony.view.SettingsActivity;
-import com.squareup.picasso.Picasso;
+
 
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.CHANGE_NAME_REQUEST;
