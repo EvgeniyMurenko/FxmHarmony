@@ -139,7 +139,21 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     public void writePost(){
         intentChangePost.putExtra(ONE_POST_DATA, postDTO);
-        startActivity(intentChangePost);
+        startActivityForResult(intentChangePost , 1);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode ==1){
+            intentDetailPostActivity.putExtra(ONE_POST_DATA,(PostDTO)data.getSerializableExtra(ONE_POST_DATA));
+            startActivity(intentDetailPostActivity);
+        }
+
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+
     }
 
     protected void updateViewList(Boolean toDoProgressDialog) {

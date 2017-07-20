@@ -57,7 +57,7 @@ import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.DELETE_AVATAR_REQUEST;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
-public class SettingsActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
+public class SettingsActivity extends BaseActivity implements DialogInterface.OnDismissListener {
 
     private ImageView avatarImage;
     private PopupMenu photoMenu;

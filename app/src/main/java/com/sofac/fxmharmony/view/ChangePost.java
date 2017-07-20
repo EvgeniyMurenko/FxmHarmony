@@ -229,10 +229,12 @@ public class ChangePost extends BaseActivity {
                                 if (fileListToSend.size() > 0) {
                                     RequestMethods.startServiceAttachLoadFilesToPost(ChangePost.this, (ArrayList<Uri>) fileListToSend, postDTO.getServerID());
                                 }
-                                finish();
+
                                 Intent intentDetailPost = new Intent(ChangePost.this, DetailPostActivity.class);
                                 intentDetailPost.putExtra(ONE_POST_DATA, postDTOtoSend);
-                                startActivity(intentDetailPost);
+
+                                setResult(1, intentDetailPost);
+                                finish();
                             }
                         }
                     }).execute();

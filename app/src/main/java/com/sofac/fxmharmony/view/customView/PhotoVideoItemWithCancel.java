@@ -30,8 +30,6 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
 
     private List<String> photoVideoList;
     private List<Uri> photoVideoListToSend;
-    private boolean isRemoteVideo;
-
 
 
     public PhotoVideoItemWithCancel(Context context, Uri uri, List<String> photoVideoList, List<Uri> photoVideoListToSend, boolean isRemoteVideo) {
@@ -40,7 +38,7 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
         this.pictureUri = uri;
         this.photoVideoList = photoVideoList;
         this.photoVideoListToSend = photoVideoListToSend;
-        this.isRemoteVideo = isRemoteVideo;
+
 
 
         int padding = AppMethods.getPxFromDp(5, context);
@@ -83,17 +81,23 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
             Bitmap videoThumbnail = null;
             try {
                 videoThumbnail = AppMethods.retrieveVideoFrameFromVideo(uri.toString());
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                videoThumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                Glide.with(context)
+                        .load(stream.toByteArray())
+                        .error(R.drawable.icon_toolbar)
+                        .override(height, height)
+                        .centerCrop()
+                        .into(imagePhoto);
             } catch (Throwable throwable) {
+                Glide.with(context)
+                        .load(R.drawable.icon_toolbar)
+                        .override(height, height)
+                        .centerCrop()
+                        .into(imagePhoto);
                 throwable.printStackTrace();
             }
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            videoThumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            Glide.with(context)
-                    .load(stream.toByteArray())
-                    .error(R.drawable.icon_toolbar)
-                    .override(height, height)
-                    .centerCrop()
-                    .into(imagePhoto);
+
         }
 
 
