@@ -72,6 +72,10 @@ public class Constants {
     public final static int PUSH_ON = 10001;
     public final static int PUSH_OFF = 10002;
 
+    public final static int REQUEST_TAKE_FILE = 11111;
+    public final static int REQUEST_TAKE_GALLERY_VIDEO = 11112;
+    public final static int REQUEST_TAKE_PHOTO = 11113;
+
     public final static int AVATAR_IMAGE_SIZE = 128;
 
 }

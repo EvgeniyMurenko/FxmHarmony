@@ -98,9 +98,9 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                                     writePost();
                                     break;
                                 case 1: //Delete
-                                    new GroupExchangeOnServer<>(GroupFragment.idPost, true, DELETE_POST_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
+                                    new GroupExchangeOnServer<>(GroupFragment.idPost, true, DELETE_POST_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                                         @Override
-                                        public void processFinish(Boolean isSuccess) {
+                                        public void processFinish(Boolean isSuccess , String answer) {
                                             if (isSuccess) {
                                                 updateViewList(true);
                                                 Toast.makeText(getActivity(), "Post was delete!", Toast.LENGTH_SHORT).show();
@@ -145,11 +145,13 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode ==1){
-            intentDetailPostActivity.putExtra(ONE_POST_DATA,(PostDTO)data.getSerializableExtra(ONE_POST_DATA));
-            startActivity(intentDetailPostActivity);
-        }
 
+        if(requestCode ==1){
+            if (resultCode ==1) {
+                intentDetailPostActivity.putExtra(ONE_POST_DATA, (PostDTO) data.getSerializableExtra(ONE_POST_DATA));
+                startActivity(intentDetailPostActivity);
+            }
+        }
 
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -158,9 +160,9 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     protected void updateViewList(Boolean toDoProgressDialog) {
 
-        new GroupExchangeOnServer<PostDTO>(null, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponse() {
+        new GroupExchangeOnServer<PostDTO>(null, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
             @Override
-            public void processFinish(Boolean isSuccess) {
+            public void processFinish(Boolean isSuccess , String answer) {
                 if (isSuccess) {
 
                     postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);

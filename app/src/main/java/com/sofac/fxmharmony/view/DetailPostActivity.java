@@ -107,9 +107,9 @@ public class DetailPostActivity extends AppCompatActivity {
                                             isCreatingComment = false;
                                             break;
                                         case 1: //Delete
-                                            new GroupExchangeOnServer<>(DetailPostActivity.idComment, true, DELETE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponse() {
+                                            new GroupExchangeOnServer<>(DetailPostActivity.idComment, true, DELETE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                                                 @Override
-                                                public void processFinish(Boolean isSuccess) {
+                                                public void processFinish(Boolean isSuccess , String answer) {
                                                     if (isSuccess) {
                                                         updateListView();
                                                         Toast.makeText(DetailPostActivity.this, R.string.comment_was_delete, Toast.LENGTH_SHORT).show();
@@ -136,9 +136,9 @@ public class DetailPostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!(editTextComment.getText().toString()).isEmpty()) {
                     if (isCreatingComment) { //Создание коментария
-                        new GroupExchangeOnServer<>(new CommentDTO(1L, null, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID()), true, WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponse() {
+                        new GroupExchangeOnServer<>(new CommentDTO(1L, null, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID()), true, WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                             @Override
-                            public void processFinish(Boolean isSuccess) {
+                            public void processFinish(Boolean isSuccess , String answer) {
                                 if (isSuccess) {
                                     updateListView();
                                     editTextComment.setText("");
@@ -148,9 +148,9 @@ public class DetailPostActivity extends AppCompatActivity {
                             }
                         }).execute();
                     } else { // Редактирование коментария
-                        new GroupExchangeOnServer<>(new CommentDTO(1L, commentDTO.getServerID(), (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID()), true, UPDATE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponse() {
+                        new GroupExchangeOnServer<>(new CommentDTO(1L, commentDTO.getServerID(), (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID()), true, UPDATE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                             @Override
-                            public void processFinish(Boolean isSuccess) {
+                            public void processFinish(Boolean isSuccess , String answer) {
                                 if (isSuccess) {
                                     updateListView();
                                     editTextComment.setText("");
@@ -241,9 +241,9 @@ public class DetailPostActivity extends AppCompatActivity {
     }
 
     public void updateListView() {
-        new GroupExchangeOnServer<>(postDTO.getServerID(), true, LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+        new GroupExchangeOnServer<>(postDTO.getServerID(), true, LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
             @Override
-            public void processFinish(Boolean output) {
+            public void processFinish(Boolean output , String answer) {
                 arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
                 adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
 
@@ -281,9 +281,9 @@ public class DetailPostActivity extends AppCompatActivity {
                 startActivity(intentChangePost);
                 return true;
             case R.id.menu_delete:
-                new GroupExchangeOnServer<>(postDTO.getServerID(), true, DELETE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                new GroupExchangeOnServer<>(postDTO.getServerID(), true, DELETE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                     @Override
-                    public void processFinish(Boolean isSuccess) {
+                    public void processFinish(Boolean isSuccess , String answer) {
                         if (isSuccess) {
                             Toast.makeText(DetailPostActivity.this, R.string.post_was_delete, Toast.LENGTH_SHORT).show();
                             finish();

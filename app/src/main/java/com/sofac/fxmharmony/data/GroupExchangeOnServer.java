@@ -14,6 +14,8 @@ import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.data.dto.base.ServerRequest;
 import com.sofac.fxmharmony.data.dto.base.ServerResponse;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,23 +34,27 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
     private String type;
     private T serverObject;
     private Context context;
-    Boolean toDoProgressDialog = false;
+    private Boolean toDoProgressDialog = false;
     private ProgressDialog pd;
 
-    public interface AsyncResponse {
-        void processFinish(Boolean isSuccess);
+
+    public interface AsyncResponseWithAnswer {
+        void processFinish(Boolean isSuccess, String answer);
     }
 
-    private AsyncResponse asyncResponse = null;
 
-    public GroupExchangeOnServer(T serverObject, Boolean toDoProgressDialog, String type, Context context, AsyncResponse asyncResponse) {
+    private AsyncResponseWithAnswer asyncResponseWithAnswer = null;
+
+    public GroupExchangeOnServer(T serverObject, Boolean toDoProgressDialog, String type, Context context, AsyncResponseWithAnswer asyncResponseWithAnswer) {
         pd = new ProgressDialog(context, R.style.MyTheme);
         this.serverObject = serverObject;
         this.type = type;
         this.toDoProgressDialog = toDoProgressDialog;
         this.context = context;
-        this.asyncResponse = asyncResponse;
+        this.asyncResponseWithAnswer = asyncResponseWithAnswer;
+
     }
+
 
     @Override
     protected void onPreExecute() {
@@ -155,6 +161,8 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
 
         if (result.equals(Constants.REQUEST_SUCCESS)) {
 
+            String answer = null;
+
             switch (type) {
                 case LOAD_ALL_POSTS_REQUEST:
 
@@ -181,12 +189,30 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
                         commentDTO.save();
                     }
                     break;
+
                 }
+                case Constants.WRITE_POST_REQUEST: {
+
+                    ServerResponse<Double> writePostServerResponse = serverResponse;
+                    NumberFormat numberFormat= NumberFormat.getInstance();
+                    Long id = null;
+                    try {
+                        id = numberFormat.parse(writePostServerResponse.getDataTransferObject().toString()).longValue();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    answer = String.valueOf(id);
+                    break;
+                }
+
             }
-            asyncResponse.processFinish(true);
+
+            asyncResponseWithAnswer.processFinish(true, answer);
+
         } else {
             Toast.makeText(context, R.string.errorServer, Toast.LENGTH_SHORT).show();
-            asyncResponse.processFinish(false);
+            asyncResponseWithAnswer.processFinish(false, null);
         }
         pd.dismiss();
     }

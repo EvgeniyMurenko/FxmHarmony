@@ -35,6 +35,9 @@ import java.util.List;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
+import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
+import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
 import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
@@ -49,11 +52,6 @@ public class ChangePost extends BaseActivity {
     private LinearLayoutGallery imagesGalleryLayout;
     private LinearLayoutGallery videoGalleryLayout;
     private LinearLayoutGallery fileGalleryLayout;
-
-
-    private final static int REQUEST_TAKE_FILE = 11111;
-    private final static int REQUEST_TAKE_GALLERY_VIDEO = 11112;
-    private final static int REQUEST_TAKE_PHOTO = 11113;
 
     private FxmPostFile fxmPostFile;
 
@@ -222,9 +220,9 @@ public class ChangePost extends BaseActivity {
                     }
 
                     final PostDTO postDTOtoSend =  new PostDTO(postDTO.getId(), postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), postDTO.getDate(), postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, postDTO.getPostUserAvatarImage());
-                    new GroupExchangeOnServer<PostDTO>( new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                    new GroupExchangeOnServer<PostDTO>( new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                         @Override
-                        public void processFinish(Boolean isSuccess) {
+                        public void processFinish(Boolean isSuccess , String answer) {
                             if (isSuccess) {
                                 if (fileListToSend.size() > 0) {
                                     RequestMethods.startServiceAttachLoadFilesToPost(ChangePost.this, (ArrayList<Uri>) fileListToSend, postDTO.getServerID());
@@ -247,6 +245,11 @@ public class ChangePost extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 

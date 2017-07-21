@@ -114,9 +114,9 @@ public class TranslatePost extends BaseActivity {
                 PostDTO changePostDTO = new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(),
                         postTextRus.getText().toString(), postTextEng.getText().toString(), postTextKor.getText().toString() , null , null , null , "");
 
-                new GroupExchangeOnServer<PostDTO>(changePostDTO, true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+                new GroupExchangeOnServer<PostDTO>(changePostDTO, true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                     @Override
-                    public void processFinish(Boolean isSuccess) {
+                    public void processFinish(Boolean isSuccess , String answer) {
                         Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
                         intent.putExtra(ONE_POST_DATA, postDTO);
                         setResult(2, intent);

@@ -4,6 +4,9 @@
     <string name="ToastLogOut">Click again to exit</string>
     <string name="upload_start">Upload start</string>
     <string name="upload_success">Upload done successfully</string>
+    <string name="videos">videos</string>
+    <string name="files">files</string>
+    <string name="images">images</string>
 
     /* Login Activity */
     <string name="logo">Logo</string>
@@ -49,7 +52,7 @@
     <string name="size_name_error">Name should be in range from 3 to 16 characters</string>
 
 
-   <!-- Change post activity-->
+    <!-- Change post activity-->
     <string name="change_post_activity_name">Change Post</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -63,7 +66,6 @@
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-
 
 
 
@@ -162,13 +164,13 @@
     <string name="update_list">Update list</string>
     <string name="write_post">Write post</string>
 
-<string name="list_comments_empty">The list of the comments is empty</string>
-<string name="list_post_empty">The list of the posts is empty</string>
-<string name="list_push_empty">The list of the push is empty</string>
+    <string name="list_comments_empty">The list of the comments is empty</string>
+    <string name="list_post_empty">The list of the posts is empty</string>
+    <string name="list_push_empty">The list of the push is empty</string>
 
-<string name="text_orig">Original</string>
-<string name="text_eng">English</string>
-<string name="text_kor">Korean</string>
+    <string name="text_orig">Original</string>
+    <string name="text_eng">English</string>
+    <string name="text_kor">Korean</string>
     <string name="text_rus">Russian</string>
 
 

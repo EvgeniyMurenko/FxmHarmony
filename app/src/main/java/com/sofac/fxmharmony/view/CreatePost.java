@@ -1,21 +1,45 @@
 package com.sofac.fxmharmony.view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.text.Editable;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.util.FxmPostFile;
+import com.sofac.fxmharmony.util.PermissionManager;
+import com.sofac.fxmharmony.util.RequestMethods;
+import com.sofac.fxmharmony.view.customView.FileItemWithCancel;
+import com.sofac.fxmharmony.view.customView.LinearLayoutGallery;
+import com.sofac.fxmharmony.view.customView.PhotoVideoItemWithCancel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
+import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
+import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
+import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
+import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_POST_REQUEST;
 
@@ -24,18 +48,78 @@ public class CreatePost extends BaseActivity {
 
     public SharedPreferences preferences;
     private EditText postTextInput;
-    TabHost.TabSpec tabSpec;
+    private BottomNavigationView bottomNavigationView;
+
+    private LinearLayoutGallery imagesGalleryLayout;
+    private LinearLayoutGallery videoGalleryLayout;
+    private LinearLayoutGallery fileGalleryLayout;
+
+    private List<Uri> fileListToSend;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_post_message);
-
-        setTitle(getString(R.string.create_post));
+        initUI();
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
-        postTextInput = (EditText) findViewById(R.id.post_text_input);
+        fileListToSend = new ArrayList<>();
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                        if (!PermissionManager.checkPermissionGranted(CreatePost.this, PermissionManager.REQUEST_CAMERA) || !PermissionManager.checkPermissionGranted(CreatePost.this, PermissionManager.REQUEST_STORAGE)) {
+                            PermissionManager.verifyCameraPermissions(CreatePost.this);
+                            PermissionManager.verifyStoragePermissions(CreatePost.this);
+                            return false;
+                        } else {
+
+                            switch (item.getItemId()) {
+
+                                case R.id.action_take_photo:
+
+                                    Intent takePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    takePhotoIntent.setType("image/*");
+                                    startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
+                                    return false;
+
+
+                                case R.id.action_take_video:
+
+                                    Intent takeVideoIntent = new Intent();
+                                    takeVideoIntent.setType("video/*");
+                                    takeVideoIntent.setAction(Intent.ACTION_GET_CONTENT);
+                                    startActivityForResult(Intent.createChooser(takeVideoIntent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
+                                    return false;
+
+
+                                case R.id.action_take_file:
+
+                                    Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    takeFileIntent.setType("*/*");
+                                    startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);
+                                    return false;
+
+                                case R.id.add_files:
+
+                                    showFileUI();
+                                    return true;
+
+                            }
+                            return true;
+                        }
+                    }
+                });
+
+
+        hideFileUI();
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,31 +128,117 @@ public class CreatePost extends BaseActivity {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+
+            Log.i("CODE", "" + requestCode);
+
+            if (data != null) {
+
+                Uri fileUri = data.getData();
+
+                for (Uri uriToSend : fileListToSend) {
+                    if (fileUri.equals(uriToSend)) return;
+                }
+                fileListToSend.add(fileUri);
+
+                if (requestCode == REQUEST_TAKE_PHOTO) {
+
+                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, new ArrayList<String>(), fileListToSend, false);
+                    imagesGalleryLayout.addView(photoVideoItemWithCancel);
+
+                } else if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
+
+                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, new ArrayList<String>(), fileListToSend, false);
+                    videoGalleryLayout.addView(photoVideoItemWithCancel);
+
+                } else if (requestCode == REQUEST_TAKE_FILE) {
+
+                    FileItemWithCancel fileItemWithCancel = new FileItemWithCancel(this, fileUri, new ArrayList<String>(), fileListToSend);
+                    fileGalleryLayout.addView(fileItemWithCancel);
+
+                }
+            }
+
+        }
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.send_post_button:
-                if(!postTextInput.getText().toString().equals("")) {
+                if (!postTextInput.getText().toString().equals("")) {
 
-                    Editable text = postTextInput.getText();
+                    Editable postText = postTextInput.getText();
 
-                    /*new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, 1L, preferences.getLong(USER_ID_PREF,0L), "Name", null, text.toString(),null,null,null),true, WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponse() {
+
+                    new GroupExchangeOnServer<PostDTO>(new PostDTO(1L, 1L, preferences.getLong(USER_ID_PREF, 0L), "", null, postText.toString(), "", "", "", null, null, null, null), true, WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                         @Override
-                        public void processFinish(Boolean isSuccess) {
-                            Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
-                    }).execute();*/
+                        public void processFinish(Boolean isSuccess , String answer) {
+                            if (isSuccess) {
 
-                }else{
-                    Toast.makeText(this, R.string.please_input_text_message, Toast.LENGTH_SHORT).show();
+                                Long postID = Long.valueOf(answer);
+
+                                if (fileListToSend.size() > 0) {
+                                    RequestMethods.startServiceAttachLoadFilesToPost(CreatePost.this, (ArrayList<Uri>) fileListToSend, postID);
+                                }
+
+                                Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            }
+                        }
+                    }).execute();
+
+                } else {
+                    Toast.makeText(this, "Please input text post", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    private void initUI() {
+        setTitle(getString(R.string.create_post));
+        postTextInput = (EditText) findViewById(R.id.post_text_input);
+        imagesGalleryLayout = (LinearLayoutGallery) findViewById(R.id.image_gallery_layout);
+        imagesGalleryLayout.setGalleryView((TextView) findViewById(R.id.image_gallery_name));
+        videoGalleryLayout = (LinearLayoutGallery) findViewById(R.id.video_gallery_layout);
+        videoGalleryLayout.setGalleryView((TextView) findViewById(R.id.video_gallery_name));
+        fileGalleryLayout = (LinearLayoutGallery) findViewById(R.id.file_gallery_layout);
+        fileGalleryLayout.setGalleryView((TextView) findViewById(R.id.file_gallery_name));
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+
+    }
+
+    private void hideFileUI() {
+
+        bottomNavigationView.findViewById(R.id.action_take_photo).setVisibility(View.GONE);
+        bottomNavigationView.findViewById(R.id.action_take_video).setVisibility(View.GONE);
+        bottomNavigationView.findViewById(R.id.action_take_file).setVisibility(View.GONE);
+        bottomNavigationView.findViewById(R.id.add_files).setVisibility(View.VISIBLE);
+
+    }
+
+    private void showFileUI() {
+
+        bottomNavigationView.findViewById(R.id.action_take_photo).setVisibility(View.VISIBLE);
+        bottomNavigationView.findViewById(R.id.action_take_video).setVisibility(View.VISIBLE);
+        bottomNavigationView.findViewById(R.id.action_take_file).setVisibility(View.VISIBLE);
+        bottomNavigationView.findViewById(R.id.add_files).setVisibility(View.GONE);
+
+    }
+
 }
 
 
