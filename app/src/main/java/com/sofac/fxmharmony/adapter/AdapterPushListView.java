@@ -54,10 +54,10 @@ public class AdapterPushListView extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // используем созданные, но не используемые view
-        View view = convertView;
-        if (view == null) {
-            view = inflater.inflate(R.layout.item_task, parent, false);
-        }
+        //View view = convertView;
+        //if (view == null) {
+        View view = inflater.inflate(R.layout.item_task, parent, false);
+        //}
 
         PushMessage pushMessage = getPushMessage(position);
 

@@ -86,8 +86,8 @@
     <string name="field_empty">Порожнє поле!</string>
     <string name="english_spinner">Англійська</string>
     <string name="korean_spinner">Корейська</string>
-    <string name="russian_spinner">Russian</string>
-    <string name="original_spinner">Російська</string>
+    <string name="russian_spinner">Російська</string>
+    <string name="original_spinner">Оригінал</string>
     <string name="post_was_delete">Пост був видалений!</string>
     <string name="push_tile">Сповіщення</string>
     <string name="send">Надіслати</string>

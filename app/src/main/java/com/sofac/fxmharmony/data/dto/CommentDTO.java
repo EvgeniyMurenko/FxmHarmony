@@ -10,7 +10,7 @@ public class CommentDTO extends SugarRecord implements Serializable {
     public CommentDTO() {
     }
 
-    public CommentDTO(Long id, Long serverID, Long userID, String userName, Date date, String commentText, Long postID) {
+    public CommentDTO(Long id, Long serverID, Long userID, String userName, Date date, String commentText, Long postID,  String commentUserAvatarImage) {
         this.id = id;
         this.serverID = serverID;
         this.userID = userID;
@@ -18,6 +18,7 @@ public class CommentDTO extends SugarRecord implements Serializable {
         this.date = date;
         this.commentText = commentText;
         this.postID = postID;
+        this.commentUserAvatarImage = commentUserAvatarImage;
     }
 
     private transient Long id;
@@ -27,6 +28,7 @@ public class CommentDTO extends SugarRecord implements Serializable {
     private Date date;
     private String commentText;
     private Long postID;
+    private String commentUserAvatarImage;
 
     public Long getId() {
         return id;
@@ -84,6 +86,14 @@ public class CommentDTO extends SugarRecord implements Serializable {
         this.serverID = serverID;
     }
 
+    public String getCommentUserAvatarImage() {
+        return commentUserAvatarImage;
+    }
+
+    public void setCommentUserAvatarImage(String commentUserAvatarImage) {
+        this.commentUserAvatarImage = commentUserAvatarImage;
+    }
+
     @Override
     public String toString() {
         return "CommentDTO{" +
@@ -94,6 +104,7 @@ public class CommentDTO extends SugarRecord implements Serializable {
                 ", date=" + date +
                 ", commentText='" + commentText + '\'' +
                 ", postID=" + postID +
+                ", commentUserAvatarImage='" + commentUserAvatarImage + '\'' +
                 '}';
     }
 }

@@ -17,6 +17,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/idAvatarPost"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
@@ -68,13 +69,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/idMessagePost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Text text text!"
+                android:textIsSelectable="true"
+                android:text="Message!"
                 android:textColor="@color/colorTextDarkPostDetail" />
         </LinearLayout>
 

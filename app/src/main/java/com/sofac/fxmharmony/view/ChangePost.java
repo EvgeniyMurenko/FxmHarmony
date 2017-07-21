@@ -247,10 +247,6 @@ public class ChangePost extends BaseActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
 
     private void initUI() {
@@ -284,7 +280,10 @@ public class ChangePost extends BaseActivity {
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
 
 
