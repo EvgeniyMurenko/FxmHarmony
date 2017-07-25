@@ -28,7 +28,6 @@ import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
-import static com.sofac.fxmharmony.view.fragment.GroupFragment.postDTO;
 
 public class AdapterPostGroup extends BaseAdapter {
     private ArrayList<PostDTO> postDTOArrayList;
@@ -70,20 +69,20 @@ public class AdapterPostGroup extends BaseAdapter {
 
         View view = inflater.inflate(R.layout.item_post, parent, false);
 
-        discreteScrollView = (DiscreteScrollView) view.findViewById(R.id.idImageCarousel);
-        discreteScrollView.setOrientation(Orientation.HORIZONTAL);
-        discreteScrollView.setOnClickListener(null);
-        discreteScrollView.setOnLongClickListener(null);
-
-        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
-            for (String imageName : postDTO.getLinksImage().split(";#")) {
-                listImage.add(BASE_URL + PART_URL_FILE_IMAGE_POST + imageName);
-            }
-            Timber.e("!!!!! listImage.toString() !!!! " + listImage.toString());
-            discreteScrollView.setAdapter(new AdapterGalleryGroup(listImage));
-        } else {
-            discreteScrollView.setVisibility(View.INVISIBLE);
-        }
+//        discreteScrollView = (DiscreteScrollView) view.findViewById(R.id.idImageCarousel);
+//        discreteScrollView.setOrientation(Orientation.HORIZONTAL);
+//        discreteScrollView.setOnClickListener(null);
+//        discreteScrollView.setOnLongClickListener(null);
+//
+//        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
+//            for (String imageName : postDTO.getLinksImage().split(";#")) {
+//                listImage.add(BASE_URL + PART_URL_FILE_IMAGE_POST + imageName);
+//            }
+//            Timber.e("!!!!! listImage.toString() !!!! " + listImage.toString());
+//            discreteScrollView.setAdapter(new AdapterGalleryGroup(listImage));
+//        } else {
+//            discreteScrollView.setVisibility(View.INVISIBLE);
+//        }
 
         Uri uri = Uri.parse(BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getPostUserAvatarImage());
         ImageView avatar = (ImageView) view.findViewById(R.id.idAvatarPostItem);
