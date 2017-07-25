@@ -23,14 +23,11 @@ import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
-import com.sofac.fxmharmony.data.dto.PushMessage;
 import com.sofac.fxmharmony.view.ChangePost;
 import com.sofac.fxmharmony.view.CreatePost;
 import com.sofac.fxmharmony.view.DetailPostActivity;
 
 import java.util.ArrayList;
-
-import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
@@ -79,36 +76,12 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         });
 
-
-        return rootView;
-    }
-
-    public void updateViewList(Boolean toDoProgressDialog) {
-
-        new GroupExchangeOnServer<PostDTO>(null, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-            @Override
-            public void processFinish(Boolean isSuccess , String answer) {
-                if (isSuccess) {
-
-                    postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
-
-                    if (postDTOs != null) {
-                        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
-                        listViewPost.setAdapter(adapterPostGroup);
-                        adapterPostGroup.notifyDataSetChanged();
-                    }
-                }
-            }
-        }).execute();
-
         listViewPost.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 postDTO = postDTOs.get(position);
                 GroupFragment.idPost = postDTOs.get(position).getServerID();
                 PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, preferences.getLong(USER_ID_PREF, 1L));
-                Timber.e("!!!!!!!!!!" + permissionDTO.toString());
-
 
                 if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -122,7 +95,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                                 case 1: //Delete
                                     new GroupExchangeOnServer<>(GroupFragment.idPost, true, DELETE_POST_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                                         @Override
-                                        public void processFinish(Boolean isSuccess , String answer) {
+                                        public void processFinish(Boolean isSuccess, String answer) {
                                             if (isSuccess) {
                                                 updateViewList(true);
                                                 Toast.makeText(getActivity(), "Post was delete!", Toast.LENGTH_SHORT).show();
@@ -149,6 +122,28 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         });
 
+        return rootView;
+    }
+
+    public void updateViewList(Boolean toDoProgressDialog) {
+
+        new GroupExchangeOnServer<PostDTO>(null, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answer) {
+                if (isSuccess) {
+
+                    postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
+
+                    if (postDTOs != null) {
+                        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
+                        listViewPost.setAdapter(adapterPostGroup);
+                        adapterPostGroup.notifyDataSetChanged();
+                    }
+                }
+            }
+        }).execute();
+
+
     }
 
     @Override
@@ -157,17 +152,17 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         super.onResume();
     }
 
-    public void writePost(){
+    public void writePost() {
         intentChangePost.putExtra(ONE_POST_DATA, postDTO);
-        startActivityForResult(intentChangePost , 1);
+        startActivityForResult(intentChangePost, 1);
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode ==1){
-            if (resultCode ==1) {
+        if (requestCode == 1) {
+            if (resultCode == 1) {
                 intentDetailPostActivity.putExtra(ONE_POST_DATA, (PostDTO) data.getSerializableExtra(ONE_POST_DATA));
                 startActivity(intentDetailPostActivity);
             }

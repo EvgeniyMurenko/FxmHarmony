@@ -1,4 +1,5 @@
 package com.sofac.fxmharmony.util;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -7,6 +8,7 @@ import android.os.Build;
 import android.os.Environment;
 
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Glide;
@@ -21,6 +23,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import timber.log.Timber;
+
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
@@ -53,7 +57,13 @@ public class AppMethods {
 
     public static String getAvatarImageUrl(Context context) {
         ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
-        String fileName = managerInfoDTO.getAvatarImage();
+        String fileName;
+        try {
+            fileName = managerInfoDTO.getAvatarImage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fileName = "";
+        }
         return BASE_URL + "get-file/avatar/" + fileName;
     }
 

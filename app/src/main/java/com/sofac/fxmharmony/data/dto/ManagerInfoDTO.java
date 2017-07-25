@@ -94,13 +94,13 @@ public class ManagerInfoDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "ManagerInfoDTO{" +
-                "id=" + getId() +
-                ", idServer=" + idServer +
+                "idServer=" + idServer +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
-                ", permissions='" + permissions + '\'' +
+                ", permissions=" + permissions +
+                ", avatarImage='" + avatarImage + '\'' +
                 '}';
     }
 }

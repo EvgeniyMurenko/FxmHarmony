@@ -37,7 +37,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     private TextView userName;
     ContentFragment contentFragment;
     GroupFragment groupFragment;
-    FragmentTransaction fTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +88,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
             Timber.e("!!!!!!");
         }
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

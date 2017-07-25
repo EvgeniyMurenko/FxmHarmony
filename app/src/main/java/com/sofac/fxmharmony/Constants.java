@@ -25,15 +25,13 @@ public class Constants {
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/";
-
-
     //public final static String BASE_URL = "http://192.168.1.108:8080/";
-    //public final static String BASE_URL = "http://52.211.242.225:8080/";
     //public final static String BASE_URL = "http://192.168.3.113:8080/";
-    public final static String BASE_URL = "http://192.168.3.113:8080/";
-    //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    //public final static String BASE_URL = "http://52.211.242.225:8080/";
+    public final static String BASE_URL = "http://192.168.3.111:8080/";
+
     public final static String GET_POST_FILES_END_URL = "get-file/post/";
+    public final static String GET_POST_thumbnails_END_URL = "get-file/thumbnails/";
+    public final static String POINT_PNG = ".png";
     public final static String PART_URL_FILE_AVATAR = "get-file/avatar/";
     public final static String PART_URL_FILE_IMAGE_POST = "get-file/post/";
 
