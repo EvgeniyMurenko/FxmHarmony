@@ -40,7 +40,6 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
         this.photoVideoListToSend = photoVideoListToSend;
 
 
-
         int padding = AppMethods.getPxFromDp(5, context);
         int height = AppMethods.getPxFromDp(100, context);
         int width = AppMethods.getPxFromDp(100, context);
@@ -78,25 +77,14 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
                     .centerCrop()
                     .into(imagePhoto);
         } else {
-            Bitmap videoThumbnail = null;
-            try {
-                videoThumbnail = AppMethods.retrieveVideoFrameFromVideo(uri.toString());
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                videoThumbnail.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                Glide.with(context)
-                        .load(stream.toByteArray())
-                        .error(R.drawable.icon_toolbar)
-                        .override(height, height)
-                        .centerCrop()
-                        .into(imagePhoto);
-            } catch (Throwable throwable) {
-                Glide.with(context)
-                        .load(R.drawable.icon_toolbar)
-                        .override(height, height)
-                        .centerCrop()
-                        .into(imagePhoto);
-                throwable.printStackTrace();
-            }
+
+            String thumbnailURL = Constants.BASE_URL + Constants.GET_POST_thumbnails_END_URL + uri + Constants.POINT_PNG;
+            Glide.with(context)
+                    .load(thumbnailURL)
+                    .error(R.drawable.icon_toolbar)
+                    .override(height, height)
+                    .centerCrop()
+                    .into(imagePhoto);
 
         }
 
@@ -107,44 +95,25 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
             @Override
             public void onClick(View v) {
 
-                Log.i("FILETEST", "ON DISSMISS");
-
                 Iterator<String> photoVideoListIterator = PhotoVideoItemWithCancel.this.photoVideoList.iterator();
                 while (photoVideoListIterator.hasNext()) {
                     String photoVideoURL = Constants.BASE_URL + Constants.GET_POST_FILES_END_URL + photoVideoListIterator.next();
-                    Log.i("FILETEST", "ORIGINAL" + pictureUri + "  AND " + photoVideoURL);
+
                     if (photoVideoURL.equals(pictureUri.toString())) {
-                        Log.i("FILETEST", "BEFORE files equals REMOVE ACTION");
                         photoVideoListIterator.remove();
-                        Log.i("FILETEST", "files equals REMOVE ACTION");
                     }
                 }
 
-                Log.i("FILETEST", "VIDEO TO SEND CHECK");
+
                 Iterator<Uri> photoVideoListToSendIterator = PhotoVideoItemWithCancel.this.photoVideoListToSend.iterator();
                 while (photoVideoListToSendIterator.hasNext()) {
                     Uri photoVideoUri = photoVideoListToSendIterator.next();
                     if (photoVideoUri.equals(pictureUri)) {
                         photoVideoListToSendIterator.remove();
-                        Log.i("FILETEST", "filesToSend equals REMOVE ACTION");
+
                     }
                 }
 
-                Log.i("FILETEST", "FROM SERVER");
-                Iterator<String> photoVideoListIterators = PhotoVideoItemWithCancel.this.photoVideoList.iterator();
-                while (photoVideoListIterators.hasNext()) {
-                    String photoVideoURL = photoVideoListIterators.next();
-                    Log.i("FILETEST", "image " + photoVideoURL);
-                }
-
-                Log.i("FILETEST", "VIDEO TO SEND CHECK");
-                Iterator<Uri> photoVideoListToSendIterators = PhotoVideoItemWithCancel.this.photoVideoListToSend.iterator();
-                while (photoVideoListToSendIterators.hasNext()) {
-                    Uri photoVideoUri = photoVideoListToSendIterators.next();
-                    Log.i("FILETEST", "image " + photoVideoUri);
-                }
-
-                Log.i("FILETEST", "OB END");
 
                 LinearLayoutGallery parent = (LinearLayoutGallery) PhotoVideoItemWithCancel.this.getParent();
                 parent.removeView(PhotoVideoItemWithCancel.this);

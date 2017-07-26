@@ -3,6 +3,7 @@ package com.sofac.fxmharmony.view.customView;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.AppMethods;
 
@@ -73,8 +75,10 @@ public class FileItemWithCancel extends RelativeLayout {
 
                 Iterator<String> fileListIterator = FileItemWithCancel.this.fileList.iterator();
                 while (fileListIterator.hasNext()) {
-                    String fileURL = fileListIterator.next();
+                    String fileURL = Constants.BASE_URL + Constants.GET_POST_FILES_END_URL + fileListIterator.next();
+
                     if (fileURL.equals(fileUri.toString())) {
+
                         fileListIterator.remove();
                     }
                 }
@@ -82,6 +86,7 @@ public class FileItemWithCancel extends RelativeLayout {
                 Iterator<Uri> fileListToSendIterator = FileItemWithCancel.this.fileListToSend.iterator();
                 while (fileListToSendIterator.hasNext()) {
                     Uri fileUrl = fileListToSendIterator.next();
+
                     if (fileUrl.equals(fileUri)) {
                         fileListToSendIterator.remove();
                     }
@@ -89,6 +94,7 @@ public class FileItemWithCancel extends RelativeLayout {
 
                 LinearLayoutGallery parent = (LinearLayoutGallery) FileItemWithCancel.this.getParent();
                 parent.removeView(FileItemWithCancel.this);
+
 
             }
         });
