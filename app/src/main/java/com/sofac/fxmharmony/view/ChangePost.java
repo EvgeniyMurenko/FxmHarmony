@@ -130,9 +130,32 @@ public class ChangePost extends BaseActivity {
 
                                 case R.id.action_take_file:
 
-                                    Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    takeFileIntent.setType("file/*");
-                                    startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);
+                                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                    intent.setType("*/*");
+                                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                                    // special intent for Samsung file manager
+                                    Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+                                    // if you want any file type, you can skip next line
+                                    sIntent.putExtra("CONTENT_TYPE", "*/*");
+                                    sIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+                                    Intent chooserIntent;
+                                    if (getPackageManager().resolveActivity(sIntent, 0) != null){
+                                        // it is device with samsung file manager
+                                        chooserIntent = Intent.createChooser(sIntent, "Open file");
+                                        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { intent});
+                                    }
+                                    else {
+                                        chooserIntent = Intent.createChooser(intent, "Open file");
+                                    }
+
+                                    try {
+                                        startActivityForResult(chooserIntent, REQUEST_TAKE_FILE);
+                                    } catch (android.content.ActivityNotFoundException ex) {
+                                        Toast.makeText(getApplicationContext(), "No suitable File Manager was found.", Toast.LENGTH_SHORT).show();
+                                    }
+
                                     return false;
 
                                 case R.id.add_files:

@@ -83,18 +83,51 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/idListFiles"
+        android:id="@+id/idListPhotos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
-            android:text="FILES:"
-            android:textStyle="bold" />
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingEnd="10dp"-->
+        <!--android:paddingStart="10dp"-->
+        <!--android:text="PHOTOS:"-->
+        <!--android:textStyle="bold" />-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/idListVideos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingEnd="10dp"-->
+        <!--android:paddingStart="10dp"-->
+        <!--android:text="VIDEOS:"-->
+        <!--android:textStyle="bold" />-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/idListFiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp">
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingEnd="10dp"-->
+        <!--android:paddingStart="10dp"-->
+        <!--android:text="FILES:"-->
+        <!--android:textStyle="bold" />-->
 
     </LinearLayout>
 
@@ -104,7 +137,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="5dp"
-        android:background="#eeeeee" />
+        android:background="@color/lineView" />
 
     <TextView
         android:layout_width="match_parent"

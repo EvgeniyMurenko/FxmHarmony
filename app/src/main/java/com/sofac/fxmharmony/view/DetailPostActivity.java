@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
@@ -50,10 +51,12 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import timber.log.Timber;
 
 import static android.R.id.message;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
+import static com.sofac.fxmharmony.Constants.GET_POST_thumbnails_END_URL;
 import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
@@ -256,9 +259,10 @@ public class DetailPostActivity extends AppCompatActivity {
     TextView messageTextView;
 
     View createPostView(String name, String date, String message) {
-
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         View v = getLayoutInflater().inflate(R.layout.post_view_detail, null);
 
+        // START AVATAR
         Uri uri = Uri.parse(BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getPostUserAvatarImage());
         ImageView avatar = (ImageView) v.findViewById(R.id.idAvatarPost);
         Glide.with(this)
@@ -268,28 +272,95 @@ public class DetailPostActivity extends AppCompatActivity {
                 .placeholder(R.drawable.no_avatar)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(avatar);
+        // END AVATAR
 
         ((TextView) v.findViewById(R.id.idNamePost)).setText(name);
         ((TextView) v.findViewById(R.id.idDatePost)).setText(date);
         messageTextView = (TextView) v.findViewById(R.id.idMessagePost);
 
+        // START IMAGE
+        LinearLayout linearLayoutPhotos = (LinearLayout) v.findViewById(R.id.idListPhotos);
 
+        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
+
+            for (final String imageName : postDTO.getLinksImage().split(";#")) {
+
+                View photoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_photo, null);
+                ImageView imageView = (ImageView) photoItemView.findViewById(R.id.idItemPhoto);
+
+                Uri uriImage = Uri.parse(BASE_URL + PART_URL_FILE_IMAGE_POST + imageName);
+                Glide.with(this)
+                        .load(uriImage)
+                        .error(R.drawable.no_image)
+                        .placeholder(R.drawable.no_image)
+                        .into(imageView);
+                linearLayoutPhotos.addView(photoItemView, lParams);
+                photoItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(DetailPostActivity.this, "IMAGE", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+        } else {
+            linearLayoutPhotos.setVisibility(View.INVISIBLE);
+        }
+        // END IMAGE
+
+
+
+
+        // START VIDEO
+        LinearLayout linearLayoutVideos = (LinearLayout) v.findViewById(R.id.idListVideos);
+
+        if (null != postDTO.getLinksVideo() && !"".equals(postDTO.getLinksVideo()) && postDTO.getLinksVideo().length() > 5) {
+
+            for (final String videoName : postDTO.getLinksVideo().split(";#")) {
+
+                View videoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_video, null);
+                ImageView imageVideoView = (ImageView) videoItemView.findViewById(R.id.idItemVideo);
+
+                Uri uriVideo = Uri.parse(BASE_URL + GET_POST_thumbnails_END_URL + videoName + ".png");
+                Glide.with(this)
+                        .load(uriVideo)
+                        .error(R.drawable.no_image)
+                        .placeholder(R.drawable.no_image)
+                        .into(imageVideoView);
+                linearLayoutVideos.addView(videoItemView, lParams);
+                videoItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(DetailPostActivity.this, "VIDEO", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+        } else {
+            linearLayoutVideos.setVisibility(View.INVISIBLE);
+        }
+        // END VIDEO
+
+
+
+
+
+        // START FILES
         LinearLayout linearLayoutFiles = (LinearLayout) v.findViewById(R.id.idListFiles);
-        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         if (null != postDTO.getLinksFile() && !"".equals(postDTO.getLinksFile()) && postDTO.getLinksFile().length() > 5) {
-            for (final String imageName : postDTO.getLinksFile().split(";#")) {
+            for (final String fileName : postDTO.getLinksFile().split(";#")) {
                 View fileItemView = getLayoutInflater().inflate(R.layout.item_detail_post_file, null);
                 TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
-                textView.setText(imageName);
+                textView.setText(fileName);
 
-                Log.e("imageName URL", BASE_URL + GET_POST_FILES_END_URL + imageName);
+                Log.e("imageName URL", BASE_URL + GET_POST_FILES_END_URL + fileName);
                 fileItemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         new FileLoadingTask(
-                                BASE_URL + GET_POST_FILES_END_URL + imageName,
-                                new File(Environment.getExternalStorageDirectory() + "/Download/" + imageName),
+                                BASE_URL + GET_POST_FILES_END_URL + fileName,
+                                new File(Environment.getExternalStorageDirectory() + "/Download/" + fileName),
                                 new FileLoadingListener() {
                                     @Override
                                     public void onBegin() {
@@ -318,6 +389,7 @@ public class DetailPostActivity extends AppCompatActivity {
         } else {
             linearLayoutFiles.setVisibility(View.INVISIBLE);
         }
+        // END FILES
 
 
         messageTextView.setText(message.replaceAll("<(.*?)>", " "));
