@@ -236,11 +236,12 @@ public class ChangePost extends BaseActivity {
                         images += image + ";#";
                     }
                     for (String video : videoList) {
-                        videos = video + ";#";
+                        videos += video + ";#";
                     }
                     for (String file : fileList) {
-                        files = file + ";#";
+                        files += file + ";#";
                     }
+
 
                     final PostDTO postDTOtoSend =  new PostDTO(postDTO.getId(), postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), postDTO.getDate(), postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, postDTO.getPostUserAvatarImage());
                     new GroupExchangeOnServer<PostDTO>( new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {

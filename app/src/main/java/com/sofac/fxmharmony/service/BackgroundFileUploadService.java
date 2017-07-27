@@ -69,7 +69,7 @@ public class BackgroundFileUploadService extends Service {
 
         }
 
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
 
@@ -114,11 +114,9 @@ public class BackgroundFileUploadService extends Service {
 
             if (type.equals(Constants.ATTACH_LOAD_USER_AVATAR)) {
                 String avatarName = (String) serverResponse.getDataTransferObject();
-                Log.i("TEST" , avatarName);
                 AppMethods.saveAvatarImageName(context, avatarName);
             }
 
-            onEnd(Constants.SERVER_REQUEST_ERROR);
         }
 
         void onEnd(final String result) {
@@ -130,6 +128,7 @@ public class BackgroundFileUploadService extends Service {
             } else {
                 showToast(R.string.errorConnection);
             }
+
         }
 
 

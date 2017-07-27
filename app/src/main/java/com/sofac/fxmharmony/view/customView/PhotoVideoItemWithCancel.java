@@ -89,7 +89,7 @@ public class PhotoVideoItemWithCancel extends RelativeLayout {
         }
 
 
-        cancelButton.setBackground(context.getDrawable(R.drawable.remove_symbol));
+        cancelButton.setBackground(context.getResources().getDrawable((R.drawable.remove_symbol)));
 
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override

@@ -66,19 +66,21 @@ public class FileItemWithCancel extends RelativeLayout {
         cancelButtonLayoutParams.height = AppMethods.getPxFromDp(30, context);
 
 
-        cancelButton.setBackground(context.getDrawable(R.drawable.remove_symbol));
+        cancelButton.setBackground(context.getResources().getDrawable(R.drawable.remove_symbol));
 
 
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                
                 Iterator<String> fileListIterator = FileItemWithCancel.this.fileList.iterator();
                 while (fileListIterator.hasNext()) {
+
+
                     String fileURL = Constants.BASE_URL + Constants.GET_POST_FILES_END_URL + fileListIterator.next();
 
                     if (fileURL.equals(fileUri.toString())) {
-
                         fileListIterator.remove();
                     }
                 }
