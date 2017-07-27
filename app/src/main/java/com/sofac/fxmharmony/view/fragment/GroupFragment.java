@@ -161,15 +161,11 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 1) {
-            if (resultCode == 1) {
-                intentDetailPostActivity.putExtra(ONE_POST_DATA, (PostDTO) data.getSerializableExtra(ONE_POST_DATA));
-                startActivity(intentDetailPostActivity);
-            }
+        if (resultCode == 2) {
+            intentDetailPostActivity.putExtra(ONE_POST_DATA, (PostDTO) data.getSerializableExtra(ONE_POST_DATA));
+            startActivity(intentDetailPostActivity);
         }
-
         super.onActivityResult(requestCode, resultCode, data);
-
 
     }
 

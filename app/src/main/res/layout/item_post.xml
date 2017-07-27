@@ -85,7 +85,15 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="5"
-                    android:textColor="@color/colorItemContext" />
+                    android:textColor="@color/colorTextDarkPostDetail" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/idListFilesPostItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
             </LinearLayout>
 
             <!--<com.yarolegovich.discretescrollview.DiscreteScrollView-->
@@ -100,7 +108,7 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="0dp"
                 android:layout_marginTop="0dp"
-                android:background="#dddddd" />
+                android:background="#eeeeee" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

@@ -2,21 +2,29 @@ package com.sofac.fxmharmony.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.util.AppMethods;
+import com.sofac.fxmharmony.util.FileLoadingListener;
+import com.sofac.fxmharmony.util.FileLoadingTask;
+import com.sofac.fxmharmony.view.DetailPostActivity;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.Orientation;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +35,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
 import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
 
 public class AdapterPostGroup extends BaseAdapter {
@@ -68,6 +77,22 @@ public class AdapterPostGroup extends BaseAdapter {
         ArrayList<String> listImage = new ArrayList<>();
 
         View view = inflater.inflate(R.layout.item_post, parent, false);
+
+        LinearLayout linearLayoutFiles = (LinearLayout) view.findViewById(R.id.idListFilesPostItem);
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        if (null != postDTO.getLinksFile() && !"".equals(postDTO.getLinksFile()) && postDTO.getLinksFile().length() > 5) {
+            Timber.e("!!!!!!!!!!!!!!!!!" + postDTO.getLinksFile());
+            for (final String imageName : postDTO.getLinksFile().split(";#")) {
+                View fileItemView = inflater.inflate(R.layout.item_preview_post_file, null);
+                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
+                textView.setText(imageName);
+                linearLayoutFiles.addView(fileItemView, lParams);
+            }
+        } else {
+            linearLayoutFiles.setVisibility(View.INVISIBLE);
+        }
+
 
 //        discreteScrollView = (DiscreteScrollView) view.findViewById(R.id.idImageCarousel);
 //        discreteScrollView.setOrientation(Orientation.HORIZONTAL);

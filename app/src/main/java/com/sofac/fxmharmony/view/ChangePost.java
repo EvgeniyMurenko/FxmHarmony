@@ -131,7 +131,7 @@ public class ChangePost extends BaseActivity {
                                 case R.id.action_take_file:
 
                                     Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    takeFileIntent.setType("*/*");
+                                    takeFileIntent.setType("file/*");
                                     startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);
                                     return false;
 
@@ -231,7 +231,7 @@ public class ChangePost extends BaseActivity {
                                 Intent intentDetailPost = new Intent(ChangePost.this, DetailPostActivity.class);
                                 intentDetailPost.putExtra(ONE_POST_DATA, postDTOtoSend);
 
-                                setResult(1, intentDetailPost);
+                                setResult(2, intentDetailPost);
                                 finish();
                             }
                         }

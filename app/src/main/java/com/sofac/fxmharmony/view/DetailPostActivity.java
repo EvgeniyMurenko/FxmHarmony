@@ -8,16 +8,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,22 +32,31 @@ import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
+import com.sofac.fxmharmony.adapter.AdapterGalleryGroup;
 import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.util.AppMethods;
+import com.sofac.fxmharmony.util.FileLoadingListener;
+import com.sofac.fxmharmony.util.FileLoadingTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import timber.log.Timber;
 
+import static android.R.id.message;
+import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
+import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
 import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
 import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_COMMENT_REQUEST;
@@ -64,6 +78,7 @@ public class DetailPostActivity extends AppCompatActivity {
     public Intent intentChangePost;
     ClipboardManager clipboardManager;
     ClipData clipData;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +87,7 @@ public class DetailPostActivity extends AppCompatActivity {
         setTitle(getString(R.string.FXM_group));
 
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        linearLayout = new LinearLayout(this);
 
         //ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -120,7 +136,7 @@ public class DetailPostActivity extends AppCompatActivity {
                                         case 1: //Delete
                                             new GroupExchangeOnServer<>(DetailPostActivity.idComment, true, DELETE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                                                 @Override
-                                                public void processFinish(Boolean isSuccess , String answer) {
+                                                public void processFinish(Boolean isSuccess, String answer) {
                                                     if (isSuccess) {
                                                         updateListView();
                                                         Toast.makeText(DetailPostActivity.this, R.string.comment_was_delete, Toast.LENGTH_SHORT).show();
@@ -149,7 +165,7 @@ public class DetailPostActivity extends AppCompatActivity {
                     if (isCreatingComment) { //Создание коментария
                         new GroupExchangeOnServer<>(new CommentDTO(1L, null, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID(), null), true, WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                             @Override
-                            public void processFinish(Boolean isSuccess , String answer) {
+                            public void processFinish(Boolean isSuccess, String answer) {
                                 if (isSuccess) {
                                     updateListView();
                                     editTextComment.setText("");
@@ -161,7 +177,7 @@ public class DetailPostActivity extends AppCompatActivity {
                     } else { // Редактирование коментария
                         new GroupExchangeOnServer<>(new CommentDTO(1L, commentDTO.getServerID(), (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getServerID(), null), true, UPDATE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                             @Override
-                            public void processFinish(Boolean isSuccess , String answer) {
+                            public void processFinish(Boolean isSuccess, String answer) {
                                 if (isSuccess) {
                                     updateListView();
                                     editTextComment.setText("");
@@ -181,56 +197,59 @@ public class DetailPostActivity extends AppCompatActivity {
         initialHeaderPost();
     }
 
+    public void createHeaderPost() {
+        headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
+        Spinner spinnerLanguage = (Spinner) headerView.findViewById(R.id.spinner_language);
+
+        ArrayList<String> stringsSpinnerLanguage = new ArrayList<>();
+        if (postDTO.getPostTextEn() != null && !postDTO.getPostTextEn().isEmpty())
+            stringsSpinnerLanguage.add(getString(R.string.english_spinner));
+        if (postDTO.getPostTextKo() != null && !postDTO.getPostTextKo().isEmpty())
+            stringsSpinnerLanguage.add(getString(R.string.korean_spinner));
+        if (postDTO.getPostTextRu() != null && !postDTO.getPostTextRu().isEmpty())
+            stringsSpinnerLanguage.add(getString(R.string.russian_spinner));
+        if (!stringsSpinnerLanguage.isEmpty())
+            stringsSpinnerLanguage.add(0, getString(R.string.original_spinner));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsSpinnerLanguage);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerLanguage.setAdapter(adapter);
+        if (stringsSpinnerLanguage.isEmpty()) spinnerLanguage.setVisibility(View.INVISIBLE);
+
+        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (parent.getSelectedItem().toString() == getString(R.string.original_spinner)) {
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
+                    //Toast.makeText(DetailPostActivity.this, "Original", Toast.LENGTH_SHORT).show();
+
+                } else if (parent.getSelectedItem().toString() == getString(R.string.english_spinner)) {
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextEn().replaceAll("<(.*?)>", " "));
+                    //Toast.makeText(DetailPostActivity.this, "English", Toast.LENGTH_SHORT).show();
+
+                } else if (parent.getSelectedItem().toString() == getString(R.string.korean_spinner)) {
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextKo().replaceAll("<(.*?)>", " "));
+                    //Toast.makeText(DetailPostActivity.this, "Korean", Toast.LENGTH_SHORT).show();
+
+                } else if (parent.getSelectedItem().toString() == getString(R.string.russian_spinner)) {
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextRu().replaceAll("<(.*?)>", " "));
+                    //Toast.makeText(DetailPostActivity.this, "Russian", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     public void initialHeaderPost() {
         if (postDTO != null) {
-            headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
-            Spinner spinnerLanguage = (Spinner) headerView.findViewById(R.id.spinner_language);
-
-            ArrayList<String> stringsSpinnerLanguage = new ArrayList<>();
-            if (postDTO.getPostTextEn() != null && !postDTO.getPostTextEn().isEmpty())
-                stringsSpinnerLanguage.add(getString(R.string.english_spinner));
-            if (postDTO.getPostTextKo() != null && !postDTO.getPostTextKo().isEmpty())
-                stringsSpinnerLanguage.add(getString(R.string.korean_spinner));
-            if (postDTO.getPostTextRu() != null && !postDTO.getPostTextRu().isEmpty())
-                stringsSpinnerLanguage.add(getString(R.string.russian_spinner));
-            if (!stringsSpinnerLanguage.isEmpty())
-                stringsSpinnerLanguage.add(0, getString(R.string.original_spinner));
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsSpinnerLanguage);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            spinnerLanguage.setAdapter(adapter);
-            if (stringsSpinnerLanguage.isEmpty()) spinnerLanguage.setVisibility(View.INVISIBLE);
+            createHeaderPost();
             listViewComments.addHeaderView(headerView, null, false);
-
-            spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    if (parent.getSelectedItem().toString() == getString(R.string.original_spinner)) {
-                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
-                        //Toast.makeText(DetailPostActivity.this, "Original", Toast.LENGTH_SHORT).show();
-
-                    } else if (parent.getSelectedItem().toString() == getString(R.string.english_spinner)) {
-                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextEn().replaceAll("<(.*?)>", " "));
-                        //Toast.makeText(DetailPostActivity.this, "English", Toast.LENGTH_SHORT).show();
-
-                    } else if (parent.getSelectedItem().toString() == getString(R.string.korean_spinner)) {
-                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextKo().replaceAll("<(.*?)>", " "));
-                        //Toast.makeText(DetailPostActivity.this, "Korean", Toast.LENGTH_SHORT).show();
-
-                    } else if (parent.getSelectedItem().toString() == getString(R.string.russian_spinner)) {
-                        ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextRu().replaceAll("<(.*?)>", " "));
-                        //Toast.makeText(DetailPostActivity.this, "Russian", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
         }
     }
 
@@ -240,7 +259,7 @@ public class DetailPostActivity extends AppCompatActivity {
 
         View v = getLayoutInflater().inflate(R.layout.post_view_detail, null);
 
-        Uri uri = Uri.parse(Constants.BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getPostUserAvatarImage());
+        Uri uri = Uri.parse(BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getPostUserAvatarImage());
         ImageView avatar = (ImageView) v.findViewById(R.id.idAvatarPost);
         Glide.with(this)
                 .load(uri)
@@ -253,6 +272,54 @@ public class DetailPostActivity extends AppCompatActivity {
         ((TextView) v.findViewById(R.id.idNamePost)).setText(name);
         ((TextView) v.findViewById(R.id.idDatePost)).setText(date);
         messageTextView = (TextView) v.findViewById(R.id.idMessagePost);
+
+
+        LinearLayout linearLayoutFiles = (LinearLayout) v.findViewById(R.id.idListFiles);
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        if (null != postDTO.getLinksFile() && !"".equals(postDTO.getLinksFile()) && postDTO.getLinksFile().length() > 5) {
+            for (final String imageName : postDTO.getLinksFile().split(";#")) {
+                View fileItemView = getLayoutInflater().inflate(R.layout.item_detail_post_file, null);
+                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
+                textView.setText(imageName);
+
+                Log.e("imageName URL", BASE_URL + GET_POST_FILES_END_URL + imageName);
+                fileItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new FileLoadingTask(
+                                BASE_URL + GET_POST_FILES_END_URL + imageName,
+                                new File(Environment.getExternalStorageDirectory() + "/Download/" + imageName),
+                                new FileLoadingListener() {
+                                    @Override
+                                    public void onBegin() {
+                                        Toast.makeText(DetailPostActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(DetailPostActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Throwable cause) {
+                                        Toast.makeText(DetailPostActivity.this, "Error download", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onEnd() {
+
+                                    }
+                                }).execute();
+                    }
+                });
+                linearLayoutFiles.addView(fileItemView, lParams);
+            }
+        } else {
+            linearLayoutFiles.setVisibility(View.INVISIBLE);
+        }
+
+
         messageTextView.setText(message.replaceAll("<(.*?)>", " "));
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
@@ -266,7 +333,9 @@ public class DetailPostActivity extends AppCompatActivity {
                 return false;
             }
         });
-        return v;
+
+        linearLayout.addView(v);
+        return linearLayout;
     }
 
     @Override
@@ -278,7 +347,7 @@ public class DetailPostActivity extends AppCompatActivity {
     public void updateListView() {
         new GroupExchangeOnServer<>(postDTO.getServerID(), true, LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
             @Override
-            public void processFinish(Boolean output , String answer) {
+            public void processFinish(Boolean output, String answer) {
                 arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
                 adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
 
@@ -313,12 +382,12 @@ public class DetailPostActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_edit:
                 intentChangePost.putExtra(ONE_POST_DATA, postDTO);
-                startActivity(intentChangePost);
+                startActivityForResult(intentChangePost, 1);
                 return true;
             case R.id.menu_delete:
                 new GroupExchangeOnServer<>(postDTO.getServerID(), true, DELETE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                     @Override
-                    public void processFinish(Boolean isSuccess , String answer) {
+                    public void processFinish(Boolean isSuccess, String answer) {
                         if (isSuccess) {
                             Toast.makeText(DetailPostActivity.this, R.string.post_was_delete, Toast.LENGTH_SHORT).show();
                             finish();
@@ -339,9 +408,11 @@ public class DetailPostActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 2) {
-            postDTO = (PostDTO) getIntent().getSerializableExtra(ONE_POST_DATA);
-            initialHeaderPost();
+        if (resultCode == 2) {
+            Toast.makeText(this, "CHANGE!!!", Toast.LENGTH_SHORT).show();
+            linearLayout.removeAllViews();
+            postDTO = (PostDTO) data.getSerializableExtra(ONE_POST_DATA);
+            createHeaderPost();
             updateListView();
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -100,7 +100,7 @@ public class CreatePost extends BaseActivity {
                                 case R.id.action_take_file:
 
                                     Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                                    takeFileIntent.setType("*/*");
+                                    takeFileIntent.setType("file/*");
                                     startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);
                                     return false;
 

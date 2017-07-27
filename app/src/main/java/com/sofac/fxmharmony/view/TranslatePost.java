@@ -111,6 +111,10 @@ public class TranslatePost extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.send_post_button:
 
+                postDTO.setPostTextRu(postTextRus.getText().toString());
+                postDTO.setPostTextEn(postTextEng.getText().toString());
+                postDTO.setPostTextKo(postTextKor.getText().toString());
+
                 PostDTO changePostDTO = new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(),
                         postTextRus.getText().toString(), postTextEng.getText().toString(), postTextKor.getText().toString() , null , null , null , "");
 

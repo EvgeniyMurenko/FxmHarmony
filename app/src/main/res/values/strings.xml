@@ -172,6 +172,7 @@
     <string name="text_eng">English</string>
     <string name="text_kor">Korean</string>
     <string name="text_rus">Russian</string>
+    <string name="click_to_download_file">Click to download file</string>
 
 
 </resources>
