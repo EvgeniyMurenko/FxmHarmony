@@ -4,6 +4,15 @@
     <string name="ToastLogOut">종료하려면 다시 누릅니다</string>
     <string name="upload_start">다운로드 시작함니다</string>
     <string name="upload_success">다운로드가 완료 됩니다</string>
+    <string name="videos">videos</string>
+    <string name="files">files</string>
+    <string name="images">images</string>
+
+    <!-- Change post activity-->
+    <string name="change_post_activity_name">Change Post</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_write_post">WritePostActivity</string>
 
     /* Login Activity */
     <string name="logo">로고</string>
@@ -135,5 +144,26 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string name="pref_ringtone_silent">Silent</string>
+    <string name="list_is_empty">List is Empty</string>
+
+    <string name="list_comments_empty">The list of the comments is empty</string>
+    <string name="list_post_empty">The list of the posts is empty</string>
+
+
+    <string name="text_orig">Original</string>
 
 </resources>
