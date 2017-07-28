@@ -5,12 +5,10 @@
         android:id="@+id/menu_update_list_post"
         android:orderInCategory="1"
         android:title="@string/update_list"
-        android:icon="@drawable/ic_delete_sweep"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_write_post"
         android:orderInCategory="2"
         android:title="@string/write_post"
-        android:icon="@drawable/ic_delete_sweep"
         app:showAsAction="never" />
 </menu>

@@ -116,7 +116,7 @@ public class TranslatePost extends BaseActivity {
                 postDTO.setPostTextKo(postTextKor.getText().toString());
 
                 PostDTO changePostDTO = new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(),
-                        postTextRus.getText().toString(), postTextEng.getText().toString(), postTextKor.getText().toString() , null , null , null , "");
+                        postTextRus.getText().toString(), postTextEng.getText().toString(), postTextKor.getText().toString() , postDTO.getLinksFile() , postDTO.getLinksVideo() , postDTO.getLinksImage() , "");
 
                 new GroupExchangeOnServer<PostDTO>(changePostDTO, true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                     @Override

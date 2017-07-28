@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -50,6 +51,7 @@ import java.util.Locale;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import timber.log.Timber;
 
+import static android.R.id.content;
 import static android.R.id.message;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
@@ -57,14 +59,18 @@ import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
 import static com.sofac.fxmharmony.Constants.GET_POST_thumbnails_END_URL;
+import static com.sofac.fxmharmony.Constants.LINK_IMAGE;
+import static com.sofac.fxmharmony.Constants.LINK_VIDEO;
 import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
+import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
+import static com.sofac.fxmharmony.Constants.NAME_VIDEO;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
 import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_COMMENT_REQUEST;
 
-public class DetailPostActivity extends AppCompatActivity {
+public class DetailPostActivity extends BaseActivity {
 
     Button buttonSend;
     Intent intent;
@@ -82,12 +88,17 @@ public class DetailPostActivity extends AppCompatActivity {
     ClipboardManager clipboardManager;
     ClipData clipData;
     LinearLayout linearLayout;
+    Parcelable state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
         setTitle(getString(R.string.FXM_group));
+
+        if(state != null) {
+            listViewComments.onRestoreInstanceState(state);
+        }
 
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
         linearLayout = new LinearLayout(this);
@@ -198,6 +209,7 @@ public class DetailPostActivity extends AppCompatActivity {
             }
         });
         initialHeaderPost();
+        updateListView();
     }
 
     public void createHeaderPost() {
@@ -298,7 +310,10 @@ public class DetailPostActivity extends AppCompatActivity {
                 photoItemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(DetailPostActivity.this, "IMAGE", Toast.LENGTH_SHORT).show();
+                        Intent intentPhoto = new Intent(DetailPostActivity.this, PreviewPhotoActivity.class);
+                        intentPhoto.putExtra(LINK_IMAGE, ("" + BASE_URL + PART_URL_FILE_IMAGE_POST + imageName));
+                        intentPhoto.putExtra(NAME_IMAGE, ("" + imageName));
+                        startActivity(intentPhoto);
                     }
                 });
             }
@@ -307,8 +322,6 @@ public class DetailPostActivity extends AppCompatActivity {
             linearLayoutPhotos.setVisibility(View.INVISIBLE);
         }
         // END IMAGE
-
-
 
 
         // START VIDEO
@@ -331,7 +344,10 @@ public class DetailPostActivity extends AppCompatActivity {
                 videoItemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(DetailPostActivity.this, "VIDEO", Toast.LENGTH_SHORT).show();
+                        Intent intentVideo = new Intent(DetailPostActivity.this, PreviewVideoActivity.class);
+                        intentVideo.putExtra(LINK_VIDEO, ("" + BASE_URL + GET_POST_FILES_END_URL + videoName));
+                        intentVideo.putExtra(NAME_VIDEO, ("" + videoName));
+                        startActivity(intentVideo);
                     }
                 });
             }
@@ -340,9 +356,6 @@ public class DetailPostActivity extends AppCompatActivity {
             linearLayoutVideos.setVisibility(View.INVISIBLE);
         }
         // END VIDEO
-
-
-
 
 
         // START FILES
@@ -412,7 +425,7 @@ public class DetailPostActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        updateListView();
+
         super.onResume();
     }
 
@@ -432,6 +445,7 @@ public class DetailPostActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail_post_update, menu);
         PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L));
         if (permissionDTO.getTranslatePermission() == null && permissionDTO.getTranslatePermission() && postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
@@ -449,6 +463,9 @@ public class DetailPostActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_update:
+                updateListView();
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
@@ -473,6 +490,8 @@ public class DetailPostActivity extends AppCompatActivity {
                 startActivityForResult(intentTranslatePost, 1);
 
                 return true;
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -488,5 +507,11 @@ public class DetailPostActivity extends AppCompatActivity {
             updateListView();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onPause() {
+        state = listViewComments.onSaveInstanceState();
+        super.onPause();
     }
 }
