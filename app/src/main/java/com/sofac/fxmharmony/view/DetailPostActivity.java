@@ -337,8 +337,8 @@ public class DetailPostActivity extends BaseActivity {
                 Uri uriVideo = Uri.parse(BASE_URL + GET_POST_thumbnails_END_URL + videoName + ".png");
                 Glide.with(this)
                         .load(uriVideo)
-                        .error(R.drawable.no_image)
-                        .placeholder(R.drawable.no_image)
+                        .error(R.drawable.no_video)
+                        .placeholder(R.drawable.no_video)
                         .into(imageVideoView);
                 linearLayoutVideos.addView(videoItemView, lParams);
                 videoItemView.setOnClickListener(new View.OnClickListener() {
