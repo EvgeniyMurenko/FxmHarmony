@@ -23,7 +23,6 @@ import retrofit2.http.PartMap;
 
 public interface RequestResponseService {
 
-
     @POST("app-exchange")
     Call<ResponseBody> postAuthorizationRequest(@Body ServerRequest serverRequest);
 

@@ -52,8 +52,7 @@ public class DataManager {
 
         if (!response.equals(Constants.SERVER_REQUEST_ERROR)) {
 
-            Type authorizationType = new TypeToken<ServerResponse<ManagerInfoDTO>>() {
-            }.getType();
+            Type authorizationType = new TypeToken<ServerResponse<ManagerInfoDTO>>() {}.getType();
 
             ServerResponse<ManagerInfoDTO> managerInfoServerResponse = new Gson().fromJson(response, authorizationType);
 

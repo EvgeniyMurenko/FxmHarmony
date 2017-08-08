@@ -1,31 +1,28 @@
 package com.sofac.fxmharmony.view;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
-
-
 import timber.log.Timber;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
-import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
 
@@ -37,16 +34,16 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     private TextView userName;
     ContentFragment contentFragment;
     GroupFragment groupFragment;
+    private FragmentTabHost mTabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        setTitle(getString(R.string.push_tile));
+        setTitle(getString(R.string.app_name));
 
         contentFragment = new ContentFragment();
         groupFragment = new GroupFragment();
-        changerFragment(contentFragment);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,6 +61,21 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         avatarImage = (ImageView) header.findViewById(R.id.navAvatarImage);
         userName = (TextView) header.findViewById(R.id.idNavDrawNameManager);
 
+        /* Tabs */
+        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+
+        mTabHost.addTab(
+                mTabHost.newTabSpec("tab1").setIndicator(getString(R.string.push_menu), null),
+                ContentFragment.class, null);
+        mTabHost.addTab(
+                mTabHost.newTabSpec("tab2").setIndicator(getString(R.string.FXM_group), null),
+                GroupFragment.class, null);
+
+        for (int i = 0; i < mTabHost.getTabWidget().getTabCount(); i++) {
+                    mTabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 100;
+        }
+        mTabHost.setCurrentTabByTag("tab1");
     }
 
     @Override
@@ -74,13 +86,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         userName.setText(AppMethods.getUserName(this));
 
     }
-
-    public void changerFragment(Fragment fragment){
-        FragmentTransaction fTrans = getFragmentManager().beginTransaction();
-        fTrans.replace(R.id.idFragmentChanger, fragment);
-        fTrans.commit();
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -95,13 +100,11 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
         switch (item.getItemId()) {
             case R.id.idPushItem:
-                changerFragment(contentFragment);
-                setTitle(item.getTitle());
+                mTabHost.setCurrentTabByTag("tab1");
                 item.setChecked(true);
                 break;
             case R.id.idGroupItem:
-                changerFragment(groupFragment);
-                setTitle(item.getTitle());
+                mTabHost.setCurrentTabByTag("tab2");
                 item.setChecked(true);
                 break;
             case R.id.idSettingItem:
@@ -140,5 +143,26 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
             backPressed = System.currentTimeMillis();
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
