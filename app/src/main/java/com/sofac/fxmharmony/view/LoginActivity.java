@@ -1,23 +1,22 @@
 package com.sofac.fxmharmony.view;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.sofac.fxmharmony.BuildConfig;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.DataManager;
@@ -44,6 +43,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     EditText editPassword, editLogin;
     Button buttonLogin;
 
+
+
+    private static final String PREFS_NAME = "preferences";
+    private static final String PREF_UNAME = "Username";
+    private static final String PREF_PASSWORD = "Password";
+
+    private final String DefaultUnameValue = "";
+    private String UnameValue;
+
+    private final String DefaultPasswordValue = "";
+    private String PasswordValue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +71,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //            e.printStackTrace();
 //        }
         Timber.e("Clear DB");
+
     }
 
     private void initUI() {
@@ -72,7 +84,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         String password = editPassword.getText().toString();
         String login = editLogin.getText().toString();
-
+        checkVersion();
         if ("".equals(password) && "".equals(login)) {
             Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
@@ -157,5 +169,63 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             pd.dismiss();
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        savePreferences();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadPreferences();
+    }
+
+    private void savePreferences() {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        // Edit and commit
+        UnameValue = editLogin.getText().toString();
+        PasswordValue = editPassword.getText().toString();
+        System.out.println("onPause save name: " + UnameValue);
+        System.out.println("onPause save password: " + PasswordValue);
+        editor.putString(PREF_UNAME, UnameValue);
+        editor.putString(PREF_PASSWORD, PasswordValue);
+        editor.commit();
+    }
+
+    private void loadPreferences() {
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME,
+                Context.MODE_PRIVATE);
+
+        // Get value
+        UnameValue = settings.getString(PREF_UNAME, DefaultUnameValue);
+        PasswordValue = settings.getString(PREF_PASSWORD, DefaultPasswordValue);
+        editLogin.setText(UnameValue);
+        editPassword.setText(PasswordValue);
+        System.out.println("onResume load name: " + UnameValue);
+        System.out.println("onResume load password: " + PasswordValue);
+    }
+
+    private void checkVersion(){
+        String versionName = "";
+        int versionCode = -1;
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = packageInfo.versionName;
+            versionCode = packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Timber.e(String.format("Version name = %s \nVersion code = %d", versionName, versionCode));
+        //textViewVersionInfo.setText(String.format("Version name = %s \nVersion code = %d", versionName, versionCode));
+    }
+
 
 }

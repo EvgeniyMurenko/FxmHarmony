@@ -65,8 +65,15 @@
                     android:layout_height="wrap_content"
                     android:text="Comment"
                     android:textColor="@color/colorTextDarkPostComment" />
-
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/commentLiner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="7dp"
+                android:layout_marginLeft="2dp"/>
 
         </LinearLayout>
 

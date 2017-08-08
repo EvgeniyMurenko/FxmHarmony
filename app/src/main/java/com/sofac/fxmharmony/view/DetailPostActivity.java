@@ -325,7 +325,7 @@ public class DetailPostActivity extends BaseActivity {
 
 
         // START VIDEO
-        LinearLayout linearLayoutVideos = (LinearLayout) v.findViewById(R.id.idListVideos);
+        /*LinearLayout linearLayoutVideos = (LinearLayout) v.findViewById(R.id.idListVideos);
 
         if (null != postDTO.getLinksVideo() && !"".equals(postDTO.getLinksVideo()) && postDTO.getLinksVideo().length() > 5) {
 
@@ -355,7 +355,7 @@ public class DetailPostActivity extends BaseActivity {
         } else {
             linearLayoutVideos.setVisibility(View.INVISIBLE);
         }
-        // END VIDEO
+        // END VIDEO*/
 
 
         // START FILES
