@@ -7,7 +7,7 @@ public class PermissionDTO extends SugarRecord implements Serializable {
 
     public PermissionDTO(){}
 
-    public PermissionDTO(Boolean superAdminPermission, Boolean estimatePermission, Boolean casePermission, Boolean customerPermission, Boolean projectsPermission, Boolean staffPermission, Boolean noticePermission, Boolean permissionManagement, Boolean translatePermission) {
+    public PermissionDTO(Boolean superAdminPermission, Boolean estimatePermission, Boolean casePermission, Boolean customerPermission, Boolean projectsPermission, Boolean staffPermission, Boolean noticePermission, Boolean permissionManagement, Boolean translatePermission, Boolean isLeaderGroup, Boolean isMemberGroup, Boolean isStaffGroup) {
         this.superAdminPermission = superAdminPermission;
         this.estimatePermission = estimatePermission;
         this.casePermission = casePermission;
@@ -17,6 +17,9 @@ public class PermissionDTO extends SugarRecord implements Serializable {
         this.noticePermission = noticePermission;
         this.permissionManagement = permissionManagement;
         this.translatePermission = translatePermission;
+        this.isLeaderGroup = isLeaderGroup;
+        this.isMemberGroup = isMemberGroup;
+        this.isStaffGroup = isStaffGroup;
     }
 
     private Boolean superAdminPermission;
@@ -36,6 +39,12 @@ public class PermissionDTO extends SugarRecord implements Serializable {
     private Boolean permissionManagement;
 
     private Boolean translatePermission;
+
+    private Boolean isLeaderGroup;
+
+    private Boolean isMemberGroup;
+
+    private Boolean isStaffGroup;
 
     public Boolean getSuperAdminPermission() {
         return superAdminPermission;
@@ -109,11 +118,34 @@ public class PermissionDTO extends SugarRecord implements Serializable {
         this.translatePermission = translatePermission;
     }
 
+    public Boolean getLeaderGroup() {
+        return isLeaderGroup;
+    }
+
+    public void setLeaderGroup(Boolean leaderGroup) {
+        isLeaderGroup = leaderGroup;
+    }
+
+    public Boolean getMemberGroup() {
+        return isMemberGroup;
+    }
+
+    public void setMemberGroup(Boolean memberGroup) {
+        isMemberGroup = memberGroup;
+    }
+
+    public Boolean getStaffGroup() {
+        return isStaffGroup;
+    }
+
+    public void setStaffGroup(Boolean staffGroup) {
+        isStaffGroup = staffGroup;
+    }
+
     @Override
     public String toString() {
         return "PermissionDTO{" +
-                "id=" + getId() +
-                ", superAdminPermission=" + superAdminPermission +
+                "superAdminPermission=" + superAdminPermission +
                 ", estimatePermission=" + estimatePermission +
                 ", casePermission=" + casePermission +
                 ", customerPermission=" + customerPermission +
@@ -122,6 +154,9 @@ public class PermissionDTO extends SugarRecord implements Serializable {
                 ", noticePermission=" + noticePermission +
                 ", permissionManagement=" + permissionManagement +
                 ", translatePermission=" + translatePermission +
+                ", isLeaderGroup=" + isLeaderGroup +
+                ", isMemberGroup=" + isMemberGroup +
+                ", isStaffGroup=" + isStaffGroup +
                 '}';
     }
 }

@@ -447,6 +447,7 @@ public class DetailPostActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_post_update, menu);
         PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L));
+        Timber.e("!!!!!!! permissionDTO !!!!!!! "+permissionDTO);
         if (permissionDTO.getTranslatePermission() == null && permissionDTO.getTranslatePermission() && postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
             getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);

@@ -29,4 +29,12 @@ public class ServerResponse <T> {
     public void setDataTransferObject(T dataTransferObject) {
         this.dataTransferObject = dataTransferObject;
     }
+
+    @Override
+    public String toString() {
+        return "ServerResponse{" +
+                "responseStatus='" + responseStatus + '\'' +
+                ", dataTransferObject=" + dataTransferObject +
+                '}';
+    }
 }

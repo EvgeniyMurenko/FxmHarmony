@@ -72,14 +72,15 @@ public class DataManager {
             Type authorizationType = null;
 
             if (groupRequestType.equals(Constants.LOAD_ALL_POSTS_REQUEST)) {
-
+                Timber.i(Constants.LOAD_ALL_POSTS_REQUEST);
                 authorizationType = new TypeToken<ServerResponse<List<PostDTO>>>() {
                 }.getType();
             } else if (groupRequestType.equals(Constants.LOAD_COMMENTS_REQUEST)) {
+                Timber.i(Constants.LOAD_COMMENTS_REQUEST);
                 authorizationType = new TypeToken<ServerResponse<List<CommentDTO>>>() {
                 }.getType();
             } else {
-                authorizationType = new TypeToken<ServerResponse>() {
+                authorizationType = new TypeToken<ServerResponse<String>>() {
                 }.getType();
             }
 

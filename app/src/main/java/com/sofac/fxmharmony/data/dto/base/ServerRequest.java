@@ -30,4 +30,12 @@ public class ServerRequest <T>{
     public void setDataTransferObject(T dataTransferObject) {
         this.dataTransferObject = dataTransferObject;
     }
+
+    @Override
+    public String toString() {
+        return "ServerRequest{" +
+                "requestType='" + requestType + '\'' +
+                ", dataTransferObject=" + dataTransferObject +
+                '}';
+    }
 }

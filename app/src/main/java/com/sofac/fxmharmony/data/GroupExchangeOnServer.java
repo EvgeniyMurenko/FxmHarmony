@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
@@ -79,9 +80,12 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
 
         switch (type) {
             case Constants.LOAD_ALL_POSTS_REQUEST:
-                Timber.i(serverRequest.toString());
-                serverResponse = dataManager.postGroupRequest(serverRequest, type);//postID = serverRequest
 
+                serverRequest.setDataTransferObject(serverObject);
+
+                Log.e("!!!!!serverRequest!!!! ",serverRequest.toString());
+
+                serverResponse = dataManager.postGroupRequest(serverRequest, type);//postID = serverRequest
                 break;
 
             case Constants.LOAD_COMMENTS_REQUEST:
@@ -193,16 +197,14 @@ public class GroupExchangeOnServer<T> extends AsyncTask<String, Void, String> {
                 }
                 case Constants.WRITE_POST_REQUEST: {
 
-                    ServerResponse<Double> writePostServerResponse = serverResponse;
-                    NumberFormat numberFormat= NumberFormat.getInstance();
-                    Long id = null;
-                    try {
-                        id = numberFormat.parse(writePostServerResponse.getDataTransferObject().toString()).longValue();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    //Timber.i(serverResponse.toString());
+                    Log.e("RESPONSE" , serverResponse.toString());
 
-                    answer = String.valueOf(id);
+                    ServerResponse<String> writePostServerResponse = serverResponse;
+
+                    answer = writePostServerResponse.getDataTransferObject();
+
+                    Log.e("ANSWER" ,  answer);
                     break;
                 }
 

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
+import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.view.ChangePost;
@@ -28,6 +29,8 @@ import com.sofac.fxmharmony.view.CreatePost;
 import com.sofac.fxmharmony.view.DetailPostActivity;
 
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
@@ -126,8 +129,10 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     public void updateViewList(Boolean toDoProgressDialog) {
+        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, preferences.getLong(USER_ID_PREF, 1L));
+        Timber.e(managerInfoDTO.toString());
 
-        new GroupExchangeOnServer<PostDTO>(null, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+        new GroupExchangeOnServer<>(managerInfoDTO, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
             @Override
             public void processFinish(Boolean isSuccess, String answer) {
                 if (isSuccess) {

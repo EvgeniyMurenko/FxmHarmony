@@ -72,9 +72,9 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 mTabHost.newTabSpec("tab2").setIndicator(getString(R.string.FXM_group), null),
                 GroupFragment.class, null);
 
-        for (int i = 0; i < mTabHost.getTabWidget().getTabCount(); i++) {
-                    mTabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 100;
-        }
+//        for (int i = 0; i < mTabHost.getTabWidget().getTabCount(); i++) {
+//                    mTabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 100;
+//        }
         mTabHost.setCurrentTabByTag("tab1");
     }
 
@@ -83,7 +83,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         super.onResume();
 
         AppMethods.putAvatarIntoImageView(this, avatarImage);
-        userName.setText(AppMethods.getUserName(this));
+        //userName.setText(AppMethods.getUserName(this));
 
     }
 

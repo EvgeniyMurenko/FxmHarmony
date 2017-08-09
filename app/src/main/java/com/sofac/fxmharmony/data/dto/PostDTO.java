@@ -10,7 +10,7 @@ public class PostDTO extends SugarRecord implements Serializable {
     public PostDTO() {
     }
 
-    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postTextOriginal, String postTextRu, String postTextEn, String postTextKo ,String linksFile , String linksVideo , String linksImage , String postUserAvatarImage) {
+    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postTextOriginal, String postTextRu, String postTextEn, String postTextKo, String linksFile, String linksImage, String linksVideo, String postUserAvatarImage, String groupType) {
         this.id = id;
         this.serverID = serverID;
         this.userID = userID;
@@ -21,11 +21,11 @@ public class PostDTO extends SugarRecord implements Serializable {
         this.postTextEn = postTextEn;
         this.postTextKo = postTextKo;
         this.linksFile = linksFile;
-        this.linksVideo = linksVideo;
         this.linksImage = linksImage;
+        this.linksVideo = linksVideo;
         this.postUserAvatarImage = postUserAvatarImage;
+        this.groupType = groupType;
     }
-
 
     private transient Long id;
 
@@ -52,6 +52,8 @@ public class PostDTO extends SugarRecord implements Serializable {
     private String linksVideo;
 
     private String postUserAvatarImage;
+
+    private String groupType;
 
 
 
@@ -160,6 +162,14 @@ public class PostDTO extends SugarRecord implements Serializable {
         this.postUserAvatarImage = postUserAvatarImage;
     }
 
+    public String getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(String groupType) {
+        this.groupType = groupType;
+    }
+
     @Override
     public String toString() {
         return "PostDTO{" +
@@ -172,6 +182,11 @@ public class PostDTO extends SugarRecord implements Serializable {
                 ", postTextRu='" + postTextRu + '\'' +
                 ", postTextEn='" + postTextEn + '\'' +
                 ", postTextKo='" + postTextKo + '\'' +
+                ", linksFile='" + linksFile + '\'' +
+                ", linksImage='" + linksImage + '\'' +
+                ", linksVideo='" + linksVideo + '\'' +
+                ", postUserAvatarImage='" + postUserAvatarImage + '\'' +
+                ", groupType='" + groupType + '\'' +
                 '}';
     }
 }

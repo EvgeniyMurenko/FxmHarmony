@@ -243,8 +243,41 @@ public class ChangePost extends BaseActivity {
                     }
 
 
-                    final PostDTO postDTOtoSend =  new PostDTO(postDTO.getId(), postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), postDTO.getDate(), postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, postDTO.getPostUserAvatarImage());
-                    new GroupExchangeOnServer<PostDTO>( new PostDTO(1L, postDTO.getServerID(), preferences.getLong(USER_ID_PREF, 0L), postDTO.getUserName(), null, postDTO.getPostTextOriginal(), postDTO.getPostTextRu(), postDTO.getPostTextEn(), postDTO.getPostTextKo(), files, videos, images, null), true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+                    final PostDTO postDTOtoSend =
+                            new PostDTO(postDTO.getId(),
+                                    postDTO.getServerID(),
+                                    preferences.getLong(USER_ID_PREF, 0L),
+                                    postDTO.getUserName(),
+                                    postDTO.getDate(),
+                                    postDTO.getPostTextOriginal(),
+                                    postDTO.getPostTextRu(),
+                                    postDTO.getPostTextEn(),
+                                    postDTO.getPostTextKo(),
+                                    files,
+                                    images,
+                                    videos,
+                                    postDTO.getPostUserAvatarImage(),
+                                    postDTO.getGroupType());
+                    new GroupExchangeOnServer<PostDTO>(
+                            new PostDTO(
+                                    postDTO.getId(),
+                                    postDTO.getServerID(),
+                                    preferences.getLong(USER_ID_PREF, 0L),
+                                    postDTO.getUserName(),
+                                    null,
+                                    postDTO.getPostTextOriginal(),
+                                    postDTO.getPostTextRu(),
+                                    postDTO.getPostTextEn(),
+                                    postDTO.getPostTextKo(),
+                                    files,
+                                    images,
+                                    videos,
+                                    null,
+                                    postDTO.getGroupType()),
+                            true,
+                            UPDATE_POST_REQUEST,
+                            this,
+                            new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                         @Override
                         public void processFinish(Boolean isSuccess , String answer) {
                             if (isSuccess) {
