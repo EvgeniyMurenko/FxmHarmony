@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.util.ConvertorHTML;
 
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
@@ -52,20 +53,20 @@ public class TranslatePost extends BaseActivity {
         //TextView
         postTextOrig = (TextView) findViewById(R.id.id_text_orig);
         if (postDTO.getPostTextOriginal() != null && !"".equals(postDTO.getPostTextOriginal()))
-            postTextOrig.setText(postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
+            postTextOrig.setText(ConvertorHTML.fromHTML(postDTO.getPostTextOriginal()));
 
         //EditText
         postTextEng = (EditText) findViewById(R.id.id_text_eng);
         if (postDTO.getPostTextEn() != null && !"".equals(postDTO.getPostTextEn()))
-            postTextEng.setText(postDTO.getPostTextEn());
+            postTextEng.setText(ConvertorHTML.fromHTML(postDTO.getPostTextEn()));
 
         postTextKor = (EditText) findViewById(R.id.id_text_kor);
         if (postDTO.getPostTextKo() != null && !"".equals(postDTO.getPostTextKo()))
-            postTextKor.setText(postDTO.getPostTextKo());
+            postTextKor.setText(ConvertorHTML.fromHTML(postDTO.getPostTextKo()));
 
         postTextRus = (EditText) findViewById(R.id.id_text_rus);
         if (postDTO.getPostTextRu() != null && !"".equals(postDTO.getPostTextRu()))
-            postTextRus.setText(postDTO.getPostTextRu());
+            postTextRus.setText(ConvertorHTML.fromHTML(postDTO.getPostTextRu()));
 
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
 
@@ -125,9 +126,9 @@ public class TranslatePost extends BaseActivity {
                                 postDTO.getUserName(),
                                 null,
                                 postDTO.getPostTextOriginal(),
-                                postTextRus.getText().toString(),
-                                postTextEng.getText().toString(),
-                                postTextKor.getText().toString() ,
+                                ConvertorHTML.toHTML(postTextRus.getText().toString()),
+                                ConvertorHTML.toHTML(postTextEng.getText().toString()),
+                                ConvertorHTML.toHTML(postTextKor.getText().toString()) ,
                                 postDTO.getLinksFile() ,
                                 postDTO.getLinksVideo() ,
                                 postDTO.getLinksImage() ,

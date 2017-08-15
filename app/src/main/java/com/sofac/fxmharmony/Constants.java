@@ -24,17 +24,19 @@ public class Constants {
 
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
-    //public final static String BASE_URL = "http://52.211.242.225:8080/";
-    //public final static String BASE_URL = "http://192.168.1.108:8080/";
-    public final static String BASE_URL = "http://192.168.0.13:8080/";
-    //public final static String BASE_URL = "http://192.168.0.32:8080/";
+    public final static String BASE_URL = "http://52.211.242.225:8080/"; // a.sofac.kr
+    //public final static String BASE_URL = "http://52.57.116.160:8080/"; //Test server
+    //public final static String BASE_URL = "http://192.168.0.13:8080/"; //Zegna
+    //public final static String BASE_URL = "http://192.168.0.32:8080/"; //Maxx
 
 
-    public final static String GET_POST_FILES_END_URL = "get-file/post/";
+    //public final static String GET_POST_FILES_END_URL = "get-file/post/";
+    public final static String GET_POST_FILES_END_URL = "softwarefactoryadmin/post/";
+
     public final static String GET_POST_thumbnails_END_URL = "get-file/thumbnails/";
     public final static String POINT_PNG = ".png";
     public final static String PART_URL_FILE_AVATAR = "get-file/avatar/";
-    public final static String PART_URL_FILE_IMAGE_POST = "get-file/post/";
+    public final static String PART_URL_FILE_IMAGE_POST = GET_POST_FILES_END_URL;
 
     //PreviewPhotoActivity
     public final static String LINK_IMAGE = "LINK_IMAGE";
@@ -43,6 +45,8 @@ public class Constants {
     public final static String LINK_VIDEO = "LINK_VIDEO";
     public final static String NAME_VIDEO = "NAME_VIDEO";
 
+    //NavActivity
+    public final static String TYPE_GROUP = "TYPE_GROUP";
 
     //Group requests
     public final static String LOAD_ALL_POSTS_REQUEST = "LOAD_ALL_POSTS_REQUEST";
@@ -58,18 +62,15 @@ public class Constants {
     public final static String ATTACH_LOAD_FXM_POST_FILES = "ATTACH_LOAD_FXM_POST_FILES";
     public final static String ATTACH_LOAD_USER_AVATAR = "ATTACH_LOAD_USER_AVATAR";
 
-
     //Settings requests
     public final static String CHANGE_NAME_REQUEST = "CHANGE_NAME_REQUEST";
     public final static String DELETE_AVATAR_REQUEST = "DELETE_AVATAR_REQUEST";
-
 
     // Controller's name
     public final static String APP_EXCHANGE = "APP_EXCHANGE";
     public final static String GROUP_EXCHANGE = "GROUP_EXCHANGE";
     public final static String SETTINGS_EXCHANGE = "SETTINGS_EXCHANGE";
     public final static String UPLOAD_MULTI_FILE_EXCHANGE = "UPLOAD_MULTI_FILE_EXCHANGE";
-
 
     // Push message types
     public final static String ESTIMATE_CASE_PUSH_TYPE = "ESTIMATE_CASE_PUSH_TYPE";

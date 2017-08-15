@@ -95,10 +95,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Black" /> <!-- or android:screenOrientation="landscape"-->
 
-        <!--<activity-->
-        <!--android:name=".view.PreviewVideoActivity"-->
-        <!--android:theme="@style/AppVideoTheme" />   &lt;!&ndash; Don't need to set the theme here if it's set on your <application /> tag already &ndash;&gt;-->
-
     </application>
 
 </manifest>

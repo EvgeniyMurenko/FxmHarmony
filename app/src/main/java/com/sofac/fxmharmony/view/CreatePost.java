@@ -27,6 +27,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.util.ConvertorHTML;
 import com.sofac.fxmharmony.util.FxmPostFile;
 import com.sofac.fxmharmony.util.PermissionManager;
 import com.sofac.fxmharmony.util.RequestMethods;
@@ -45,6 +46,7 @@ import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
+import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_POST_REQUEST;
@@ -60,8 +62,9 @@ public class CreatePost extends BaseActivity {
     private LinearLayoutGallery imagesGalleryLayout;
     private LinearLayoutGallery videoGalleryLayout;
     private LinearLayoutGallery fileGalleryLayout;
-    Spinner spinnerGroupType;
+
     private List<Uri> fileListToSend;
+    public String stringTypeGroup = "staff";
 
 
     @Override
@@ -70,54 +73,11 @@ public class CreatePost extends BaseActivity {
         setContentView(R.layout.create_post_message);
         initUI();
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        Intent intent =getIntent();
+        stringTypeGroup = intent.getStringExtra(TYPE_GROUP);
+        setTitle("Create post (" + stringTypeGroup + ")");
 
         fileListToSend = new ArrayList<>();
-
-        spinnerGroupType = (Spinner) findViewById(R.id.spinner_create_post);
-        PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L));
-
-        ArrayList<String> stringsSpinnerGroupType = new ArrayList<>();
-        if (permissionDTO.getLeaderGroup() != null && permissionDTO.getLeaderGroup())
-            stringsSpinnerGroupType.add("leader");
-        if (permissionDTO.getMemberGroup() != null && permissionDTO.getMemberGroup())
-            stringsSpinnerGroupType.add("member");
-        if (permissionDTO.getStaffGroup() != null && permissionDTO.getStaffGroup())
-            stringsSpinnerGroupType.add("staff");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsSpinnerGroupType);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinnerGroupType.setAdapter(adapter);
-        if (stringsSpinnerGroupType.isEmpty()) spinnerGroupType.setVisibility(View.INVISIBLE);
-
-//        spinnerGroupType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//                if (parent.getSelectedItem().toString() == getString(R.string.original_spinner)) {
-//                    ((TextView) findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
-//                    //Toast.makeText(DetailPostActivity.this, "Original", Toast.LENGTH_SHORT).show();
-//
-//                } else if (parent.getSelectedItem().toString() == getString(R.string.english_spinner)) {
-//                    ((TextView) findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextEn().replaceAll("<(.*?)>", " "));
-//                    //Toast.makeText(DetailPostActivity.this, "English", Toast.LENGTH_SHORT).show();
-//
-//                } else if (parent.getSelectedItem().toString() == getString(R.string.korean_spinner)) {
-//                    ((TextView) findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextKo().replaceAll("<(.*?)>", " "));
-//                    //Toast.makeText(DetailPostActivity.this, "Korean", Toast.LENGTH_SHORT).show();
-//
-//                } else if (parent.getSelectedItem().toString() == getString(R.string.russian_spinner)) {
-//                    ((TextView) findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextRu().replaceAll("<(.*?)>", " "));
-//                    //Toast.makeText(DetailPostActivity.this, "Russian", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -256,7 +216,7 @@ public class CreatePost extends BaseActivity {
                                     preferences.getLong(USER_ID_PREF, 0L),
                                     "",
                                     null,
-                                    postText.toString(),
+                                    ConvertorHTML.toHTML(postText.toString()),
                                     "",
                                     "",
                                     "",
@@ -264,7 +224,7 @@ public class CreatePost extends BaseActivity {
                                     null,
                                     null,
                                     null,
-                                    spinnerGroupType.getSelectedItem().toString()),
+                                    stringTypeGroup),
                             true,
                             WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                         @Override

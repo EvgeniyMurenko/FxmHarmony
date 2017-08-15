@@ -122,6 +122,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Authorization authorization = new Authorization(urls[0], urls[1], sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, ""));
 
             ServerRequest serverRequest = new ServerRequest(Constants.AUTHORIZATION_REQUEST, authorization);
+            Timber.e("!!!!!! serverRequest !!!!!"+serverRequest);
             DataManager dataManager = DataManager.getInstance();
             managerInfoServerResponse = dataManager.sendAuthorizationRequest(serverRequest);
 

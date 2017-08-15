@@ -72,11 +72,11 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
     testCompile 'junit:junit:4.12'
     compile 'fm.jiecao:jiecaovideoplayer:5.7'
-
 }
 
 repositories{
     mavenCentral()
+    jcenter()
 }
 
 apply plugin: 'com.google.gms.google-services'

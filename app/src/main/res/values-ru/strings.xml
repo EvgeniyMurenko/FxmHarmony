@@ -101,7 +101,7 @@
     <string name="post_was_delete">Пост был успешно удален!</string>
     <string name="push_tile">Уведомления</string>
     <string name="send">Отправить</string>
-    <string name="event_date">Дата события:</string>
+    <string name="event_date">Дата события:&#xA0;</string>
     <string name="manager">Менеджер</string>
     <string name="comments">Комментарии:</string>
     <string name="push_menu">Уведомления</string>
@@ -165,5 +165,9 @@
 
 
     <string name="text_orig">Original</string>
+    <string name="group_type">Group:&#xA0;</string>
+    <string name="leader_group">Leader group</string>
+    <string name="member_group">Member group</string>
+    <string name="staff_group">Staff group</string>
 
 </resources>

@@ -44,4 +44,14 @@ public class Authorization implements Serializable{
     public void setGoogleCloudKey(String googleCloudKey) {
         googleCloudKey = googleCloudKey;
     }
+
+
+    @Override
+    public String toString() {
+        return "Authorization{" +
+                "ssoId='" + ssoId + '\'' +
+                ", password='" + password + '\'' +
+                ", googleCloudKey='" + googleCloudKey + '\'' +
+                '}';
+    }
 }

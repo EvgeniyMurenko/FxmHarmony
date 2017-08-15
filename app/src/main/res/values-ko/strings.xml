@@ -101,7 +101,7 @@
     <string name="post_was_delete">포스트가 삭제되었습니다!</string>
     <string name="push_tile">알림</string>
     <string name="send">보내기</string>
-    <string name="event_date">이벤트 날짜 :</string>
+    <string name="event_date">이벤트 날짜:&#xA0;</string>
     <string name="manager">매니저</string>
     <string name="comments">댓글:</string>
     <string name="push_menu">알림</string>
@@ -165,5 +165,9 @@
 
 
     <string name="text_orig">Original</string>
+    <string name="group_type">Group:&#xA0;</string>
+    <string name="leader_group">Leader group</string>
+    <string name="member_group">Member group</string>
+    <string name="staff_group">Staff group</string>
 
 </resources>

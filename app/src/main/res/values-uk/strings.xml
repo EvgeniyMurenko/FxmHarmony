@@ -100,7 +100,7 @@
     <string name="post_was_delete">Пост був видалений!</string>
     <string name="push_tile">Сповіщення</string>
     <string name="send">Надіслати</string>
-    <string name="event_date">Дата події: </string>
+    <string name="event_date">Дата події:&#xA0;</string>
     <string name="manager">Менеджер</string>
     <string name="comments">Коментарі:</string>
     <string name="push_menu">Сповіщення</string>
@@ -164,5 +164,9 @@
 
 
     <string name="text_orig">Original</string>
+    <string name="group_type">Group:&#xA0;</string>
+    <string name="leader_group">Leader group</string>
+    <string name="member_group">Member group</string>
+    <string name="staff_group">Staff group</string>
 
 </resources>

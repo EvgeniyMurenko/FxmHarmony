@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
+import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
@@ -37,13 +40,13 @@ import static android.content.Context.USER_SERVICE;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.LOAD_ALL_POSTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public Intent intentDetailPostActivity;
-    public AdapterPostGroup adapterPostGroup;
-    public ListView listViewPost;
+
     public ArrayList<PostDTO> postDTOs;
     public SwipeRefreshLayout groupSwipeRefreshLayout;
     SharedPreferences preferences;
@@ -51,6 +54,12 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public static Long idPost;
     public static PostDTO postDTO;
     public Intent intentChangePost;
+    public String stringTypeGroup = "staff";
+
+
+    public RecyclerView recyclerViewPost;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter adapterPostGroup;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +73,19 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        Bundle groupType =getArguments();
+        stringTypeGroup = groupType.getString(TYPE_GROUP);
+
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
-        listViewPost = (ListView) rootView.findViewById(R.id.idListGroup);
-        listViewPost.setDivider(null);
+
+        mLayoutManager = new LinearLayoutManager(getContext());
+
+        recyclerViewPost = (RecyclerView) rootView.findViewById(R.id.idListGroup);
+        recyclerViewPost.setHasFixedSize(true);
+        recyclerViewPost.setLayoutManager(mLayoutManager);
+
+
+
         groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
         setHasOptionsMenu(true);
@@ -75,13 +94,24 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(GroupFragment.this.getActivity(), CreatePost.class), 1);
+                Intent intentButtonAdd = new Intent(GroupFragment.this.getActivity(), CreatePost.class);
+                intentButtonAdd.putExtra(TYPE_GROUP, stringTypeGroup);
+                startActivityForResult(intentButtonAdd, 1);
             }
         });
 
-        listViewPost.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+        recyclerViewPost.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewPost, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View view, int position) {
+                if (postDTOs != null) {
+                    intentDetailPostActivity.putExtra(ONE_POST_DATA, postDTOs.get(position));
+                    startActivity(intentDetailPostActivity);
+                }
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
                 postDTO = postDTOs.get(position);
                 GroupFragment.idPost = postDTOs.get(position).getServerID();
                 PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, preferences.getLong(USER_ID_PREF, 1L));
@@ -111,19 +141,8 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                     });
                     builder.show();
                 }
-                return true;
             }
-        });
-
-        listViewPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                if (postDTOs != null) {
-                    intentDetailPostActivity.putExtra(ONE_POST_DATA, postDTOs.get(position));
-                    startActivity(intentDetailPostActivity);
-                }
-            }
-        });
+        }));
 
         return rootView;
     }
@@ -132,7 +151,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, preferences.getLong(USER_ID_PREF, 1L));
         Timber.e(managerInfoDTO.toString());
 
-        new GroupExchangeOnServer<>(managerInfoDTO, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+        new GroupExchangeOnServer<>(stringTypeGroup, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
             @Override
             public void processFinish(Boolean isSuccess, String answer) {
                 if (isSuccess) {
@@ -141,7 +160,8 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
                     if (postDTOs != null) {
                         adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
-                        listViewPost.setAdapter(adapterPostGroup);
+                        recyclerViewPost.setAdapter(adapterPostGroup);
+                        recyclerViewPost.setHasFixedSize(true);
                         adapterPostGroup.notifyDataSetChanged();
                     }
                 }

@@ -1,5 +1,4 @@
 package com.sofac.fxmharmony.view;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -7,25 +6,19 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.widget.VideoView;
-
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.FileLoadingListener;
 import com.sofac.fxmharmony.util.FileLoadingTask;
-
 import java.io.File;
-
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import timber.log.Timber;
-
 import static com.sofac.fxmharmony.Constants.LINK_VIDEO;
 import static com.sofac.fxmharmony.Constants.NAME_VIDEO;
 
 public class PreviewVideoActivity extends BaseActivity {
     public String linkVideo;
     public String nameVideo;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +34,12 @@ public class PreviewVideoActivity extends BaseActivity {
         Intent intent = getIntent();
         linkVideo = intent.getStringExtra(LINK_VIDEO);
         nameVideo = intent.getStringExtra(NAME_VIDEO);
+        Timber.e("!!!! linkVideo !!! " + linkVideo);
 
         JCVideoPlayerStandard jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.videoplayer);
         jcVideoPlayerStandard.setUp(linkVideo, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, nameVideo);
         //jcVideoPlayerStandard.thumbImageView.setImage("http://p.qpic.cn/videoyun/0/2449_43b6f696980311e59ed467f22794e792_1/640");
+
     }
 
     @Override
@@ -66,6 +61,8 @@ public class PreviewVideoActivity extends BaseActivity {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

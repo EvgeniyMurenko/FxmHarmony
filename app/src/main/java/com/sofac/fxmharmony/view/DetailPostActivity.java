@@ -6,10 +6,12 @@ import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,6 +33,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
@@ -40,6 +45,7 @@ import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.data.dto.PostDTO;
 import com.sofac.fxmharmony.util.AppMethods;
+import com.sofac.fxmharmony.util.ConvertorHTML;
 import com.sofac.fxmharmony.util.FileLoadingListener;
 import com.sofac.fxmharmony.util.FileLoadingTask;
 
@@ -69,6 +75,7 @@ import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
 import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_COMMENT_REQUEST;
+import static com.sofac.fxmharmony.R.id.messageTranslatePushMessage;
 
 public class DetailPostActivity extends BaseActivity {
 
@@ -90,6 +97,9 @@ public class DetailPostActivity extends BaseActivity {
     LinearLayout linearLayout;
     Parcelable state;
 
+    TextView buttonTranslatePushMessage;
+    TextView messageTranslatePushMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +112,8 @@ public class DetailPostActivity extends BaseActivity {
 
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
         linearLayout = new LinearLayout(this);
+
+
 
         //ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -213,7 +225,7 @@ public class DetailPostActivity extends BaseActivity {
     }
 
     public void createHeaderPost() {
-        headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
+        headerView = createPostView(postDTO.getUserName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getPostTextOriginal());
         Spinner spinnerLanguage = (Spinner) headerView.findViewById(R.id.spinner_language);
 
         ArrayList<String> stringsSpinnerLanguage = new ArrayList<>();
@@ -237,19 +249,19 @@ public class DetailPostActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 if (parent.getSelectedItem().toString() == getString(R.string.original_spinner)) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextOriginal().replaceAll("<(.*?)>", " "));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getPostTextOriginal()));
                     //Toast.makeText(DetailPostActivity.this, "Original", Toast.LENGTH_SHORT).show();
 
                 } else if (parent.getSelectedItem().toString() == getString(R.string.english_spinner)) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextEn().replaceAll("<(.*?)>", " "));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getPostTextEn()));
                     //Toast.makeText(DetailPostActivity.this, "English", Toast.LENGTH_SHORT).show();
 
                 } else if (parent.getSelectedItem().toString() == getString(R.string.korean_spinner)) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextKo().replaceAll("<(.*?)>", " "));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getPostTextKo()));
                     //Toast.makeText(DetailPostActivity.this, "Korean", Toast.LENGTH_SHORT).show();
 
                 } else if (parent.getSelectedItem().toString() == getString(R.string.russian_spinner)) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(postDTO.getPostTextRu().replaceAll("<(.*?)>", " "));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getPostTextRu()));
                     //Toast.makeText(DetailPostActivity.this, "Russian", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -289,6 +301,8 @@ public class DetailPostActivity extends BaseActivity {
         ((TextView) v.findViewById(R.id.idNamePost)).setText(name);
         ((TextView) v.findViewById(R.id.idDatePost)).setText(date);
         messageTextView = (TextView) v.findViewById(R.id.idMessagePost);
+        buttonTranslatePushMessage = (TextView) v.findViewById(R.id.idTranslatePush);
+        messageTranslatePushMessage = (TextView) v.findViewById(R.id.messageTranslatePushMessage);
 
         // START IMAGE
         LinearLayout linearLayoutPhotos = (LinearLayout) v.findViewById(R.id.idListPhotos);
@@ -325,7 +339,7 @@ public class DetailPostActivity extends BaseActivity {
 
 
         // START VIDEO
-        /*LinearLayout linearLayoutVideos = (LinearLayout) v.findViewById(R.id.idListVideos);
+        LinearLayout linearLayoutVideos = (LinearLayout) v.findViewById(R.id.idListVideos);
 
         if (null != postDTO.getLinksVideo() && !"".equals(postDTO.getLinksVideo()) && postDTO.getLinksVideo().length() > 5) {
 
@@ -341,6 +355,7 @@ public class DetailPostActivity extends BaseActivity {
                         .placeholder(R.drawable.no_video)
                         .into(imageVideoView);
                 linearLayoutVideos.addView(videoItemView, lParams);
+
                 videoItemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -355,7 +370,7 @@ public class DetailPostActivity extends BaseActivity {
         } else {
             linearLayoutVideos.setVisibility(View.INVISIBLE);
         }
-        // END VIDEO*/
+        // END VIDEO
 
 
         // START FILES
@@ -367,7 +382,7 @@ public class DetailPostActivity extends BaseActivity {
                 TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
                 textView.setText(fileName);
 
-                Log.e("imageName URL", BASE_URL + GET_POST_FILES_END_URL + fileName);
+                Log.e("FILES URL", BASE_URL + GET_POST_FILES_END_URL + fileName);
                 fileItemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -405,8 +420,26 @@ public class DetailPostActivity extends BaseActivity {
         // END FILES
 
 
-        messageTextView.setText(message.replaceAll("<(.*?)>", " "));
+        messageTextView.setText(ConvertorHTML.fromHTML(message));
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+                /* Translate */
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        TranslateOptions options = TranslateOptions.newBuilder().setApiKey(Constants.CLOUD_API_KEY).build();
+        Translate translate = options.getService();
+        final Translation translation = translate.translate(messageTextView.getText().toString(), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
+        final Drawable drawable = getResources().getDrawable(R.drawable.verticalline);
+
+        buttonTranslatePushMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                messageTranslatePushMessage.setVisibility(View.VISIBLE);
+                messageTranslatePushMessage.setText(translation.getTranslatedText());
+                messageTranslatePushMessage.setBackground(drawable);
+                buttonTranslatePushMessage.setVisibility(View.GONE);
+            }
+        });
 
         messageTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -447,16 +480,15 @@ public class DetailPostActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_post_update, menu);
         PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L));
+
         Timber.e("!!!!!!! permissionDTO !!!!!!! "+permissionDTO);
-        if (permissionDTO.getTranslatePermission() == null && permissionDTO.getTranslatePermission() && postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
+
+        if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
+        }
+
+        if (permissionDTO.getTranslatePermission() != null && permissionDTO.getTranslatePermission()) {
             getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
-        } else if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
-            getMenuInflater().inflate(R.menu.menu_detail_post, menu);
-        } else if (permissionDTO.getTranslatePermission() == null && permissionDTO.getTranslatePermission()) {
-            getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
-        } else {
-            return false;
         }
         return true;
     }

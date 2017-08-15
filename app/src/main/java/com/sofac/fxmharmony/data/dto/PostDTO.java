@@ -10,7 +10,7 @@ public class PostDTO extends SugarRecord implements Serializable {
     public PostDTO() {
     }
 
-    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postTextOriginal, String postTextRu, String postTextEn, String postTextKo, String linksFile, String linksImage, String linksVideo, String postUserAvatarImage, String groupType) {
+    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postTextOriginal, String postTextRu, String postTextEn, String postTextKo, String linksFile, String linksVideo, String linksImage, String postUserAvatarImage, String groupType) {
         this.id = id;
         this.serverID = serverID;
         this.userID = userID;
@@ -21,8 +21,8 @@ public class PostDTO extends SugarRecord implements Serializable {
         this.postTextEn = postTextEn;
         this.postTextKo = postTextKo;
         this.linksFile = linksFile;
-        this.linksImage = linksImage;
         this.linksVideo = linksVideo;
+        this.linksImage = linksImage;
         this.postUserAvatarImage = postUserAvatarImage;
         this.groupType = groupType;
     }
@@ -47,9 +47,11 @@ public class PostDTO extends SugarRecord implements Serializable {
 
     private String linksFile;
 
-    private String linksImage;
+
 
     private String linksVideo;
+
+    private String linksImage;
 
     private String postUserAvatarImage;
 

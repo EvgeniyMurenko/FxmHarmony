@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.util.ConvertorHTML;
 import com.sofac.fxmharmony.util.FxmPostFile;
 import com.sofac.fxmharmony.util.PermissionManager;
 import com.sofac.fxmharmony.util.RequestMethods;
@@ -244,18 +245,19 @@ public class ChangePost extends BaseActivity {
 
 
                     final PostDTO postDTOtoSend =
-                            new PostDTO(postDTO.getId(),
+                            new PostDTO(
+                                    postDTO.getId(),
                                     postDTO.getServerID(),
                                     preferences.getLong(USER_ID_PREF, 0L),
                                     postDTO.getUserName(),
                                     postDTO.getDate(),
-                                    postDTO.getPostTextOriginal(),
-                                    postDTO.getPostTextRu(),
-                                    postDTO.getPostTextEn(),
-                                    postDTO.getPostTextKo(),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextOriginal()),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextRu()),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextEn()),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextKo()),
                                     files,
-                                    images,
                                     videos,
+                                    images,
                                     postDTO.getPostUserAvatarImage(),
                                     postDTO.getGroupType());
                     new GroupExchangeOnServer<PostDTO>(
@@ -265,13 +267,13 @@ public class ChangePost extends BaseActivity {
                                     preferences.getLong(USER_ID_PREF, 0L),
                                     postDTO.getUserName(),
                                     null,
-                                    postDTO.getPostTextOriginal(),
-                                    postDTO.getPostTextRu(),
-                                    postDTO.getPostTextEn(),
-                                    postDTO.getPostTextKo(),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextOriginal()),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextRu()),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextEn()),
+                                    ConvertorHTML.toHTML(postDTO.getPostTextKo()),
                                     files,
-                                    images,
                                     videos,
+                                    images,
                                     null,
                                     postDTO.getGroupType()),
                             true,
